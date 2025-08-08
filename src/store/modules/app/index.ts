@@ -146,6 +146,7 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
   init();
 
   return {
+    tabStore,
     isMobile,
     reloadFlag,
     reloadPage,

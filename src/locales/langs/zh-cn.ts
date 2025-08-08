@@ -167,7 +167,8 @@ const local: App.I18n.Schema = {
     500: '服务器错误',
     'iframe-page': '外链页面',
     home: '首页',
-    connection: '数据库连接'
+    connection: '数据库连接',
+    'connection-action': '新增数据连接'
     // databaseTask: '数据库任务',
     // webInterface: '网络接口任务',
     // industrialInterfaceTask: '工业接口任务',

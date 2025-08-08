@@ -167,7 +167,8 @@ const local: App.I18n.Schema = {
     500: 'Server Error',
     'iframe-page': 'Iframe',
     home: 'Home',
-    connection: 'Connection'
+    connection: 'Connection',
+    'connection-action': 'new connection'
     // databaseTask: 'Database Tasks',
     // webInterface: 'Web Interface Task',
     // industrialInterfaceTask: 'Industrial InterfaceT ask',

@@ -39,7 +39,6 @@ export const generatedRoutes: GeneratedRoute[] = [
       hideInMenu: true
     }
   },
-
   {
     name: 'home',
     path: '/home',
