@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // 在 script 标签中添加组件名称定义
 defineOptions({
-  name: 'ConnectionAction'
+  name: 'ConnectionNew'
 });
 </script>
 
