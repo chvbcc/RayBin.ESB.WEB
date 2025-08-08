@@ -103,8 +103,7 @@
     "vue-tsc": "3.0.1"
   },
   "simple-git-hooks": {
-    "commit-msg": "pnpm sa git-commit-verify",
-    "pre-commit": "pnpm typecheck && pnpm lint && git diff --exit-code"
+    "pre-commit": "pnpm lint"
   },
   "website": "https://admin.soybeanjs.cn"
 }

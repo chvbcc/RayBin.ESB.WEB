@@ -168,7 +168,8 @@ const local: App.I18n.Schema = {
     'iframe-page': 'Iframe',
     home: 'Home',
     connection: 'Connection',
-    'connection-action': 'new connection'
+    'connection-new': 'new connection',
+    'connection-edit': 'edit connection'
     // databaseTask: 'Database Tasks',
     // webInterface: 'Web Interface Task',
     // industrialInterfaceTask: 'Industrial InterfaceT ask',

@@ -88,7 +88,7 @@ const { drawerVisible, operateType, editingData, handleEdit, checkedRowKeys, onD
 );
 
 async function handleAdd() {
-  appStore.tabStore.replaceTab('connection-action');
+  appStore.tabStore.replaceTab('connection-new');
 }
 
 function handleDelete(id: number) {
