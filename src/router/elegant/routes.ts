@@ -40,6 +40,33 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'connection',
+    path: '/connection',
+    component: 'layout.base$view.connection',
+    meta: {
+      title: 'connection',
+      i18nKey: 'route.connection'
+    }
+  },
+  {
+    name: 'connection-edit',
+    path: '/connection-edit',
+    component: 'layout.base$view.connection-edit',
+    meta: {
+      title: 'connection-edit',
+      i18nKey: 'route.connection-edit'
+    }
+  },
+  {
+    name: 'connection-new',
+    path: '/connection-new',
+    component: 'layout.base$view.connection-new',
+    meta: {
+      title: 'connection-new',
+      i18nKey: 'route.connection-new'
+    }
+  },
+  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',

@@ -31,27 +31,12 @@ function search() {
       <NCollapseItem :title="$t('common.search')" name="role-search">
         <NForm :model="model" label-placement="left" :label-width="88">
           <NGrid responsive="screen" item-responsive>
-            <NFormItemGi
-              span="24 s:12 m:12"
-              :label="$t('page.connection.connectionName')"
-              path="connectionName"
-              class="pr-24px"
-            >
+            <NFormItemGi span="24 s:12 m:12" :label="$t('page.connection.connectionName')"  path="connectionName" class="pr-24px">
               <NInput v-model:value="model.connectionName" :placeholder="$t('page.connection.form.connectionName')" />
             </NFormItemGi>
 
-            <NFormItemGi
-              span="24 s:12 m:12"
-              :label="$t('page.connection.databaseType')"
-              path="databaseType"
-              class="pr-24px"
-            >
-              <NSelect
-                v-model:value="model.databaseType"
-                :placeholder="$t('page.connection.form.databaseType')"
-                :options="translateOptions(databaseTypeOptions)"
-                clearable
-              />
+            <NFormItemGi span="24 s:12 m:12" :label="$t('page.connection.databaseType')" path="databaseType" class="pr-24px">
+              <NSelect v-model:value="model.databaseType" :placeholder="$t('page.connection.form.databaseType')" :options="translateOptions(databaseTypeOptions)" clearable />
             </NFormItemGi>
 
             <NFormItemGi span="24 s:12 m:12" :label="$t('page.connection.hostName')" path="hostName" class="pr-24px">
