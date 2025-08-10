@@ -88,7 +88,7 @@ const { drawerVisible, operateType, editingData, handleEdit, checkedRowKeys, onD
 );
 
 async function handleAdd() {
-  appStore.tabStore.replaceTab("connection-new");
+  appStore.tabStore.replaceTab('connection-new');
 }
 
 function handleDelete(id: number) {
@@ -137,7 +137,12 @@ function edit(id: number) {
         :row-key="row => row.id"
         :pagination="mobilePagination"
       />
-      <RoleOperateDrawer v-model:visible="drawerVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
+      <RoleOperateDrawer
+        v-model:visible="drawerVisible"
+        :operate-type="operateType"
+        :row-data="editingData"
+        @submitted="getDataByPage"
+      />
     </NCard>
   </div>
 </template>
