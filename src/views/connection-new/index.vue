@@ -14,22 +14,10 @@ const { defaultRequiredRule } = useFormRules();
 const isCustomMode = computed(() => connectionMode.value === '0');
 const isConnectionStringMode = computed(() => connectionMode.value === '1');
 
-// 2. 定义模型类型
-type Model = Pick<Api.ConnectionTypes.Connection,
-  | 'connectionName'
-  | 'databaseType'
-  | 'hostName'
-  | 'port'
-  | 'databases'
-  | 'userName'
-  | 'password'
-  | 'connectionString'
->;
-
-// 3. 定义默认模型
+// 2. 定义默认模型
 const model = ref(createDefaultModel());
 
-function createDefaultModel(): Model {
+function createDefaultModel(): Api.ConnectionTypes.ConnectionModel {
   return {
     connectionName: '',
     databaseType: '1',
@@ -43,7 +31,7 @@ function createDefaultModel(): Model {
 }
 
 // 4. 定义规则类型
-type RuleKey = Extract<keyof Model, 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
+type RuleKey = Extract<keyof Api.ConnectionTypes.ConnectionModel, 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
 
 // 5. 将rules改为计算属性，根据连接模式动态调整必填字段
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {

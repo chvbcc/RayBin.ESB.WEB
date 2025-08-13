@@ -8,3 +8,12 @@ export function fetchGetConnectionList(params?: Api.ConnectionTypes.ConnectionSe
     params
   });
 }
+
+/** test connection */
+export function testConnection(params?: Api.ConnectionTypes.ConnectionModel) {
+  return request<string>({
+    url: '/connection/testConnection',
+    method: 'get',
+    params
+  });
+}

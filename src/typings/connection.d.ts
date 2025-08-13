@@ -25,5 +25,8 @@ declare namespace Api {
       password: string;
       connectionString: string;
     }>;
+
+    // 2. 定义模型类型
+    type ConnectionModel = Pick<Api.ConnectionTypes.Connection, | 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString' >;
   }
 }
