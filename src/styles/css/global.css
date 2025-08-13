@@ -1,0 +1,54 @@
+@import './reset.css';
+@import './nprogress.css';
+@import './transition.css';
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+.searchAlign {
+  margin-left: 88px;
+}
+
+.orange-btn,
+.table-edit-btn {
+  background-color: #f39c12; /* 警告黄 */
+  border-color: #f39c12;
+  color: #fff;
+}
+
+.orange-btn:hover,
+.table-edit-btn:hover {
+  background-color: #ffbe3c !important;
+  border-color: #ffbe3c !important;
+  color: #fff !important;
+}
+
+.red-btn,
+.table-delete-btn {
+  background-color: #dd4b39; /* 警告黄 */
+  border-color: #dd4b39;
+  color: #fff;
+}
+
+.red-btn:hover,
+.table-delete-btn:hover {
+  background-color: #ea5441 !important;
+  border-color: #ea5441 !important;
+  color: #fff !important;
+}
+
+.table-edit-btn,
+.table-delete-btn:hover {
+  height: 28px;
+}
+
+button {
+  font-size: 12px !important;
+}
