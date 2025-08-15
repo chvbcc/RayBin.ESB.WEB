@@ -45,7 +45,12 @@ const local: App.I18n.Schema = {
     yesOrNo: {
       yes: 'Yes',
       no: 'No'
-    }
+    },
+    success: 'Success',
+    fail: 'Fail',
+    save: 'Save',
+    back: 'Back',
+    test: 'Test'
   },
   request: {
     logout: 'Logout user after request failed',
@@ -161,6 +166,7 @@ const local: App.I18n.Schema = {
     connection: 'Database Connection',
     "connection-new": 'New Database Connection',
     'user-center': 'User Center',
+    database: 'Database Task',
     manage: 'System Manage',
     manage_user: 'User Manage',
     'manage_user-detail': 'User Detail',
@@ -271,13 +277,16 @@ const local: App.I18n.Schema = {
         port: 'Please enter port',
         databases: 'Please enter databases',
         userName: 'Please enter user name',
-        password: 'Please enter password'
+        password: 'Please enter password',
+        connectionString: 'Please enter connection string'
       },
       connectionMode: 'Connection Mode',
       mode: {
         custom: 'Custom',
         connectionString: 'Connection String'
-      }
+      },
+      connectionSuccess: 'Connection Successful',
+      connectionString: 'Connection String'
     },
     manage: {
       common: {

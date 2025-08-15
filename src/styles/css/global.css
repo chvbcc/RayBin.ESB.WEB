@@ -39,13 +39,13 @@ html {
 
 .red-btn:hover,
 .table-delete-btn:hover {
-  background-color: #ea5441 !important;
-  border-color: #ea5441 !important;
+  background-color: #f66060 !important;
+  border-color: #f66060 !important;
   color: #fff !important;
 }
 
 .table-edit-btn,
-.table-delete-btn:hover {
+.table-delete-btn {
   height: 28px;
 }
 

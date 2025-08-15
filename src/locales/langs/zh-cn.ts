@@ -45,7 +45,12 @@ const local: App.I18n.Schema = {
     yesOrNo: {
       yes: '是',
       no: '否'
-    }
+    },
+    success: '成功',
+    fail: '失败',
+    save: '保存',
+    back: '返回',
+    test: '测试'
   },
   request: {
     logout: '请求失败后登出用户',
@@ -159,6 +164,7 @@ const local: App.I18n.Schema = {
     'iframe-page': '外链页面',
     home: '首页',
     connection: '数据库连接',
+    database: '数据库任务',
     "connection-new": '新增数据库连接',
     'user-center': '个人中心',
     manage: '系统管理',
@@ -270,13 +276,16 @@ const local: App.I18n.Schema = {
         port: '请输入端口',
         databases: '请输入数据库名称',
         userName: '请输入用户名',
-        password: '请输入密码'
+        password: '请输入密码',
+        connectionString: '请输入连接字符串',
       },
       connectionMode: '连接方式',
       mode: {
         custom: '自定义',
         connectionString: '连接字符串'
-      }
+      },
+      connectionSuccess: '连接成功',
+      connectionString: '连接字符串',
     },
     manage: {
       common: {

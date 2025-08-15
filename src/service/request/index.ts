@@ -21,7 +21,6 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
     async onRequest(config) {
       const Authorization = getAuthorization();
       Object.assign(config.headers, { Authorization });
-
       return config;
     },
     isBackendSuccess(response) {

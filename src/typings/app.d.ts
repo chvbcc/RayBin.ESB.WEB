@@ -327,6 +327,11 @@ declare namespace App {
           yes: string;
           no: string;
         };
+        success: string;
+        fail: string;
+        save: string;
+        back: string;
+        test: string;
       };
       request: {
         logout: string;
@@ -499,12 +504,15 @@ declare namespace App {
             databases: string;
             userName: string;
             password: string;
+            connectionString: string;
           };
           connectionMode: string;
           mode: {
             custom: string;
             connectionString: string;
           };
+          connectionSuccess: string;
+          connectionString: string;
         };
         manage: {
           common: {

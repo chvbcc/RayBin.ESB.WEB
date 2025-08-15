@@ -58,6 +58,15 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'database',
+    path: '/database',
+    component: 'layout.base$view.database',
+    meta: {
+      title: 'database',
+      i18nKey: 'route.database'
+    }
+  },
+  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',

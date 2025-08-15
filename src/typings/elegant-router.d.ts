@@ -22,6 +22,7 @@ declare module "@elegant-router/types" {
     "500": "/500";
     "connection": "/connection";
     "connection-new": "/connection-new";
+    "database": "/database";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
@@ -67,6 +68,7 @@ declare module "@elegant-router/types" {
     | "500"
     | "connection"
     | "connection-new"
+    | "database"
     | "home"
     | "iframe-page"
     | "login"
@@ -95,6 +97,7 @@ declare module "@elegant-router/types" {
     | "login"
     | "connection-new"
     | "connection"
+    | "database"
     | "home"
     | "manage_menu"
     | "manage_role"

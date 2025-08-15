@@ -1,14 +1,22 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import { databaseTypeOptions, connectionModeOptions } from '@/constants/business';
-import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { translateOptions } from '@/utils/common';
 import { $t } from '@/locales';
-import { parseConnectionString, generateConnectionStringByType } from '@/views/common/connection';
+import { computed, ref, watch } from 'vue';
+import { testConnection } from '@/service/api';
+import { translateOptions } from '@/utils/common';
+import CustomAlert from '@/components/custom/custom-alert.vue';
+import { useAntdForm, useFormRules } from '@/hooks/common/form';
+import { databaseTypeOptions, connectionModeOptions } from '@/constants/business';
+import { parseConnectionString, parseConnectionModel, getConnectionStringByType } from '@/views/common/connection';
 
 const connectionMode = ref<string>('0');
 const { formRef } = useAntdForm();
 const { defaultRequiredRule } = useFormRules();
+
+// 0. 控制alert显示/隐藏的状态
+const showAlert = ref(false);
+const type = ref<'error' | 'success' | 'warning' | 'info'>('success');
+const message = ref<string>('');
+const description = ref<string>('');
 
 // 1. 添加计算属性，根据connectionMode控制字段禁用状态
 const isCustomMode = computed(() => connectionMode.value === '0');
@@ -30,10 +38,10 @@ function createDefaultModel(): Api.ConnectionTypes.ConnectionModel {
   };
 }
 
-// 4. 定义规则类型
+// 3. 定义规则类型
 type RuleKey = Extract<keyof Api.ConnectionTypes.ConnectionModel, 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
 
-// 5. 将rules改为计算属性，根据连接模式动态调整必填字段
+// 4. 将rules改为计算属性，根据连接模式动态调整必填字段
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
   const baseRules: Record<RuleKey, App.Global.FormRule> = {
     connectionName: defaultRequiredRule,
@@ -48,23 +56,51 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
   return baseRules;
 });
 
-// 6. 添加连接字符串变化的watch监听
-watch(() => model.value.connectionString, (newValue) => {
-  if (connectionMode.value === '1') {
-    const parsedData = parseConnectionString(model.value.databaseType, newValue);
-    Object.assign(model.value, parsedData);
-  }
-});
 
-// 7. 添加数据库类型变化的watch监听
+// 5. 添加数据库类型变化的watch监听
 watch(() => model.value.databaseType, (newType) => {
-    generateConnectionStringByType(newType, model.value);
-    const parsedData = parseConnectionString(newType, model.value.connectionString);
-    Object.assign(model.value, parsedData);
+    getConnectionStringByType(newType, model.value);
+    parseConnectionString(model.value);
 });
 
-function handleTestConnection() {
+// 6. 添加连接字符串变化的watch监听
+watch(() => [
+    model.value.hostName,
+    model.value.port,
+    model.value.databases,
+    model.value.userName,
+    model.value.password,
+    model.value.connectionString
+  ],
+  () => {
+    if (connectionMode.value === '0') {
+      parseConnectionModel(model.value);
+    } else if (connectionMode.value === '1') {
+      parseConnectionString(model.value);
+    }
+  }
+);
 
+// 7. 关闭alert的处理函数
+const handleCloseAlert = () => {
+  showAlert.value = false;
+};
+
+// 8. 测试连接
+async function handleTestConnection() {
+  const { response } = await testConnection(model.value);
+  const data = response.data as { msg: string; data: string };
+  if (data.msg === "fail") {
+      message.value =  $t('common.fail')
+      description.value = data.data
+      type.value = 'error';
+  }
+  else if (data.msg === "success") {
+    message.value = $t('common.success');
+    description.value = $t('page.connection.connectionSuccess');
+    type.value = 'success';
+  }
+  showAlert.value = true;
 }
 
 function handleSave()  {
@@ -112,30 +148,37 @@ function handleBack() {
               </a-form-item>
             </a-col>
             <a-col :span="18">
-              <a-form-item label="用户名" name="userName" class="m-2">
-                <a-input v-model:value="model.userName" placeholder="请输入用户名" :disabled="isConnectionStringMode" />
+              <a-form-item :label="$t('page.connection.userName')" name="userName" class="m-2">
+                <a-input v-model:value="model.userName" :placeholder="$t('page.connection.form.userName')" :disabled="isConnectionStringMode" />
               </a-form-item>
             </a-col>
             <a-col :span="18">
-              <a-form-item label="密码" name="password" class="m-2">
-                <a-input-password v-model:value="model.password" placeholder="请输入密码" :disabled="isConnectionStringMode" />
+              <a-form-item :label="$t('page.connection.password')" name="password" class="m-2">
+                <a-input-password v-model:value="model.password" :placeholder="$t('page.connection.form.password')" :disabled="isConnectionStringMode" />
               </a-form-item>
             </a-col>
             <a-col :span="18">
-              <a-form-item label="连接字符串" name="connectionString" class="m-2">
-                <a-textarea v-model:value="model.connectionString" placeholder="请输入连接字符串" :disabled="isCustomMode" />
+              <a-form-item :label="$t('page.connection.connectionString')" name="connectionString" class="m-2">
+                <a-textarea v-model:value="model.connectionString" :placeholder="$t('page.connection.form.connectionString')" :disabled="isCustomMode" />
               </a-form-item>
             </a-col>
             <a-col :span="18">
               <a-form-item :label-col="{ span: 6 }" label="&nbsp;" :colon="false" class="m-2">
-                <a-button type="primary" @click="handleTestConnection" class="orange-btn mr-8">测试</a-button>
-                <a-button type="primary" @click="handleSave" class="mr-8">保存</a-button>
-                <a-button type="primary" @click="handleBack">返回</a-button>
+                <a-button type="primary" @click="handleTestConnection" class="orange-btn mr-8 pl-5 pr-5">
+                  {{$t('common.test')}}
+                </a-button>
+                <a-button type="primary" @click="handleSave" class="mr-8 pl-3 pl-5 pr-5">
+                  {{$t('common.save')}}
+                </a-button>
+                <a-button type="primary" @click="handleBack" class="pl-5 pr-5">
+                  {{$t('common.back')}}
+                </a-button>
               </a-form-item>
             </a-col>
           </a-row>
         </a-form>
       </a-card>
+      <CustomAlert v-if="showAlert"  :message="message" :type="type" :description="description" show-icon closable @close="handleCloseAlert" />
     </div>
 </template>
 

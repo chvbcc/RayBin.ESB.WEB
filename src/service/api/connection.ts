@@ -10,10 +10,10 @@ export function fetchGetConnectionList(params?: Api.ConnectionTypes.ConnectionSe
 }
 
 /** test connection */
-export function testConnection(params?: Api.ConnectionTypes.ConnectionModel) {
-  return request<string>({
+export function testConnection(data: Api.ConnectionTypes.ConnectionModel) {
+  return request<App.Service.Response>({
     url: '/connection/testConnection',
-    method: 'get',
-    params
-  });
+    method: 'post',
+    data
+  })
 }
