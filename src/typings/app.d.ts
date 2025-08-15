@@ -332,6 +332,7 @@ declare namespace App {
         save: string;
         back: string;
         test: string;
+        exists: string;
       };
       request: {
         logout: string;

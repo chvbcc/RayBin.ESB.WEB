@@ -3,10 +3,12 @@ import { databaseTypeRecord } from '@/constants/business';
 import { fetchGetConnectionList } from '@/service/api';
 import { useTable, useTableOperate } from '@/hooks/common/table';
 import ConnectionSearch from './modules/connection-search.vue';
+import { useAppStore } from '@/store/modules/app';
 import { useRouter } from 'vue-router';
 import { $t } from '@/locales';
 
 const router = useRouter();
+const appStore = useAppStore();
 
 const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
   apiFn: fetchGetConnectionList,
@@ -38,7 +40,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       dataIndex: 'databaseType',
       title: $t('page.connection.databaseType'),
       align: 'center',
-      width: 120,
+      minWidth: 120,
       customRender: ({ record } )=> {
         if (record.databaseType === null) {
           return null;
@@ -84,6 +86,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
 const {handleEdit, onDeleted } = useTableOperate(data, getData);
 
 async function handleAdd() {
+  appStore.tabStore.removeActiveTab();
   router.push({ name: 'connection-new' });
 }
 
@@ -107,18 +110,18 @@ function refresh() {
           <div class="flex flex-wrap justify-end gap-x-12px gap-y-8px lt-sm:(w-200px py-12px)">
           <slot name="prefix"></slot>
           <slot name="default">
-            <a-button size="small" ghost type="primary" @click="handleAdd">
+            <a-button type="primary" class="blue-btn" @click="handleAdd">
               <template #icon>
                 <icon-ic-round-plus class="align-sub text-icon" />
               </template>
-              <span class="ml-8px">{{ $t('common.add') }}</span>
+              <span class="ml-5px">{{ $t('common.add') }}</span>
             </a-button>
           </slot>
-          <a-button size="small" @click="refresh">
+          <a-button type="primary" ghost @click="refresh">
             <template #icon>
               <icon-mdi-refresh class="align-sub text-icon" :class="{ 'animate-spin': loading }" />
             </template>
-            <span class="ml-8px">{{ $t('common.refresh') }}</span>
+            <span class="ml-0px">{{ $t('common.refresh') }}</span>
           </a-button>
         </div>
       </template>

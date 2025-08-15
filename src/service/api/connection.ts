@@ -17,3 +17,17 @@ export function testConnection(data: Api.ConnectionTypes.ConnectionModel) {
     data
   })
 }
+
+/** check connection name*/
+export function checkConnectionName(connectionName: string, createUserId: number, id: number) {
+  return request<App.Service.Response>({url: '/connection/checkName', params: { connectionName, createUserId, id }});
+}
+
+/** save connection */
+export function saveConnection(data: Api.ConnectionTypes.ConnectionModel) {
+  return request<App.Service.Response>({
+    url: '/connection/save',
+    method: 'post',
+    data
+  });
+}

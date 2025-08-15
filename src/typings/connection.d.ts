@@ -16,6 +16,7 @@ declare namespace Api {
     type ConnectionMode = '0' | '1' ;
 
     type Connection = Api.Common.CommonRecord<{
+      id: number;
       connectionName: string;
       databaseType: DatabaseType;
       hostName: string;
@@ -27,6 +28,6 @@ declare namespace Api {
     }>;
 
     // 2. 定义模型类型
-    type ConnectionModel = Pick<Api.ConnectionTypes.Connection, | 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString' >;
+    type ConnectionModel = Pick<Api.ConnectionTypes.Connection, | 'id' | 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString' >;
   }
 }

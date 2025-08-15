@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
+import { useRouter } from 'vue-router';
 import { computed, ref, watch } from 'vue';
-import { testConnection } from '@/service/api';
+import { useAppStore } from '@/store/modules/app';
+import { useAuthStore } from '@/store/modules/auth';
 import { translateOptions } from '@/utils/common';
 import CustomAlert from '@/components/custom/custom-alert.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
+import { testConnection, checkConnectionName } from '@/service/api';
 import { databaseTypeOptions, connectionModeOptions } from '@/constants/business';
 import { parseConnectionString, parseConnectionModel, getConnectionStringByType } from '@/views/common/connection';
+import { isNull } from 'util';
+
+const router = useRouter();
+const appStore = useAppStore();
+const authStore = useAuthStore();
 
 const connectionMode = ref<string>('0');
 const { formRef } = useAntdForm();
@@ -27,6 +35,7 @@ const model = ref(createDefaultModel());
 
 function createDefaultModel(): Api.ConnectionTypes.ConnectionModel {
   return {
+    id: 0,
     connectionName: '',
     databaseType: '1',
     hostName: '127.0.0.1',
@@ -43,17 +52,36 @@ type RuleKey = Extract<keyof Api.ConnectionTypes.ConnectionModel, 'connectionNam
 
 // 4. 将rules改为计算属性，根据连接模式动态调整必填字段
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
-  const baseRules: Record<RuleKey, App.Global.FormRule> = {
-    connectionName: defaultRequiredRule,
-    databaseType: defaultRequiredRule,
-    hostName: isConnectionStringMode.value ? {} : defaultRequiredRule,
-    port: isConnectionStringMode.value ? {} : defaultRequiredRule,
-    databases: isConnectionStringMode.value ? {} : defaultRequiredRule,
-    userName: isConnectionStringMode.value ? {} : defaultRequiredRule,
-    password: isConnectionStringMode.value ? {} : defaultRequiredRule,
-    connectionString: isCustomMode.value ? {} : defaultRequiredRule
+  // connectionName blur 时触发后端验证
+  const connectionNameRule: App.Global.FormRule = {
+    validateTrigger: 'blur',
+    validator: async (_rule: any, value: string) => {
+      const name = (value ?? '').trim();
+      if (!name) {
+        return Promise.reject(new Error(($t('page.connection.form.connectionName') as string)));
+      }
+
+      const createUserId = parseInt(authStore.userInfo.userId) ?? 0;
+      const { response } = await checkConnectionName(name, createUserId, model.value.id);
+      const data = response.data as { code: string; msg: string; data: boolean };
+      if (data.msg==="success" && data.data) {
+        return Promise.reject(new Error($t('common.exists')));
+      }
+      return Promise.resolve();
+    }
   };
-  return baseRules;
+
+  // 其余字段保持默认必填规则
+  return {
+    connectionName: connectionNameRule,
+    databaseType: defaultRequiredRule,
+    hostName: defaultRequiredRule,
+    port: defaultRequiredRule,
+    databases: defaultRequiredRule,
+    userName: defaultRequiredRule,
+    password: defaultRequiredRule,
+    connectionString: defaultRequiredRule
+  };
 });
 
 
@@ -89,7 +117,7 @@ const handleCloseAlert = () => {
 // 8. 测试连接
 async function handleTestConnection() {
   const { response } = await testConnection(model.value);
-  const data = response.data as { msg: string; data: string };
+  const data = response.data as { code: string; msg: string; data: string };
   if (data.msg === "fail") {
       message.value =  $t('common.fail')
       description.value = data.data
@@ -103,12 +131,19 @@ async function handleTestConnection() {
   showAlert.value = true;
 }
 
+// 9. 保存连接
 function handleSave()  {
-
+  formRef.value?.validate().then(() => {
+    // saveConnection(model.value);
+  }).catch(() => {
+    return;
+  });
 }
 
+// 10. 返回
 function handleBack() {
-
+  appStore.tabStore.removeActiveTab();
+  router.push({ name: 'connection' });
 }
 </script>
 
@@ -164,13 +199,13 @@ function handleBack() {
             </a-col>
             <a-col :span="18">
               <a-form-item :label-col="{ span: 6 }" label="&nbsp;" :colon="false" class="m-2">
-                <a-button type="primary" @click="handleTestConnection" class="orange-btn mr-8 pl-5 pr-5">
+                <a-button type="primary" @click="handleTestConnection" class="orange-btn mr-8 pl-6 pr-6">
                   {{$t('common.test')}}
                 </a-button>
-                <a-button type="primary" @click="handleSave" class="mr-8 pl-3 pl-5 pr-5">
+                <a-button type="primary" @click="handleSave" class="blue-btn mr-8  pl-6 pr-6">
                   {{$t('common.save')}}
                 </a-button>
-                <a-button type="primary" @click="handleBack" class="pl-5 pr-5">
+                <a-button type="primary" @click="handleBack" ghost class=" pl-6 pr-6">
                   {{$t('common.back')}}
                 </a-button>
               </a-form-item>

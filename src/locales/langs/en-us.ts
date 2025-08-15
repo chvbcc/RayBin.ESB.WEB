@@ -50,7 +50,8 @@ const local: App.I18n.Schema = {
     fail: 'Fail',
     save: 'Save',
     back: 'Back',
-    test: 'Test'
+    test: 'Test',
+    exists: 'already exists'
   },
   request: {
     logout: 'Logout user after request failed',

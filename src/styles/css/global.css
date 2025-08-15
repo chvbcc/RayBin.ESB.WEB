@@ -16,6 +16,12 @@ html {
   margin-left: 88px;
 }
 
+.table-edit-btn,
+.table-delete-btn {
+  padding-top: 3px !important;
+  height: 26px;
+}
+
 .orange-btn,
 .table-edit-btn {
   background-color: #f39c12; /* 警告黄 */
@@ -44,9 +50,15 @@ html {
   color: #fff !important;
 }
 
-.table-edit-btn,
-.table-delete-btn {
-  height: 28px;
+.blue-btn {
+  background-color: #00acd6; /* 蓝色 */
+  border-color: #00acd6;
+  color: #fff;
+}
+.blue-btn:hover {
+  background-color: #20bde3 !important;
+  border-color: #20bde3 !important;
+  color: #fff !important;
 }
 
 button {
