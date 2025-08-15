@@ -28,6 +28,6 @@ declare namespace Api {
     }>;
 
     // 2. 定义模型类型
-    type ConnectionModel = Pick<Api.ConnectionTypes.Connection, | 'id' | 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString' >;
+    type ConnectionModel = Pick<Api.ConnectionTypes.Connection, | 'id' | 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
   }
 }

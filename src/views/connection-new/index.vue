@@ -7,10 +7,9 @@ import { useAuthStore } from '@/store/modules/auth';
 import { translateOptions } from '@/utils/common';
 import CustomAlert from '@/components/custom/custom-alert.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { testConnection, checkConnectionName } from '@/service/api';
 import { databaseTypeOptions, connectionModeOptions } from '@/constants/business';
+import { testConnection, checkConnectionName, saveConnection } from '@/service/api';
 import { parseConnectionString, parseConnectionModel, getConnectionStringByType } from '@/views/common/connection';
-import { isNull } from 'util';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -52,15 +51,14 @@ type RuleKey = Extract<keyof Api.ConnectionTypes.ConnectionModel, 'connectionNam
 
 // 4. 将rules改为计算属性，根据连接模式动态调整必填字段
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
-  // connectionName blur 时触发后端验证
   const connectionNameRule: App.Global.FormRule = {
+    required: true, // 添加 required: true，确保显示星号
     validateTrigger: 'blur',
     validator: async (_rule: any, value: string) => {
       const name = (value ?? '').trim();
       if (!name) {
         return Promise.reject(new Error(($t('page.connection.form.connectionName') as string)));
       }
-
       const createUserId = parseInt(authStore.userInfo.userId) ?? 0;
       const { response } = await checkConnectionName(name, createUserId, model.value.id);
       const data = response.data as { code: string; msg: string; data: boolean };
@@ -132,11 +130,19 @@ async function handleTestConnection() {
 }
 
 // 9. 保存连接
-function handleSave()  {
-  formRef.value?.validate().then(() => {
-    // saveConnection(model.value);
-  }).catch(() => {
-    return;
+async function handleSave()  {
+  formRef.value?.validate().then(async () => {
+    const { response } = await saveConnection(model.value);
+    const data = response.data as { code: string; msg: string; data: string};
+    if (data.msg === "fail") {
+      window.$message?.error(data.data);
+    } else if (data.msg === "success") {
+      window.$message?.success($t('common.addSuccess'));
+      appStore.tabStore.removeActiveTab();
+      router.push({ name: 'connection' });
+    }
+    }).catch(() => {
+      return;
   });
 }
 

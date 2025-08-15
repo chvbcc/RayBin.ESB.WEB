@@ -27,7 +27,7 @@ function search() {
 
 <template>
   <a-card :title="$t('common.search')" :bordered="false" class="card-wrapper">
-    <a-form :model="model"  :label-col="{ span: 4 }">
+    <a-form :model="model"  :label-col="{ span: 4 }" :labelWrap="true">
       <a-row :gutter="[16, 16]" wrap>
         <a-col :span="24" :md="12" :lg="12">
           <a-form-item :label="$t('page.connection.connectionName')" name="connectionName" class="m-0">
@@ -41,17 +41,17 @@ function search() {
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <AFormItem :label="$t('page.connection.hostName')" name="hostName" class="m-0">
+          <a-form-item :label="$t('page.connection.hostName')" name="hostName" class="m-0">
             <a-input v-model:value="model.hostName" :placeholder="$t('page.connection.form.hostName')" />
-          </AFormItem>
+          </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <AFormItem :label="$t('page.connection.databases')" name="databases" class="m-0">
-            <AInput v-model:value="model.databases" :placeholder="$t('page.connection.form.databases')" />
-          </AFormItem>
+          <a-form-item :label="$t('page.connection.databases')" name="databases" class="m-0">
+            <a-input v-model:value="model.databases" :placeholder="$t('page.connection.form.databases')" />
+          </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label-col="{ span: 4 }" label=" " :colon="false" class="m-0">
+          <a-form-item label="&nbsp;" :colon="false" class="m-0">
             <div class="w-full flex-y-center justify-start gap-12px">
               <a-button type="primary" ghost @click="reset">
                   <template #icon>
