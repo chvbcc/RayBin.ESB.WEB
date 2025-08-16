@@ -20,6 +20,7 @@ const local: App.I18n.Schema = {
     confirm: '确认',
     delete: '删除',
     deleteSuccess: '删除成功',
+    deleteFailed: '删除失败',
     confirmDelete: '确认删除吗？',
     edit: '编辑',
     error: '错误',

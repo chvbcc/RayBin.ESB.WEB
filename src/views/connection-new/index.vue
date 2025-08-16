@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
-import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
 import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '@/store/modules/app';
 import { useAuthStore } from '@/store/modules/auth';
 import { translateOptions } from '@/utils/common';
 import CustomAlert from '@/components/custom/custom-alert.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { databaseTypeOptions, connectionModeOptions } from '@/constants/business';
-import { testConnection, checkConnectionName, saveConnection } from '@/service/api';
+import { fetchTest, fetchCheckName, fetchSave, fetchGetModel } from '@/service/api';
 import { parseConnectionString, parseConnectionModel, getConnectionStringByType } from '@/views/common/connection';
 
+const route = useRoute();
 const router = useRouter();
 const appStore = useAppStore();
 const authStore = useAuthStore();
@@ -30,7 +32,7 @@ const isCustomMode = computed(() => connectionMode.value === '0');
 const isConnectionStringMode = computed(() => connectionMode.value === '1');
 
 // 2. 定义默认模型
-const model = ref(createDefaultModel());
+const model = ref<Api.ConnectionTypes.ConnectionModel>(createDefaultModel());
 
 function createDefaultModel(): Api.ConnectionTypes.ConnectionModel {
   return {
@@ -46,6 +48,17 @@ function createDefaultModel(): Api.ConnectionTypes.ConnectionModel {
   };
 }
 
+onMounted(async () => {
+  const id = Number(route.params.id ?? 0);
+  if (id) {
+    const { response } = await fetchGetModel(id);
+    const data = response.data as { code: string; msg: string; data: Api.ConnectionTypes.ConnectionModel };
+
+    model.value = (data?.data && Object.keys(data.data).length > 0) ? data.data as Api.ConnectionTypes.ConnectionModel : createDefaultModel();
+  }
+});
+
+
 // 3. 定义规则类型
 type RuleKey = Extract<keyof Api.ConnectionTypes.ConnectionModel, 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
 
@@ -60,7 +73,7 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
         return Promise.reject(new Error(($t('page.connection.form.connectionName') as string)));
       }
       const createUserId = parseInt(authStore.userInfo.userId) ?? 0;
-      const { response } = await checkConnectionName(name, createUserId, model.value.id);
+      const { response } = await fetchCheckName(name, createUserId, model.value.id);
       const data = response.data as { code: string; msg: string; data: boolean };
       if (data.msg==="success" && data.data) {
         return Promise.reject(new Error($t('common.exists')));
@@ -114,7 +127,7 @@ const handleCloseAlert = () => {
 
 // 8. 测试连接
 async function handleTestConnection() {
-  const { response } = await testConnection(model.value);
+  const { response } = await fetchTest(model.value);
   const data = response.data as { code: string; msg: string; data: string };
   if (data.msg === "fail") {
       message.value =  $t('common.fail')
@@ -130,27 +143,37 @@ async function handleTestConnection() {
 }
 
 // 9. 保存连接
-async function handleSave()  {
+async function handleSave() {
   formRef.value?.validate().then(async () => {
-    const { response } = await saveConnection(model.value);
-    const data = response.data as { code: string; msg: string; data: string};
+    const { response } = await fetchTest(model.value);
+    const data = response.data as { code: string; msg: string; data: string };
     if (data.msg === "fail") {
-      window.$message?.error(data.data);
-    } else if (data.msg === "success") {
-      window.$message?.success($t('common.addSuccess'));
-      appStore.tabStore.removeActiveTab();
-      router.push({ name: 'connection' });
+      message.value =  $t('common.fail')
+      description.value = data.data
+      type.value = 'error';
+      showAlert.value = true;
     }
-    }).catch(() => {
-      return;
+    else if (data.msg === "success") {
+      const { response } = await fetchSave(model.value);
+      const data = response.data as { code: string; msg: string; data: string};
+      if (data.msg === "fail") {
+        window.$message?.error(data.data);
+      } else if (data.msg === "success") {
+        window.$message?.success($t('common.addSuccess'));
+        appStore.tabStore.removeActiveTab();
+        router.push({ name: 'connection' });
+      }
+    }
+  }).catch(() => {
+    return;
   });
 }
 
-// 10. 返回
 function handleBack() {
   appStore.tabStore.removeActiveTab();
   router.push({ name: 'connection' });
 }
+
 </script>
 
 <template>

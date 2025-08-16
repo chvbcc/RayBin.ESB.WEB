@@ -1,17 +1,17 @@
 <script setup lang="tsx">
-import { databaseTypeRecord } from '@/constants/business';
-import { fetchGetConnectionList } from '@/service/api';
-import { useTable, useTableOperate } from '@/hooks/common/table';
-import ConnectionSearch from './modules/connection-search.vue';
-import { useAppStore } from '@/store/modules/app';
-import { useRouter } from 'vue-router';
 import { $t } from '@/locales';
+import { useRouter } from 'vue-router';
+import { useAppStore } from '@/store/modules/app';
+import { fetchGetList,fetchDelete } from '@/service/api';
+import { databaseTypeRecord } from '@/constants/business';
+import ConnectionSearch from './modules/connection-search.vue';
+import { useTable, useTableOperate } from '@/hooks/common/table';
 
 const router = useRouter();
 const appStore = useAppStore();
 
 const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
-  apiFn: fetchGetConnectionList,
+  apiFn: fetchGetList,
   apiParams: {
     current: 1,
     size: 10,
@@ -69,7 +69,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       width: 130,
       customRender:  ({ record })  => (
         <div class="flex-center gap-8px">
-          <a-button type="default" class="table-edit-btn" onClick={() => edit(record.id)}>
+          <a-button type="default" class="table-edit-btn" onClick={() => handleEdit(record.id)}>
             {$t('common.edit')}
           </a-button>
           <a-popconfirm title={$t('common.confirmDelete')} onConfirm={() => handleDelete(record.id)}>
@@ -83,7 +83,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
   ]
 });
 
-const {handleEdit, onDeleted } = useTableOperate(data, getData);
+const { onDeleted } = useTableOperate(data, getData);
 
 async function handleAdd() {
   appStore.tabStore.removeActiveTab();
@@ -91,11 +91,26 @@ async function handleAdd() {
 }
 
 function handleDelete(id: number) {
-  onDeleted();
+  fetchDelete(id).then((res) => {
+    if(!res.error) {
+      const result = res.response.data;
+      if (result.msg === 'success' && result.data === true) {
+        onDeleted();
+      }
+      else if (result.msg === 'fail') {
+        window.$message?.error(String(result.data));
+      }
+      else if (res.response.status != 200) {
+        window.$message?.error($t('common.deleteFailed'));
+      }
+    }
+  })
 }
 
-function edit(id: number) {
-  handleEdit(id);
+function handleEdit(id: number) {
+  console.log('handleEdit', id);
+  appStore.tabStore.removeActiveTab();
+  router.push({ name: 'connection-new', params: { id } });
 }
 
 function refresh() {

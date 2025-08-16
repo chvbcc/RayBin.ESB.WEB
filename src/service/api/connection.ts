@@ -1,7 +1,7 @@
 import { request } from '../request';
 
 /** get connection list */
-export function fetchGetConnectionList(params?: Api.ConnectionTypes.ConnectionSearchParams) {
+export function fetchGetList(params?: Api.ConnectionTypes.ConnectionSearchParams) {
   return request<Api.ConnectionTypes.ConnectionList>({
     url: '/connection/getList',
     method: 'get',
@@ -10,8 +10,8 @@ export function fetchGetConnectionList(params?: Api.ConnectionTypes.ConnectionSe
 }
 
 /** test connection */
-export function testConnection(data: Api.ConnectionTypes.ConnectionModel) {
-  return request<App.Service.Response>({
+export function fetchTest(data: Api.ConnectionTypes.ConnectionModel) {
+  return request({
     url: '/connection/testConnection',
     method: 'post',
     data
@@ -19,15 +19,32 @@ export function testConnection(data: Api.ConnectionTypes.ConnectionModel) {
 }
 
 /** check connection name*/
-export function checkConnectionName(connectionName: string, createUserId: number, id: number) {
-  return request<App.Service.Response>({url: '/connection/checkName', params: { connectionName, createUserId, id }});
+export function fetchCheckName(connectionName: string, createUserId: number, id: number) {
+  return request({url: '/connection/checkName', params: { connectionName, createUserId, id }});
 }
 
 /** save connection */
-export function saveConnection(data: Api.ConnectionTypes.ConnectionModel) {
-  return request<App.Service.Response>({
+export function fetchSave(data: Api.ConnectionTypes.ConnectionModel) {
+  return request({
     url: '/connection/save',
     method: 'post',
     data
+  });
+}
+
+/** delete connection by id */
+export function fetchDelete(id: number) {
+  return request({
+    url: '/connection/delete',
+    method: 'delete',
+    params: { id }
+  });
+}
+
+export function fetchGetModel(id: number) {
+  return request({
+    url: '/connection/getModel',
+    method: 'get',
+    params: { id }
   });
 }
