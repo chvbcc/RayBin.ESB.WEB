@@ -1,1 +1,21 @@
 @forward './scrollbar.scss';
+// 基础按钮样式
+.table-edit-btn,
+.table-delete-btn {
+  // 默认使用中文宽度
+  width: 60px;
+  padding-top: 3px !important;
+  height: 26px;
+  transition: width 0.2s; // 语言切换时平滑过渡
+}
+
+// 适配i18n语言标识（与i18n.locale对应）
+// 例如i18n.locale为'en'时，对应类名'lang-en'
+.lang-en {
+  .table-edit-btn {
+    width: 80px;
+  } // Edit
+  .table-delete-btn {
+    width: 80px;
+  } // Delete
+}

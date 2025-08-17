@@ -38,7 +38,7 @@ declare namespace Api {
       /** record creator */
       createBy: string;
       /** record create time */
-      createDate: string;
+      createTime: string;
       /** record updater */
       updateBy: string;
       /** record update time */

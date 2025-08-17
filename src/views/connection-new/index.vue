@@ -42,18 +42,17 @@ function createDefaultModel(): Api.ConnectionTypes.ConnectionModel {
     hostName: '127.0.0.1',
     port: 3306,
     databases: 'myDB',
-    userName: 'root',
+    username: 'root',
     password: 'Pwd@123',
     connectionString: 'Server=127.0.0.1;Database=myDB;Uid=root;Pwd=Pwd@123;Port=3306;'
   };
 }
 
 onMounted(async () => {
-  const id = Number(route.params.id ?? 0);
+  const id = Number(route.query.id ?? 0);
   if (id) {
     const { response } = await fetchGetModel(id);
     const data = response.data as { code: string; msg: string; data: Api.ConnectionTypes.ConnectionModel };
-
     model.value = (data?.data && Object.keys(data.data).length > 0) ? data.data as Api.ConnectionTypes.ConnectionModel : createDefaultModel();
   }
 });
@@ -107,7 +106,7 @@ watch(() => [
     model.value.hostName,
     model.value.port,
     model.value.databases,
-    model.value.userName,
+    model.value.username,
     model.value.password,
     model.value.connectionString
   ],
@@ -212,8 +211,8 @@ function handleBack() {
               </a-form-item>
             </a-col>
             <a-col :span="18">
-              <a-form-item :label="$t('page.connection.userName')" name="userName" class="m-2">
-                <a-input v-model:value="model.userName" :placeholder="$t('page.connection.form.userName')" :disabled="isConnectionStringMode" />
+              <a-form-item :label="$t('page.connection.username')" name="username" class="m-2">
+                <a-input v-model:value="model.username" :placeholder="$t('page.connection.form.username')" :disabled="isConnectionStringMode" />
               </a-form-item>
             </a-col>
             <a-col :span="18">

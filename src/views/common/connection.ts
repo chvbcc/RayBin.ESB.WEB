@@ -13,7 +13,7 @@ export function  parseConnectionString(model: Api.ConnectionTypes.ConnectionMode
         model.port = parseInt(serverMatch[1].split(':')[1], 10);
       }
       if (dbMatch) model.databases = dbMatch[1];
-      if (userIdMatch) model.userName = userIdMatch[1];
+      if (userIdMatch) model.username = userIdMatch[1];
       if (pwdMatch) model.password = pwdMatch[1];
       break;
     }
@@ -28,7 +28,7 @@ export function  parseConnectionString(model: Api.ConnectionTypes.ConnectionMode
       if (serverMatch) model.hostName = serverMatch[1];
       if (portMatch) model.port = parseInt(portMatch[1], 10);
       if (dbMatch) model.databases = dbMatch[1];
-      if (uidMatch) model.userName = uidMatch[1];
+      if (uidMatch) model.username = uidMatch[1];
       if (pwdMatch) model.password = pwdMatch[1];
       break;
     }
@@ -42,7 +42,7 @@ export function  parseConnectionString(model: Api.ConnectionTypes.ConnectionMode
       if (hostMatch) model.hostName = hostMatch[1];
       if (portMatch) model.port = parseInt(portMatch[1], 10);
       if (serviceNameMatch) model.databases = serviceNameMatch[1];
-      if (userIdMatch) model.userName = userIdMatch[1];
+      if (userIdMatch) model.username = userIdMatch[1];
       if (pwdMatch) model.password = pwdMatch[1];
       break;
     }
@@ -59,7 +59,7 @@ export function  parseConnectionString(model: Api.ConnectionTypes.ConnectionMode
         model.port = 1433; // 默认端口
       }
       if (dbMatch) model.databases = dbMatch[1];
-      if (userIdMatch) model.userName = userIdMatch[1];
+      if (userIdMatch) model.username = userIdMatch[1];
       if (pwdMatch) model.password = pwdMatch[1];
       break;
     }
@@ -73,7 +73,7 @@ export function  parseConnectionString(model: Api.ConnectionTypes.ConnectionMode
       if (hostMatch) model.hostName = hostMatch[1];
       if (portMatch) model.port = parseInt(portMatch[1], 10);
       if (dbMatch) model.databases = dbMatch[1];
-      if (usernameMatch) model.userName = usernameMatch[1];
+      if (usernameMatch) model.username = usernameMatch[1];
       if (pwdMatch) model.password = pwdMatch[1];
       break;
     }
@@ -87,7 +87,7 @@ export function parseConnectionModel(model: Api.ConnectionTypes.ConnectionModel)
   const type = model.databaseType?.trim() ?? '';
   const host = model.hostName?.trim() ?? '';
   const db = model.databases?.trim() ?? '';
-  const user = model.userName?.trim() ?? '';
+  const user = model.username?.trim() ?? '';
   const pwd = model.password ?? '';
   const port = model.port !== undefined && model.port !== null && String(model.port) !== '' ? Number(model.port) : undefined;
 

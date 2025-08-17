@@ -110,7 +110,7 @@ function handleDelete(id: number) {
 function handleEdit(id: number) {
   console.log('handleEdit', id);
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'connection-new', params: { id } });
+  router.push({ name: 'connection-new', query: { id: String(id) } });
 }
 
 function refresh() {

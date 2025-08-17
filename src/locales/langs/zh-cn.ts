@@ -269,7 +269,7 @@ const local: App.I18n.Schema = {
       hostName: '主机名',
       port: '端口',
       databases: '数据库',
-      userName: '用户名',
+      username: '用户名',
       password: '密码',
       form: {
         connectionName: '请输入连接名称',
@@ -277,7 +277,7 @@ const local: App.I18n.Schema = {
         hostName: '请输入主机名',
         port: '请输入端口',
         databases: '请输入数据库名称',
-        userName: '请输入用户名',
+        username: '请输入用户名',
         password: '请输入密码',
         connectionString: '请输入连接字符串',
       },

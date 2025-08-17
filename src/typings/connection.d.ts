@@ -4,9 +4,7 @@ declare namespace Api {
     type CommonSearchParams = Pick<Api.Common.PaginatingCommonParams, 'current' | 'size'>;
 
     /** Connection search params */
-    type ConnectionSearchParams = Partial<
-      Pick<Api.ConnectionTypes.Connection, 'connectionName' | 'databaseType' | 'hostName' | 'databases'> & Common.CommonSearchParams
-    >;
+    type ConnectionSearchParams = Partial<Pick<Api.ConnectionTypes.Connection, 'connectionName' | 'databaseType' | 'hostName' | 'databases'> & Common.CommonSearchParams >;
 
     /** Connection list */
     type ConnectionList = Api.Common.PaginatingQueryRecord<Connection>;
@@ -22,12 +20,12 @@ declare namespace Api {
       hostName: string;
       port: number;
       databases: string;
-      userName: string;
+      username: string;
       password: string;
       connectionString: string;
     }>;
 
     // 2. 定义模型类型
-    type ConnectionModel = Pick<Api.ConnectionTypes.Connection, | 'id' | 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
+    type ConnectionModel = Pick<Api.ConnectionTypes.Connection, | 'id' | 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'username' | 'password' | 'connectionString'>;
   }
 }

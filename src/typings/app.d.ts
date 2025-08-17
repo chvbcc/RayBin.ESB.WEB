@@ -496,7 +496,7 @@ declare namespace App {
           hostName: string;
           port: string;
           databases: string;
-          userName: string;
+          username: string;
           password: string;
           form: {
             connectionName: string;
@@ -504,7 +504,7 @@ declare namespace App {
             hostName: string;
             port: string;
             databases: string;
-            userName: string;
+            username: string;
             password: string;
             connectionString: string;
           };

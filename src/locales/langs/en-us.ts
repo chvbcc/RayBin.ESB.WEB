@@ -270,7 +270,7 @@ const local: App.I18n.Schema = {
       hostName: 'Host Name',
       databases: 'Databases',
       port: 'Port',
-      userName: 'User Name',
+      username: 'User Name',
       password: 'Password',
       form: {
         connectionName: 'Please enter connection name',
@@ -278,7 +278,7 @@ const local: App.I18n.Schema = {
         hostName: 'Please enter host name',
         port: 'Please enter port',
         databases: 'Please enter databases',
-        userName: 'Please enter user name',
+        username: 'Please enter user name',
         password: 'Please enter password',
         connectionString: 'Please enter connection string'
       },
