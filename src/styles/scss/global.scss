@@ -11,11 +11,11 @@
 
 // 适配i18n语言标识（与i18n.locale对应）
 // 例如i18n.locale为'en'时，对应类名'lang-en'
-.lang-en {
+.lang-en-us {
   .table-edit-btn {
-    width: 80px;
-  } // Edit
+    width: 70px;
+  }
   .table-delete-btn {
-    width: 80px;
-  } // Delete
+    width: 70px;
+  }
 }

@@ -516,6 +516,7 @@ declare namespace App {
           connectionSuccess: string;
           connectionString: string;
         };
+
         manage: {
           common: {
             status: {
@@ -672,15 +673,9 @@ declare namespace App {
       };
     };
 
-    type GetI18nKey<T extends Record<string, unknown>, K extends keyof T = keyof T> = K extends string
-      ? T[K] extends Record<string, unknown>
-        ? `${K}.${GetI18nKey<T[K]>}`
-        : K
-      : never;
-
     type I18nKey = GetI18nKey<Schema>;
-
     type TranslateOptions<Locales extends string> = import('vue-i18n').TranslateOptions<Locales>;
+    type GetI18nKey<T extends Record<string, unknown>, K extends keyof T = keyof T> = K extends string ? T[K] extends Record<string, unknown> ? `${K}.${GetI18nKey<T[K]>}` : K : never;
 
     interface $T {
       (key: I18nKey): string;
