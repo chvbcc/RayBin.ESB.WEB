@@ -167,17 +167,26 @@ const routeMap: RouteMap = {
   "404": "/404",
   "500": "/500",
   "connection": "/connection",
-  "connection-new": "/connection-new",
+  "connection-action": "/connection-action",
   "database": "/database",
+  "database-action": "/database-action",
   "home": "/home",
   "iframe-page": "/iframe-page/:url",
+  "industria": "/industria",
+  "industria-action": "/industria-action",
   "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?",
   "manage": "/manage",
   "manage_menu": "/manage/menu",
   "manage_role": "/manage/role",
   "manage_user": "/manage/user",
   "manage_user-detail": "/manage/user-detail/:id",
-  "user-center": "/user-center"
+  "message": "/message",
+  "pending": "/pending",
+  "suspended": "/suspended",
+  "tasklog": "/tasklog",
+  "user-center": "/user-center",
+  "webapi": "/webapi",
+  "webapi-action": "/webapi-action"
 };
 
 /**

@@ -516,7 +516,6 @@ declare namespace App {
           connectionSuccess: string;
           connectionString: string;
         };
-
         manage: {
           common: {
             status: {

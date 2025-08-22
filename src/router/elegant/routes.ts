@@ -40,30 +40,16 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
-    name: 'connection',
-    path: '/connection',
-    component: 'layout.base$view.connection',
+    name: 'iframe-page',
+    path: '/iframe-page/:url',
+    component: 'layout.base$view.iframe-page',
+    props: true,
     meta: {
-      title: 'connection',
-      i18nKey: 'route.connection'
-    }
-  },
-  {
-    name: 'connection-new',
-    path: '/connection-new',
-    component: 'layout.base$view.connection-new',
-    meta: {
-      title: 'connection-new',
-      i18nKey: 'route.connection-new'
-    }
-  },
-  {
-    name: 'database',
-    path: '/database',
-    component: 'layout.base$view.database',
-    meta: {
-      title: 'database',
-      i18nKey: 'route.database'
+      title: 'iframe-page',
+      i18nKey: 'route.iframe-page',
+      constant: true,
+      hideInMenu: true,
+      keepAlive: true
     }
   },
   {
@@ -78,16 +64,121 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
-    name: 'iframe-page',
-    path: '/iframe-page/:url',
-    component: 'layout.base$view.iframe-page',
-    props: true,
+    name: 'connection',
+    path: '/connection',
+    component: 'layout.base$view.connection',
     meta: {
-      title: 'iframe-page',
-      i18nKey: 'route.iframe-page',
-      constant: true,
-      hideInMenu: true,
-      keepAlive: true
+      title: 'connection',
+      i18nKey: 'route.connection'
+    }
+  },
+  {
+    name: 'connection-action',
+    path: '/connection-action',
+    component: 'layout.base$view.connection-action',
+    meta: {
+      title: 'connection-action',
+      i18nKey: 'route.connection-action'
+    }
+  },
+  {
+    name: 'database',
+    path: '/database',
+    component: 'layout.base$view.database',
+    meta: {
+      title: 'database',
+      i18nKey: 'route.database'
+    }
+  },
+  {
+    name: 'database-action',
+    path: '/database-action',
+    component: 'layout.base$view.database-action',
+    meta: {
+      title: 'database-action',
+      i18nKey: 'route.database-action'
+    }
+  },
+  {
+    name: 'industria',
+    path: '/industria',
+    component: 'layout.base$view.industria',
+    meta: {
+      title: 'industria',
+      i18nKey: 'route.industria'
+    }
+  },
+  {
+    name: 'industria-action',
+    path: '/industria-action',
+    component: 'layout.base$view.industria-action',
+    meta: {
+      title: 'industria-action',
+      i18nKey: 'route.industria-action'
+    }
+  },
+  {
+    name: 'message',
+    path: '/message',
+    component: 'layout.base$view.message',
+    meta: {
+      title: 'message',
+      i18nKey: 'route.message'
+    }
+  },
+  {
+    name: 'pending',
+    path: '/pending',
+    component: 'layout.base$view.pending',
+    meta: {
+      title: 'pending',
+      i18nKey: 'route.pending'
+    }
+  },
+  {
+    name: 'suspended',
+    path: '/suspended',
+    component: 'layout.base$view.suspended',
+    meta: {
+      title: 'suspended',
+      i18nKey: 'route.suspended'
+    }
+  },
+  {
+    name: 'tasklog',
+    path: '/tasklog',
+    component: 'layout.base$view.tasklog',
+    meta: {
+      title: 'tasklog',
+      i18nKey: 'route.tasklog'
+    }
+  },
+  {
+    name: 'user-center',
+    path: '/user-center',
+    component: 'layout.base$view.user-center',
+    meta: {
+      title: 'user-center',
+      i18nKey: 'route.user-center',
+      hideInMenu: true
+    }
+  },
+  {
+    name: 'webapi',
+    path: '/webapi',
+    component: 'layout.base$view.webapi',
+    meta: {
+      title: 'webapi',
+      i18nKey: 'route.webapi'
+    }
+  },
+  {
+    name: 'webapi-action',
+    path: '/webapi-action',
+    component: 'layout.base$view.webapi-action',
+    meta: {
+      title: 'webapi-action',
+      i18nKey: 'route.webapi-action'
     }
   },
   {
@@ -165,15 +256,5 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       }
     ]
-  },
-  {
-    name: 'user-center',
-    path: '/user-center',
-    component: 'layout.base$view.user-center',
-    meta: {
-      title: 'user-center',
-      i18nKey: 'route.user-center',
-      hideInMenu: true
-    }
   }
 ];

@@ -1,0 +1,42 @@
+1. 根据提供的信息
+在当前项目 src\typings\app.d.ts 文件 common: 下生成对应的声明
+
+
+
+
+
+根据提供的数据库字段信息
+在当前项目 src\typings\app.d.ts 文件 manage: 上方
+生成声明 task
+在声明下包含 form 子属性
+
+注意：
+需要将首字符转为小写
+title:string; 为固定的每次生成都需要且保持在第一个位置
+
+数据库字段信息如下：
+(<TaskType, varchar(50),>     //任务类型
+,<TaskName, varchar(50),>     //任务名称
+,<RunType, varchar(10),>      //运行类型
+,<RunTime, datetime,>         //运行时间
+,<RunFrequency, int,>         //运行频率
+,<DataHandle, int,>           //数据处理
+,<ProgrammeLanguage, int,>    //编程语言
+,<DataHandleScript, text,>    //数据处理脚本
+,<IsDebug, bit,>              //是否调试
+,<Status, int,>               //状态
+,<Description, varchar(500),> //说明
+,<CreateUserID, int,>         //创建者ID
+,<CreateTime, datetime,>)     //创建时间
+
+示例
+xxx {
+  title: string;
+  field：string
+  .....
+  form: {
+    field：string
+    .....
+  }
+}
+

@@ -21,17 +21,26 @@ declare module "@elegant-router/types" {
     "404": "/404";
     "500": "/500";
     "connection": "/connection";
-    "connection-new": "/connection-new";
+    "connection-action": "/connection-action";
     "database": "/database";
+    "database-action": "/database-action";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
+    "industria": "/industria";
+    "industria-action": "/industria-action";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
     "manage": "/manage";
     "manage_menu": "/manage/menu";
     "manage_role": "/manage/role";
     "manage_user": "/manage/user";
     "manage_user-detail": "/manage/user-detail/:id";
+    "message": "/message";
+    "pending": "/pending";
+    "suspended": "/suspended";
+    "tasklog": "/tasklog";
     "user-center": "/user-center";
+    "webapi": "/webapi";
+    "webapi-action": "/webapi-action";
   };
 
   /**
@@ -67,13 +76,22 @@ declare module "@elegant-router/types" {
     | "404"
     | "500"
     | "connection"
-    | "connection-new"
+    | "connection-action"
     | "database"
+    | "database-action"
     | "home"
     | "iframe-page"
+    | "industria"
+    | "industria-action"
     | "login"
     | "manage"
+    | "message"
+    | "pending"
+    | "suspended"
+    | "tasklog"
     | "user-center"
+    | "webapi"
+    | "webapi-action"
   >;
 
   /**
@@ -95,15 +113,24 @@ declare module "@elegant-router/types" {
     | "500"
     | "iframe-page"
     | "login"
-    | "connection-new"
+    | "connection-action"
     | "connection"
+    | "database-action"
     | "database"
     | "home"
+    | "industria-action"
+    | "industria"
     | "manage_menu"
     | "manage_role"
     | "manage_user-detail"
     | "manage_user"
+    | "message"
+    | "pending"
+    | "suspended"
+    | "tasklog"
     | "user-center"
+    | "webapi-action"
+    | "webapi"
   >;
 
   /**
