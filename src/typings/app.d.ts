@@ -542,28 +542,33 @@ declare namespace App {
           };
           user: {
             title: string;
-            userName: string;
-            userGender: string;
-            nickName: string;
-            userPhone: string;
-            userEmail: string;
-            userStatus: string;
+            username: string;
+            password: string;
+            userAvatar: string;
+            employeeName: string;
+            employeeNo: string;
+            gender: string;
+            phone: string;
+            email: string;
+            weChat: string;
+            dingDing: string;
+            status: string;
             userRole: string;
             form: {
-              userName: string;
-              userGender: string;
-              nickName: string;
-              userPhone: string;
-              userEmail: string;
-              userStatus: string;
+              username: string;
+              password: string;
+              employeeName: string;
+              gender: string;
+              email: string;
+              status: string;
               userRole: string;
             };
-            addUser: string;
-            editUser: string;
-            gender: {
+            gendertype: {
               male: string;
               female: string;
             };
+            addUser: string;
+            editUser: string;
           };
           menu: {
             home: string;

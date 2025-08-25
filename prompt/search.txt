@@ -2,33 +2,31 @@
 在当前项目 src\typings\app.d.ts 文件 common: 下生成对应的声明
 
 
-
-
-
 根据提供的数据库字段信息
-在当前项目 src\typings\app.d.ts 文件 manage: 上方
-生成声明 task
-在声明下包含 form 子属性
+数据库信息如下：
+表名：用户管理
+字段名	字段类型	字段说明
+ID	int	自动编号
+Username	varchar	用户名
+Password	varchar	密码
+UserAvatar	varchar	用户头像URL或路径
+EmployeeName	varchar	姓名
+EmployeeNo	varchar	员工编号
+Gender	varchar	性别
+Phone	varchar	电话
+Email	varchar	邮箱
+WeChat	varchar	微信标识
+DingDing	varchar	钉钉标识
+Status	int	状态
+CreateTime	datetime	创建时间
+
+生成type声明
+在 src\typings\app.d.ts 文件生成声明 User 以及 form 子属性
 
 注意：
 需要将首字符转为小写
 title:string; 为固定的每次生成都需要且保持在第一个位置
-
-数据库字段信息如下：
-(<TaskType, varchar(50),>     //任务类型
-,<TaskName, varchar(50),>     //任务名称
-,<RunType, varchar(10),>      //运行类型
-,<RunTime, datetime,>         //运行时间
-,<RunFrequency, int,>         //运行频率
-,<DataHandle, int,>           //数据处理
-,<ProgrammeLanguage, int,>    //编程语言
-,<DataHandleScript, text,>    //数据处理脚本
-,<IsDebug, bit,>              //是否调试
-,<Status, int,>               //状态
-,<Description, varchar(500),> //说明
-,<CreateUserID, int,>         //创建者ID
-,<CreateTime, datetime,>)     //创建时间
-
+代码位置插入在 manage: {} 的上方不是在 manage内
 示例
 xxx {
   title: string;
@@ -39,4 +37,21 @@ xxx {
     .....
   }
 }
+
+生成声明对应的中文语言 使用字段说明
+在src\locales\langs\zh-cn.ts 文件生成声明 User 以及 form 子属性
+代码位置插入在 manage: {} 的上方不是在 manage内
+
+示例
+xxx {
+  title: 用户管理;  这里使用表名
+  field：xxxx;
+  .....
+  form: {
+    field：string
+    .....
+  }
+}
+
+在当前项目 src\locales\langs\en-us.ts 文件中生成与上面任务中文对应的英文 需要将中文翻译下
 

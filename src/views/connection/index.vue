@@ -87,7 +87,7 @@ const { onDeleted } = useTableOperate(data, getData);
 
 async function handleAdd() {
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'connection-new' });
+  router.push({ name: 'connection-action' });
 }
 
 function handleDelete(id: number) {
