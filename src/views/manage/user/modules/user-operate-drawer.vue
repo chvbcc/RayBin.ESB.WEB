@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { fetchGetAllRoles } from '@/service/api';
 import { $t } from '@/locales';
+import { computed, ref, watch } from 'vue';
+import { RoleApi } from '@/service/api/manage';
+import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { enableStatusOptions, userGenderOptions } from '@/constants/business';
 
 defineOptions({
@@ -10,9 +10,7 @@ defineOptions({
 });
 
 interface Props {
-  /** the type of operation */
   operateType: AntDesign.TableOperateType;
-  /** the edit row data */
   rowData?: Api.SystemManage.User | null;
 }
 
@@ -24,9 +22,7 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 
-const visible = defineModel<boolean>('visible', {
-  default: false
-});
+const visible = defineModel<boolean>('visible', { default: false });
 
 const { formRef, validate, resetFields } = useAntdForm();
 const { defaultRequiredRule } = useFormRules();
@@ -39,59 +35,57 @@ const title = computed(() => {
   return titles[props.operateType];
 });
 
-type Model = Pick<
-  Api.SystemManage.User,
-  'userName' | 'userGender' | 'nickName' | 'userPhone' | 'userEmail' | 'userRoles' | 'status'
->;
+// 2. 定义默认模型
+const model = ref<Api.SystemManage.UserModel>(createDefaultModel());
 
-const model = ref(createDefaultModel());
-
-function createDefaultModel(): Model {
+function createDefaultModel(): Api.SystemManage.UserModel {
   return {
-    userName: '',
-    userGender: '1',
-    nickName: '',
-    userPhone: '',
-    userEmail: '',
-    userRoles: [],
+    id: 0,
+    username: '',
+    password: '',
+    userAvatar: '',
+    employeeName: '',
+    employeeNo: '',
+    gender: '1',
+    phone: '',
+    email: '',
+    weChat: '',
+    dingDing: '',
     status: '1'
   };
 }
 
-type RuleKey = Extract<keyof Model, 'userName' | 'status'>;
+type RuleKey = Extract<keyof Api.SystemManage.User, 'username' | 'status'>;
 
-const rules: Record<RuleKey, App.Global.FormRule> = {
-  userName: defaultRequiredRule,
-  status: defaultRequiredRule
-};
+const rules: Record<RuleKey, App.Global.FormRule> = { username: defaultRequiredRule, status: defaultRequiredRule };
 
 /** the enabled role options */
-const roleOptions = ref<CommonType.Option<string>[]>([]);
+const userRoles = ref<CommonType.Option<number>[]>([]);
+const roleOptions = ref<CommonType.Option<number>[]>([]);
 
 async function getRoleOptions() {
-  const { error, data } = await fetchGetAllRoles();
-
+  const { error, data } = await RoleApi.fetchGetList();
   if (!error) {
-    const options = data.map(item => ({
+    roleOptions.value = data.map(item => ({
       label: item.roleName,
-      value: item.roleCode
+      value: item.id
     }));
+  }
+}
 
-    // the mock data does not have the roleCode, so fill it
-    // if the real request, remove the following code
-    const userRoleOptions = model.value.userRoles.map(item => ({
-      label: item,
-      value: item
+async function getUserRoles() {
+  if (!model.value.id) return;
+  const { error, data } = await RoleApi.fetchGetRoles(model.value.id);
+  if (!error) {
+    userRoles.value = data.map(item => ({
+      label: item.roleName,
+      value: item.id
     }));
-    // end
-
-    roleOptions.value = [...userRoleOptions, ...options];
   }
 }
 
 function handleInitModel() {
   model.value = createDefaultModel();
-
   if (props.operateType === 'edit' && props.rowData) {
     Object.assign(model.value, props.rowData);
   }
@@ -114,55 +108,57 @@ watch(visible, () => {
     handleInitModel();
     resetFields();
     getRoleOptions();
+    getUserRoles();
   }
 });
 </script>
 
 <template>
-  <ADrawer v-model:open="visible" :title="title" :width="360">
-    <AForm ref="formRef" layout="vertical" :model="model" :rules="rules">
-      <AFormItem :label="$t('page.manage.user.userName')" name="userName">
-        <AInput v-model:value="model.userName" :placeholder="$t('page.manage.user.form.userName')" />
-      </AFormItem>
-      <AFormItem :label="$t('page.manage.user.userGender')" name="userGender">
-        <ARadioGroup v-model:value="model.userGender">
-          <ARadio v-for="item in userGenderOptions" :key="item.value" :value="item.value">
+  <a-drawer v-model:open="visible" :title="title" :width="360">
+    <a-form ref="formRef" layout="vertical" :model="model" :rules="rules">
+      <a-form-item :label="$t('page.manage.user.username')" name="username">
+        <a-input v-model:value="model.username" :placeholder="$t('page.manage.user.form.username')" />
+      </a-form-item>
+      <a-form-item :label="$t('page.manage.user.gender')" name="gender">
+        <a-radio-group v-model:value="model.gender">
+          <a-radio v-for="item in userGenderOptions" :key="item.value" :value="item.value">
             {{ $t(item.label) }}
-          </ARadio>
-        </ARadioGroup>
-      </AFormItem>
-      <AFormItem :label="$t('page.manage.user.nickName')" name="nickName">
-        <AInput v-model:value="model.nickName" :placeholder="$t('page.manage.user.form.nickName')" />
-      </AFormItem>
-      <AFormItem :label="$t('page.manage.user.userPhone')" name="userPhone">
-        <AInput v-model:value="model.userPhone" :placeholder="$t('page.manage.user.form.userPhone')" />
-      </AFormItem>
-      <AFormItem :label="$t('page.manage.user.userEmail')" name="email">
-        <AInput v-model:value="model.userEmail" :placeholder="$t('page.manage.user.form.userEmail')" />
-      </AFormItem>
-      <AFormItem :label="$t('page.manage.user.userStatus')" name="status">
-        <ARadioGroup v-model:value="model.status">
-          <ARadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value">
+          </a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item :label="$t('page.manage.user.userAvatar')" name="userAvatar">
+        <a-input v-model:value="model.userAvatar" :placeholder="$t('page.manage.user.form.userAvatar')" />
+      </a-form-item>
+      <a-form-item :label="$t('page.manage.user.employeeName')" name="employeeName">
+        <a-input v-model:value="model.employeeName" :placeholder="$t('page.manage.user.form.employeeName')" />
+      </a-form-item>
+      <a-form-item :label="$t('page.manage.user.employeeNo')" name="employeeNo">
+        <a-input v-model:value="model.employeeNo" :placeholder="$t('page.manage.user.form.employeeNo')" />
+      </a-form-item>
+      <a-form-item :label="$t('page.manage.user.phone')" name="phone">
+        <a-input v-model:value="model.phone" :placeholder="$t('page.manage.user.form.phone')" />
+      </a-form-item>
+      <a-form-item :label="$t('page.manage.user.email')" name="email">
+        <a-input v-model:value="model.email" :placeholder="$t('page.manage.user.form.email')" />
+      </a-form-item>
+      <a-form-item :label="$t('page.manage.user.status')" name="status">
+        <a-radio-group v-model:value="model.status">
+          <a-radio v-for="item in enableStatusOptions" :key="item.value" :value="item.value">
             {{ $t(item.label) }}
-          </ARadio>
-        </ARadioGroup>
-      </AFormItem>
-      <AFormItem :label="$t('page.manage.user.userRole')" name="roles">
-        <ASelect
-          v-model:value="model.userRoles"
-          multiple
-          :options="roleOptions"
-          :placeholder="$t('page.manage.user.form.userRole')"
-        />
-      </AFormItem>
-    </AForm>
+          </a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item :label="$t('page.manage.user.userRoles')" name="userRoles">
+        <a-select v-model:value="userRoles" mode="multiple" :options="roleOptions" :placeholder="$t('page.manage.user.form.userRoles')" />
+      </a-form-item>
+    </a-form>
     <template #footer>
-      <ASpace :size="16">
-        <AButton @click="closeDrawer">{{ $t('common.cancel') }}</AButton>
-        <AButton type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</AButton>
-      </ASpace>
+      <a-space :size="16">
+        <a-button @click="closeDrawer">{{ $t('common.cancel') }}</a-button>
+        <a-button type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</a-button>
+      </a-space>
     </template>
-  </ADrawer>
+  </a-drawer>
 </template>
 
 <style scoped></style>

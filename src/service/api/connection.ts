@@ -1,7 +1,7 @@
 import { request } from '../request';
 
 /** test connection */
-export function fetchTest(data: Api.ConnectionTypes.ConnectionModel) {
+export function fetchTest(data: Api.Connection.ConnectionModel) {
   return request({
     url: '/connection/testConnection',
     method: 'post',
@@ -10,8 +10,8 @@ export function fetchTest(data: Api.ConnectionTypes.ConnectionModel) {
 }
 
 /** get connection list */
-export function fetchGetList(params?: Api.ConnectionTypes.ConnectionSearchParams) {
-  return request<Api.ConnectionTypes.ConnectionList>({
+export function fetchGetList(params?: Api.Connection.ConnectionSearchParams) {
+  return request<Api.Connection.ConnectionList>({
     url: '/connection/getList',
     method: 'get',
     params
@@ -32,7 +32,7 @@ export function fetchCheckName(connectionName: string, createUserId: number, id:
 }
 
 /** save connection */
-export function fetchSave(data: Api.ConnectionTypes.ConnectionModel) {
+export function fetchSave(data: Api.Connection.ConnectionModel) {
   let url = data.id === 0 ? '/connection/save' : '/connection/update';
   return request({
     url: url,
@@ -49,5 +49,3 @@ export function fetchDelete(id: number) {
     params: { id }
   });
 }
-
-

@@ -1,11 +1,11 @@
 <script setup lang="tsx">
-import { Button, Popconfirm, Tag } from 'ant-design-vue';
-import { fetchGetUserList } from '@/service/api';
-import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 import { $t } from '@/locales';
-import { enableStatusRecord, userGenderRecord } from '@/constants/business';
-import UserOperateDrawer from './modules/user-operate-drawer.vue';
+import  { UserApi }  from '@/service/api/manage';
 import UserSearch from './modules/user-search.vue';
+import { Button, Popconfirm, Tag } from 'ant-design-vue';
+import UserOperateDrawer from './modules/user-operate-drawer.vue';
+import { enableStatusRecord, userGenderRecord } from '@/constants/business';
+import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
 const { tableWrapperRef, scrollConfig } = useTableScroll();
 
@@ -20,16 +20,14 @@ const {
   searchParams,
   resetSearchParams
 } = useTable({
-  apiFn: fetchGetUserList,
+  apiFn: UserApi.fetchGetPagingList,
   apiParams: {
     current: 1,
     size: 10,
+    username: undefined,
+    employeeName: undefined,
+    email: undefined,
     status: undefined,
-    userName: undefined,
-    userGender: undefined,
-    nickName: undefined,
-    userPhone: undefined,
-    userEmail: undefined
   },
   columns: () => [
     {
@@ -40,72 +38,55 @@ const {
       width: 64
     },
     {
-      key: 'userName',
-      dataIndex: 'userName',
-      title: $t('page.manage.user.userName'),
+      key: 'username',
+      dataIndex: 'username',
+      title: $t('page.manage.user.username'),
       align: 'center',
       minWidth: 100
     },
     {
-      key: 'userGender',
-      title: $t('page.manage.user.userGender'),
+      key: 'gender',
+      title: $t('page.manage.user.gender'),
       align: 'center',
-      dataIndex: 'userGender',
+      dataIndex: 'gender',
       width: 100,
       customRender: ({ record }) => {
-        if (record.userGender === null) {
+        if (record.gender === null) {
           return null;
         }
-
-        const tagMap: Record<Api.SystemManage.UserGender, string> = {
-          1: 'processing',
-          2: 'error'
-        };
-
-        const label = $t(userGenderRecord[record.userGender]);
-
-        return <Tag color={tagMap[record.userGender]}>{label}</Tag>;
+        const label = $t(userGenderRecord[record.gender]);
+        return label;
       }
     },
     {
-      key: 'nickName',
-      dataIndex: 'nickName',
-      title: $t('page.manage.user.nickName'),
-      align: 'center',
-      minWidth: 100
-    },
-    {
-      key: 'userPhone',
-      dataIndex: 'userPhone',
-      title: $t('page.manage.user.userPhone'),
+      key: 'employeeName',
+      dataIndex: 'employeeName',
+      title: $t('page.manage.user.employeeName'),
       align: 'center',
       width: 120
     },
     {
-      key: 'userEmail',
-      dataIndex: 'userEmail',
-      title: $t('page.manage.user.userEmail'),
+      key: 'email',
+      dataIndex: 'email',
+      title: $t('page.manage.user.email'),
       align: 'center',
       minWidth: 200
     },
     {
       key: 'status',
       dataIndex: 'status',
-      title: $t('page.manage.user.userStatus'),
+      title: $t('page.manage.user.status'),
       align: 'center',
       width: 100,
       customRender: ({ record }) => {
         if (record.status === null) {
           return null;
         }
-
         const tagMap: Record<Api.Common.EnableStatus, string> = {
-          1: 'success',
-          2: 'warning'
+          0: 'success',
+          1: 'warning'
         };
-
         const label = $t(enableStatusRecord[record.status]);
-
         return <Tag color={tagMap[record.status]}>{label}</Tag>;
       }
     },
@@ -144,16 +125,11 @@ const {
 } = useTableOperate(data, getData);
 
 async function handleBatchDelete() {
-  // request
-  // console.log(checkedRowKeys.value);
-
   onBatchDeleted();
 }
 
 function handleDelete(id: number) {
-  // request
   console.log(id);
-
   onDeleted();
 }
 
@@ -165,42 +141,13 @@ function edit(id: number) {
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <UserSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
-    <ACard
-      :title="$t('page.manage.user.title')"
-      :bordered="false"
-      :body-style="{ flex: 1, overflow: 'hidden' }"
-      class="flex-col-stretch sm:flex-1-hidden card-wrapper"
-    >
+    <a-card :title="$t('page.manage.user.title')" :bordered="false" :body-style="{ flex: 1, overflow: 'hidden' }" class="flex-col-stretch sm:flex-1-hidden card-wrapper">
       <template #extra>
-        <TableHeaderOperation
-          v-model:columns="columnChecks"
-          :disabled-delete="checkedRowKeys.length === 0"
-          :loading="loading"
-          @add="handleAdd"
-          @delete="handleBatchDelete"
-          @refresh="getData"
-        />
+        <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
-      <ATable
-        ref="tableWrapperRef"
-        :columns="columns"
-        :data-source="data"
-        size="small"
-        :row-selection="rowSelection"
-        :scroll="scrollConfig"
-        :loading="loading"
-        row-key="id"
-        :pagination="mobilePagination"
-        class="h-full"
-      />
-
-      <UserOperateDrawer
-        v-model:visible="drawerVisible"
-        :operate-type="operateType"
-        :row-data="editingData"
-        @submitted="getDataByPage"
-      />
-    </ACard>
+      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" size="small" :row-selection="rowSelection" :scroll="scrollConfig" :loading="loading" row-key="id":pagination="mobilePagination" class="h-full" bordered />
+      <UserOperateDrawer v-model:visible="drawerVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
+    </a-Card>
   </div>
 </template>
 

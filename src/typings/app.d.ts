@@ -553,15 +553,18 @@ declare namespace App {
             weChat: string;
             dingDing: string;
             status: string;
-            userRole: string;
+            userRoles: string;
             form: {
               username: string;
               password: string;
+              userAvatar: string;
               employeeName: string;
+              employeeNo: string;
               gender: string;
+              phone: string;
               email: string;
               status: string;
-              userRole: string;
+              userRoles: string;
             };
             gendertype: {
               male: string;

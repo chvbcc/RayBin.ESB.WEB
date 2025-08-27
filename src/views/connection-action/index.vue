@@ -9,7 +9,7 @@ import { translateOptions } from '@/utils/common';
 import CustomAlert from '@/components/custom/custom-alert.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { databaseTypeOptions, connectionModeOptions } from '@/constants/business';
-import { fetchTest, fetchCheckName, fetchSave, fetchGetModel } from '@/service/api';
+import { fetchTest, fetchCheckName, fetchSave, fetchGetModel } from '@/service/api/connection';
 import { parseConnectionString, parseConnectionModel, getConnectionStringByType } from '@/views/common/connection';
 
 const route = useRoute();
@@ -32,9 +32,9 @@ const isCustomMode = computed(() => connectionMode.value === '0');
 const isConnectionStringMode = computed(() => connectionMode.value === '1');
 
 // 2. 定义默认模型
-const model = ref<Api.ConnectionTypes.ConnectionModel>(createDefaultModel());
+const model = ref<Api.Connection.ConnectionModel>(createDefaultModel());
 
-function createDefaultModel(): Api.ConnectionTypes.ConnectionModel {
+function createDefaultModel(): Api.Connection.ConnectionModel {
   return {
     id: 0,
     connectionName: '',
@@ -52,14 +52,14 @@ onMounted(async () => {
   const id = Number(route.query.id ?? 0);
   if (id) {
     const { response } = await fetchGetModel(id);
-    const data = response.data as { code: string; msg: string; data: Api.ConnectionTypes.ConnectionModel };
-    model.value = (data?.data && Object.keys(data.data).length > 0) ? data.data as Api.ConnectionTypes.ConnectionModel : createDefaultModel();
+    const data = response.data as { code: string; msg: string; data: Api.Connection.ConnectionModel };
+    model.value = (data?.data && Object.keys(data.data).length > 0) ? data.data as Api.Connection.ConnectionModel : createDefaultModel();
   }
 });
 
 
 // 3. 定义规则类型
-type RuleKey = Extract<keyof Api.ConnectionTypes.ConnectionModel, 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
+type RuleKey = Extract<keyof Api.Connection.ConnectionModel, 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
 
 // 4. 将rules改为计算属性，根据连接模式动态调整必填字段
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {

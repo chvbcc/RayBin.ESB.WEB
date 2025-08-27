@@ -1,15 +1,15 @@
 import { transformRecordToOption } from '@/utils/common';
 
 export const enableStatusRecord: Record<Api.Common.EnableStatus, App.I18n.I18nKey> = {
-  '1': 'page.manage.common.status.enable',
-  '2': 'page.manage.common.status.disable'
+  '0': 'page.manage.common.status.enable',
+  '1': 'page.manage.common.status.disable'
 };
 
 export const enableStatusOptions = transformRecordToOption(enableStatusRecord);
 
-export const userGenderRecord: Record<Api.SystemManage.UserGender, App.I18n.I18nKey> = {
-  '1': 'page.manage.user.gender.male',
-  '2': 'page.manage.user.gender.female'
+export const userGenderRecord: Record<Api.SystemManage.Gender, App.I18n.I18nKey> = {
+  '0': 'page.manage.user.gendertype.female',
+  '1': 'page.manage.user.gendertype.male'
 };
 
 export const userGenderOptions = transformRecordToOption(userGenderRecord);
@@ -29,7 +29,7 @@ export const menuIconTypeRecord: Record<Api.SystemManage.IconType, App.I18n.I18n
 export const menuIconTypeOptions = transformRecordToOption(menuIconTypeRecord);
 
 
-export const databaseTypeRecord: Record<Api.ConnectionTypes.DatabaseType, App.I18n.I18nKey> = {
+export const databaseTypeRecord: Record<Api.Connection.DatabaseType, App.I18n.I18nKey> = {
   '0': 'dropdownList.databaseType.hana',
   '1': 'dropdownList.databaseType.mySql',
   '2': 'dropdownList.databaseType.oracle',
@@ -43,7 +43,7 @@ export const databaseTypeRecord: Record<Api.ConnectionTypes.DatabaseType, App.I1
 
 export const databaseTypeOptions = transformRecordToOption(databaseTypeRecord);
 
-export const connectionModeRecord: Record<Api.ConnectionTypes.ConnectionMode, App.I18n.I18nKey> = {
+export const connectionModeRecord: Record<Api.Connection.ConnectionMode, App.I18n.I18nKey> = {
   '0': 'page.connection.mode.custom',
   '1': 'page.connection.mode.connectionString'
 };

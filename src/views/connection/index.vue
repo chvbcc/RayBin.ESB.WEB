@@ -2,7 +2,7 @@
 import { $t } from '@/locales';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@/store/modules/app';
-import { fetchGetList,fetchDelete } from '@/service/api';
+import { fetchGetList, fetchDelete } from '@/service/api/connection';
 import { databaseTypeRecord } from '@/constants/business';
 import ConnectionSearch from './modules/connection-search.vue';
 import { useTable, useTableOperate } from '@/hooks/common/table';
@@ -110,7 +110,7 @@ function handleDelete(id: number) {
 function handleEdit(id: number) {
   console.log('handleEdit', id);
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'connection-new', query: { id: String(id) } });
+  router.push({ name: 'connection-action', query: { id: String(id) } });
 }
 
 function refresh() {

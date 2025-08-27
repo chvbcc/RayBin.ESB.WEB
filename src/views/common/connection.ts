@@ -1,5 +1,5 @@
 // 解析连接字符串 为 model
-export function  parseConnectionString(model: Api.ConnectionTypes.ConnectionModel) {
+export function  parseConnectionString(model: Api.Connection.ConnectionModel) {
   const type = model.databaseType?.trim() ?? '';
   const connectionString = model.connectionString?.trim() ?? '';
   switch (type) {
@@ -83,7 +83,7 @@ export function  parseConnectionString(model: Api.ConnectionTypes.ConnectionMode
 }
 
 
-export function parseConnectionModel(model: Api.ConnectionTypes.ConnectionModel) {
+export function parseConnectionModel(model: Api.Connection.ConnectionModel) {
   const type = model.databaseType?.trim() ?? '';
   const host = model.hostName?.trim() ?? '';
   const db = model.databases?.trim() ?? '';

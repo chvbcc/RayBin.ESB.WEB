@@ -52,7 +52,6 @@ function refresh() {
           <template #icon>
             <icon-ic-round-delete class="align-sub text-icon" />
           </template>
-
           <span class="ml-8px">{{ $t('common.batchDelete') }}</span>
         </AButton>
       </APopconfirm>

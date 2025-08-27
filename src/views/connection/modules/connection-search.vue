@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { databaseTypeOptions } from '@/constants/business';
-import { translateOptions } from '@/utils/common';
 import { $t } from '@/locales';
+import { translateOptions } from '@/utils/common';
+import { databaseTypeOptions } from '@/constants/business';
 
 defineOptions({
   name: 'ConnectionSearch'
@@ -14,7 +14,7 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.ConnectionTypes.ConnectionSearchParams>('model', { required: true });
+const model = defineModel<Api.Connection.ConnectionSearchParams>('model', { required: true });
 
 function reset() {
   emit('reset');

@@ -1,5 +1,5 @@
 declare namespace Api {
-  namespace ConnectionTypes {
+  namespace DatabaseTask {
 
   }
 }
