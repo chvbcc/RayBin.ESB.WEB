@@ -2,7 +2,7 @@
 import { $t } from '@/locales';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@/store/modules/app';
-import { fetchGetList, fetchDelete } from '@/service/api/connection';
+import { fetchGetPagingList, fetchDelete } from '@/service/api/connection';
 import { databaseTypeRecord } from '@/constants/business';
 import ConnectionSearch from './modules/connection-search.vue';
 import { useTable, useTableOperate } from '@/hooks/common/table';
@@ -11,7 +11,7 @@ const router = useRouter();
 const appStore = useAppStore();
 
 const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
-  apiFn: fetchGetList,
+  apiFn: fetchGetPagingList,
   apiParams: {
     current: 1,
     size: 10,

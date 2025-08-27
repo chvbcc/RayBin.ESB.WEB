@@ -10,9 +10,9 @@ export function fetchTest(data: Api.Connection.ConnectionModel) {
 }
 
 /** get connection list */
-export function fetchGetList(params?: Api.Connection.ConnectionSearchParams) {
+export function fetchGetPagingList(params?: Api.Connection.ConnectionSearchParams) {
   return request<Api.Connection.ConnectionList>({
-    url: '/connection/getList',
+    url: '/connection/getPagingList',
     method: 'get',
     params
   });

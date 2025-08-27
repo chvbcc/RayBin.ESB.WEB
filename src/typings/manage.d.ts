@@ -19,6 +19,9 @@ declare namespace Api {
     /*  Roles dropdown */
     type Roles = Pick<Role, 'id' | 'roleName'>;
 
+    /* Role model */
+    type RoleModel = Pick<Role, | 'id' | 'roleName' | 'IsSystem' | 'Description' | 'status'>;
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // User
     /* User search params */
