@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
-import { translateOptions } from '@/utils/common';
+import { convertOptions } from '@/utils/common';
 import { enableStatusOptions } from '@/constants/business';
 
 defineOptions({
@@ -46,7 +46,7 @@ async function search() {
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
           <a-form-item :label="$t('page.manage.user.status')" name="userStatus" class="m-0">
-            <a-select v-model:value="model.status":placeholder="$t('page.manage.user.form.status')" :options="translateOptions(enableStatusOptions)" clearable />
+            <a-select v-model:value="model.status":placeholder="$t('page.manage.user.form.status')" :options="convertOptions(enableStatusOptions)" clearable />
           </a-form-item>
         </a-col>
         <div class="flex-1">

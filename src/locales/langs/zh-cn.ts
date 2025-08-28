@@ -338,7 +338,9 @@ const local: App.I18n.Schema = {
         userRoles: '用户角色',
         form: {
           username: '请输入用户名',
+          usernameLength: '用户名长度在3-20个字符之间',
           password: '请输入密码',
+          passwordLength: '密码长度在6-20个字符之间',
           userAvatar: '请上传用户头像',
           employeeName: '请输入姓名',
           employeeNo: '请输入员工编号',

@@ -3,7 +3,7 @@ import { $t } from '@/locales';
 import  { UserApi }  from '@/service/api/manage';
 import UserSearch from './modules/user-search.vue';
 import { Button, Popconfirm, Tag } from 'ant-design-vue';
-import UserOperateDrawer from './modules/user-operate-drawer.vue';
+import UserOperateModal from './modules/user-operate-modal.vue';
 import { enableStatusRecord, userGenderRecord } from '@/constants/business';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
@@ -112,7 +112,7 @@ const {
 });
 
 const {
-  drawerVisible,
+  drawerVisible: modalVisible,
   operateType,
   editingData,
   handleAdd,
@@ -121,7 +121,6 @@ const {
   rowSelection,
   onBatchDeleted,
   onDeleted
-  // closeDrawer
 } = useTableOperate(data, getData);
 
 async function handleBatchDelete() {
@@ -146,7 +145,7 @@ function edit(id: number) {
         <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
       <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" size="small" :row-selection="rowSelection" :scroll="scrollConfig" :loading="loading" row-key="id":pagination="mobilePagination" class="h-full" bordered />
-      <UserOperateDrawer v-model:visible="drawerVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
+      <UserOperateModal v-model:visible="modalVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
     </a-Card>
   </div>
 </template>

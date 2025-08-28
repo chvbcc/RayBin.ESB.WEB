@@ -338,7 +338,9 @@ const local: App.I18n.Schema = {
         userRoles: 'User Role',
         form: {
           username: 'Please enter username',
+          usernameLength: 'Username length is between 3-20 characters',
           password: 'Please enter password',
+          passwordLength: 'Password length is between 6-20 characters',
           userAvatar: 'Please upload user avatar',
           employeeName: 'Please enter name',
           employeeNo: 'Please enter employee number',

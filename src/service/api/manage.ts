@@ -1,7 +1,7 @@
 import { request } from '../request';
 
 export namespace UserApi {
-  /** get user list */
+  /** 分页列表 */
   export function fetchGetPagingList(params?: Api.SystemManage.UserSearchParams) {
     return request<Api.SystemManage.UserList>({
       url: '/user/getPagingList',
@@ -9,10 +9,20 @@ export namespace UserApi {
       params
     });
   }
+
+  /** 保存用户 */
+  export function fetchSave(data: Api.SystemManage.UserModel) {
+    let url = data.id === 0 ? '/user/save' : '/user/update';
+    return request({
+      url: url,
+      method: 'post',
+      data
+    });
+  }
 }
 
 export namespace RoleApi {
-  /** get role list */
+  /** 分页列表 */
   export function fetchGetPagingList(params?: Api.SystemManage.RoleSearchParams) {
     return request<Api.SystemManage.RoleList>({
       url: '/role/getPagingList',

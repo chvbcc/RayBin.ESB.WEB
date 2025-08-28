@@ -556,7 +556,9 @@ declare namespace App {
             userRoles: string;
             form: {
               username: string;
+              usernameLength: string;
               password: string;
+              passwordLength: string;
               userAvatar: string;
               employeeName: string;
               employeeNo: string;

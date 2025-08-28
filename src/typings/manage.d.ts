@@ -31,7 +31,7 @@ declare namespace Api {
     type UserList = Common.PaginatingQueryRecord<User>;
 
     // female，male
-    type Gender = '0' | '1';
+    type Gender = '1' | '0';
 
     /* User */
     type User = Common.CommonRecord<{

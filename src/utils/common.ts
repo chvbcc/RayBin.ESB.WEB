@@ -37,6 +37,13 @@ export function translateOptions(options: CommonType.Option<string>[]) {
   }));
 }
 
+export function convertOptions(options: CommonType.Option<number>[]) {
+  return options.map(option => ({
+    ...option,
+    label: $t(option.label as App.I18n.I18nKey)
+  }));
+}
+
 /**
  * Toggle html class
  *
