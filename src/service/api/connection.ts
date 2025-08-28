@@ -33,7 +33,7 @@ export function fetchCheckName(connectionName: string, createUserId: number, id:
 
 /** save connection */
 export function fetchSave(data: Api.Connection.ConnectionModel) {
-  let url = data.id === 0 ? '/connection/save' : '/connection/update';
+  let url = data.id === 0 ? '/connection/add' : '/connection/update';
   return request({
     url: url,
     method: 'post',

@@ -12,11 +12,21 @@ export namespace UserApi {
 
   /** 保存用户 */
   export function fetchSave(data: Api.SystemManage.UserModel) {
-    let url = data.id === 0 ? '/user/save' : '/user/update';
+    let url = data.id === 0 ? '/user/add' : '/user/update';
     return request({
       url: url,
       method: 'post',
       data
+    });
+  }
+
+  /** 删除用户 */
+  export function fetchDelete(id: number) {
+    let url = '/user/delete';
+    return request({
+      url: url,
+      method: 'delete',
+      params: { id }
     });
   }
 }

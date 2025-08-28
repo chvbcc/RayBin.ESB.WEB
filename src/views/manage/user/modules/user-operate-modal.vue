@@ -56,16 +56,18 @@ function createDefaultModel(): Api.SystemManage.UserModel {
 // 3. 定义表单验证规则
 type RuleKey = Extract<keyof Api.SystemManage.User, 'username' | 'password' | 'employeeName' | 'email' | 'status'>;
 
-const rules: Record<RuleKey, App.Global.FormRule> = {
-  username: {required: true, min: 3, max: 20, message: $t('page.manage.user.form.usernameLength'), trigger: 'blur' },
-  password: { min: 6, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' },
+const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => ({
+  username: { required: true, min: 3, max: 20, message: $t('page.manage.user.form.usernameLength'), trigger: 'blur' },
+  password: model.value.id === 0
+    ? { required: true, min: 6, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' }
+    : { required: false, min: 0, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' },
   employeeName: defaultRequiredRule,
   email: { required: true, type: 'email', message: $t('page.manage.user.form.email'), trigger: 'blur' },
   status: defaultRequiredRule
-};
+}));
 
 // 4. 用户角色和角色选项
-const userRoles = ref<CommonType.Option<number>[]>([]);
+const userRoles = ref<number[]>([]);
 const roleOptions = ref<CommonType.Option<number>[]>([]);
 
 // 5. 获取角色选项
@@ -84,10 +86,7 @@ async function getUserRoles() {
   if (!model.value.id) return;
   const { error, data } = await RoleApi.fetchGetRoles(model.value.id);
   if (!error) {
-    userRoles.value = data.map(item => ({
-      label: item.roleName,
-      value: item.id
-    }));
+    userRoles.value = data.map(item => item.id);
   }
 }
 
@@ -110,7 +109,7 @@ function closeModal() {
 // 9. 提交表单
 async function handleSubmit() {
   await validate();
-  const submitData = { ...model.value, userRoles: userRoles.value.map(item => item.value) };
+  const submitData = { ...model.value, userRoles: userRoles.value };
   console.log(submitData);
   await UserApi.fetchSave(submitData);
   window.$message?.success($t('common.updateSuccess'));

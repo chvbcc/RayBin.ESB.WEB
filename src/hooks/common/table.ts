@@ -216,16 +216,13 @@ export function useTableOperate<T extends TableData = TableData>(data: Ref<T[]>,
   /** the hook after the batch delete operation is completed */
   async function onBatchDeleted() {
     window.$message?.success($t('common.deleteSuccess'));
-
     checkedRowKeys.value = [];
-
     await getData();
   }
 
   /** the hook after the delete operation is completed */
   async function onDeleted() {
     window.$message?.success($t('common.deleteSuccess'));
-
     await getData();
   }
 

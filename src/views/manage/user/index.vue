@@ -128,7 +128,6 @@ async function handleBatchDelete() {
 }
 
 function handleDelete(id: number) {
-  console.log(id);
   onDeleted();
 }
 
