@@ -2,7 +2,7 @@
 import { $t } from '@/locales';
 import  { UserApi }  from '@/service/api/manage';
 import UserSearch from './modules/user-search.vue';
-import { Button, Popconfirm, Tag } from 'ant-design-vue';
+import { Button, Tag } from 'ant-design-vue';
 import UserOperateModal from './modules/user-operate-modal.vue';
 import { enableStatusRecord, userGenderRecord } from '@/constants/business';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
@@ -100,11 +100,11 @@ const {
           <Button type="primary" ghost size="small" onClick={() => edit(record.id)}>
             {$t('common.edit')}
           </Button>
-          <Popconfirm title={$t('common.confirmDelete')} onConfirm={() => handleDelete(record.id)}>
+          <a-popconfirm title={$t('common.confirmDelete')} onConfirm={() => handleDelete(record.id)}>
             <Button danger size="small">
               {$t('common.delete')}
             </Button>
-          </Popconfirm>
+          </a-popconfirm>
         </div>
       )
     }
@@ -124,11 +124,36 @@ const {
 } = useTableOperate(data, getData);
 
 async function handleBatchDelete() {
-  onBatchDeleted();
+  if (checkedRowKeys.value.length === 0) return;
+  const res = await UserApi.fetchDeletes(checkedRowKeys.value);
+  if (!res.error) {
+    const result = res.response.data;
+    if (result.msg === 'success' && result.data === true) {
+      window.$message?.success($t('common.deleteSuccess'));
+      onBatchDeleted();
+    } else if (result.msg === 'fail') {
+      window.$message?.error(String(result.data));
+    } else {
+      window.$message?.error($t('common.deleteFailed'));
+    }
+  }
 }
 
 function handleDelete(id: number) {
-  onDeleted();
+  UserApi.fetchDelete(id).then((res) => {
+    if(!res.error) {
+      const result = res.response.data;
+      if (result.msg === 'success' && result.data === true) {
+        onDeleted();
+      }
+      else if (result.msg === 'fail') {
+        window.$message?.error(String(result.data));
+      }
+      else if (res.response.status != 200) {
+        window.$message?.error($t('common.deleteFailed'));
+      }
+    }
+  })
 }
 
 function edit(id: number) {

@@ -29,8 +29,18 @@ export namespace UserApi {
       params: { id }
     });
   }
-}
 
+  export function fetchDeletes(ids: number[]) {
+    let url = '/user/deletes';
+    return request({
+      headers: { 'Content-Type': 'application/json' },
+      url: url,
+      method: 'delete',
+      data: ids
+    });
+  }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 export namespace RoleApi {
   /** 分页列表 */
   export function fetchGetPagingList(params?: Api.SystemManage.RoleSearchParams) {
@@ -41,6 +51,7 @@ export namespace RoleApi {
     });
   }
 
+  /** 获取所有角色 */
   export function fetchGetList() {
     return request<Api.SystemManage.Roles[]>({
       url: '/role/getList',
@@ -48,6 +59,7 @@ export namespace RoleApi {
     });
   }
 
+  /** 获取用户角色 */
   export function fetchGetRoles(userId: number) {
     return request<Api.SystemManage.Roles[]>({
       url: '/role/getRoles',
@@ -56,33 +68,29 @@ export namespace RoleApi {
     });
   }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+export namespace MenuApi {
+  /** 分页列表 */
+  export function fetchGetMenuList() {
+    return request<Api.SystemManage.MenuList>({
+      url: '/menu/getPagingList',
+      method: 'get'
+    });
+  }
 
-/**
- * get all roles
- * these roles are all enabled
- */
+  /** get all pages */
+  export function fetchGetAllPages() {
+    return request<string[]>({
+      url: '/systemManage/getAllPages',
+      method: 'get'
+    });
+  }
 
-
-// /** get menu list */
-// export function fetchGetMenuList() {
-//   return request<Api.SystemManage.MenuList>({
-//     url: '/systemManage/getMenuList/v2',
-//     method: 'get'
-//   });
-// }
-
-// /** get all pages */
-// export function fetchGetAllPages() {
-//   return request<string[]>({
-//     url: '/systemManage/getAllPages',
-//     method: 'get'
-//   });
-// }
-
-// /** get menu tree */
-// export function fetchGetMenuTree() {
-//   return request<Api.SystemManage.MenuTree[]>({
-//     url: '/systemManage/getMenuTree',
-//     method: 'get'
-//   });
-// }
+  /** get menu tree */
+  export function fetchGetMenuTree() {
+    return request<Api.SystemManage.MenuTree[]>({
+      url: '/systemManage/getMenuTree',
+      method: 'get'
+    });
+  }
+}

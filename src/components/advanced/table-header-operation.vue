@@ -41,27 +41,27 @@ function refresh() {
   <div class="flex flex-wrap justify-end gap-x-12px gap-y-8px lt-sm:(w-200px py-12px)">
     <slot name="prefix"></slot>
     <slot name="default">
-      <AButton size="small" ghost type="primary" @click="add">
+      <a-button size="small" ghost type="primary" @click="add">
         <template #icon>
           <icon-ic-round-plus class="align-sub text-icon" />
         </template>
         <span class="ml-8px">{{ $t('common.add') }}</span>
-      </AButton>
-      <APopconfirm :title="$t('common.confirmDelete')" :disabled="disabledDelete" @confirm="batchDelete">
-        <AButton size="small" danger :disabled="disabledDelete">
+      </a-button>
+      <a-popconfirm :title="$t('common.confirmDelete')" :disabled="disabledDelete" @confirm="batchDelete">
+        <a-button size="small" danger :disabled="disabledDelete">
           <template #icon>
-            <icon-ic-round-delete class="align-sub text-icon" />
+            <icon-local-delete class="align-sub text-icon" />
           </template>
           <span class="ml-8px">{{ $t('common.batchDelete') }}</span>
-        </AButton>
-      </APopconfirm>
+        </a-button>
+      </a-popconfirm>
     </slot>
-    <AButton size="small" @click="refresh">
+    <a-button size="small" @click="refresh">
       <template #icon>
         <icon-mdi-refresh class="align-sub text-icon" :class="{ 'animate-spin': loading }" />
       </template>
       <span class="ml-8px">{{ $t('common.refresh') }}</span>
-    </AButton>
+    </a-button>
     <TableColumnSetting v-model:columns="columns" />
     <slot name="suffix"></slot>
   </div>

@@ -6,7 +6,7 @@ import { $t } from '@/locales';
 import { enableStatusOptions, menuIconTypeOptions, menuTypeOptions } from '@/constants/business';
 import SvgIcon from '@/components/custom/svg-icon.vue';
 import { getLocalIcons } from '@/utils/icon';
-import { fetchGetAllRoles } from '@/service/api';
+import { RoleApi } from '@/service/api/manage';
 import {
   getLayoutAndPage,
   getPathParamFromRoutePath,
@@ -98,7 +98,7 @@ function createDefaultModel(): Model {
     icon: '',
     iconType: '1',
     parentId: 0,
-    status: '1',
+    status: 0,
     keepAlive: false,
     constant: false,
     order: 0,
@@ -165,15 +165,15 @@ const layoutOptions: CommonType.Option[] = [
 ];
 
 /** the enabled role options */
-const roleOptions = ref<CommonType.Option<string>[]>([]);
+const roleOptions = ref<CommonType.Option<number>[]>([]);
 
 async function getRoleOptions() {
-  const { error, data } = await fetchGetAllRoles();
+  const { error, data } = await RoleApi.fetchGetList();
 
   if (!error) {
     const options = data.map(item => ({
       label: item.roleName,
-      value: item.roleCode
+      value: item.id
     }));
 
     roleOptions.value = [...options];

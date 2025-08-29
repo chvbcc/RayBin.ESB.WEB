@@ -108,7 +108,6 @@ function handleDelete(id: number) {
 }
 
 function handleEdit(id: number) {
-  console.log('handleEdit', id);
   appStore.tabStore.removeActiveTab();
   router.push({ name: 'connection-action', query: { id: String(id) } });
 }

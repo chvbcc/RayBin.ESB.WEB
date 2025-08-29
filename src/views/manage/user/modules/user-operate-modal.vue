@@ -57,6 +57,7 @@ function createDefaultModel(): Api.SystemManage.UserModel {
 type RuleKey = Extract<keyof Api.SystemManage.User, 'username' | 'password' | 'employeeName' | 'email' | 'status'>;
 
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => ({
+
   username: { required: true, min: 3, max: 20, message: $t('page.manage.user.form.usernameLength'), trigger: 'blur' },
   password: model.value.id === 0
     ? { required: true, min: 6, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' }
@@ -110,7 +111,6 @@ function closeModal() {
 async function handleSubmit() {
   await validate();
   const submitData = { ...model.value, userRoles: userRoles.value };
-  console.log(submitData);
   await UserApi.fetchSave(submitData);
   window.$message?.success($t('common.updateSuccess'));
   closeModal();

@@ -1,21 +1,21 @@
 <script setup lang="tsx">
 import { ref } from 'vue';
-import { Button, Popconfirm, Tag } from 'ant-design-vue';
+import { $t } from '@/locales';
 import type { Ref } from 'vue';
 import { useBoolean } from '@sa/hooks';
-import { fetchGetAllPages, fetchGetMenuList } from '@/service/api';
-import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
-import { $t } from '@/locales';
+import { MenuApi } from '@/service/api/manage';
 import { yesOrNoRecord } from '@/constants/common';
-import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
 import SvgIcon from '@/components/custom/svg-icon.vue';
+import { Button, Popconfirm, Tag } from 'ant-design-vue';
+import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
+import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 import MenuOperateModal, { type OperateType } from './modules/menu-operate-modal.vue';
 
 const { bool: visible, setTrue: openModal } = useBoolean();
 const { tableWrapperRef, scrollConfig } = useTableScroll();
 
 const { columns, columnChecks, data, loading, pagination, getData, getDataByPage } = useTable({
-  apiFn: fetchGetMenuList,
+  apiFn: MenuApi.fetchGetMenuList,
   columns: () => [
     {
       key: 'id',
@@ -94,8 +94,8 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
         }
 
         const tagMap: Record<Api.Common.EnableStatus, string> = {
-          1: 'success',
-          2: 'warning'
+          0: 'success',
+          1: 'warning'
         };
 
         const label = $t(enableStatusRecord[record.status]);
@@ -204,7 +204,7 @@ function handleAddChildMenu(item: Api.SystemManage.Menu) {
 const allPages = ref<string[]>([]);
 
 async function getAllPages() {
-  const { data: pages } = await fetchGetAllPages();
+  const { data: pages } = await MenuApi.fetchGetAllPages();
   allPages.value = pages || [];
 }
 
@@ -218,42 +218,13 @@ init();
 
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-    <ACard
-      :title="$t('page.manage.menu.title')"
-      :bordered="false"
-      :body-style="{ flex: 1, overflow: 'hidden' }"
-      class="flex-col-stretch sm:flex-1-hidden card-wrapper"
-    >
+    <a-card :title="$t('page.manage.menu.title')" :bordered="false" :body-style="{ flex: 1, overflow: 'hidden' }" class="flex-col-stretch sm:flex-1-hidden card-wrapper">
       <template #extra>
-        <TableHeaderOperation
-          v-model:columns="columnChecks"
-          :disabled-delete="checkedRowKeys.length === 0"
-          :loading="loading"
-          @add="handleAdd"
-          @delete="handleBatchDelete"
-          @refresh="getData"
-        />
+        <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
-      <ATable
-        ref="tableWrapperRef"
-        :columns="columns"
-        :data-source="data"
-        :row-selection="rowSelection"
-        size="small"
-        :loading="loading"
-        row-key="id"
-        :scroll="scrollConfig"
-        :pagination="pagination"
-        class="h-full"
-      />
-      <MenuOperateModal
-        v-model:visible="visible"
-        :operate-type="operateType"
-        :row-data="editingData"
-        :all-pages="allPages"
-        @submitted="getDataByPage"
-      />
-    </ACard>
+      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small" :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="pagination" class="h-full" />
+      <MenuOperateModal v-model:visible="visible" :operate-type="operateType" :row-data="editingData" :all-pages="allPages" @submitted="getDataByPage" />
+    </a-card>
   </div>
 </template>
 
