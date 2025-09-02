@@ -19,12 +19,10 @@ declare namespace Api {
     /** common search params of table */
     type CommonSearchParams = Pick<Common.PaginatingCommonParams, 'current' | 'size'>;
 
-    /**
-     * enable status
-     *
-     * - "1": enabled
-     * - "2": disabled
-     */
+    /** yesOrNo 0: No  1: Yes */
+    type YesOrNo = 0 | 1;
+
+    /** enable status  0: enabled  1: disabled */
     type EnableStatus = 0 | 1;
 
     /** common record */

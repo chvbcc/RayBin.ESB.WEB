@@ -52,7 +52,11 @@ const local: App.I18n.Schema = {
     save: 'Save',
     back: 'Back',
     test: 'Test',
-    exists: 'already exists'
+    exists: 'already exists',
+    status: {
+      enable: 'Enable',
+      disable: 'Disable'
+    }
   },
   request: {
     logout: 'Logout user after request failed',
@@ -299,28 +303,22 @@ const local: App.I18n.Schema = {
       connectionString: 'Connection String'
     },
     manage: {
-      common: {
-        status: {
-          enable: 'Enable',
-          disable: 'Disable'
-        }
-      },
       role: {
         title: 'Role List',
         roleName: 'Role Name',
-        roleCode: 'Role Code',
-        roleStatus: 'Role Status',
-        roleDesc: 'Role Description',
-        menuAuth: 'Menu Auth',
-        buttonAuth: 'Button Auth',
+        isSystem: 'System Role',
+        description: 'Role Description',
+        status: 'Role Status',
         form: {
           roleName: 'Please enter role name',
-          roleCode: 'Please enter role code',
-          roleStatus: 'Please select role status',
-          roleDesc: 'Please enter role description'
+          isSystem: 'Please select system role',
+          description: 'Please enter role description',
+          status: 'Please select role status'
         },
         addRole: 'Add Role',
-        editRole: 'Edit Role'
+        editRole: 'Edit Role',
+        menuAuth: 'Menu Auth',
+        buttonAuth: 'Button Auth'
       },
       user: {
         title: 'User',
@@ -359,21 +357,20 @@ const local: App.I18n.Schema = {
       },
       menu: {
         home: 'Home',
-        title: 'Menu List',
+        pageTitle: 'Menu List',
         id: 'ID',
-        parentId: 'Parent ID',
+        parentID: 'Parent ID',
         menuType: 'Menu Type',
-        menuName: 'Menu Name',
+        title: 'Menu Name',
         query: 'Query Params',
-        routeName: 'Route Name',
-        routePath: 'Route Path',
+        name: 'Route Name',
+        path: 'Route Path',
         layout: 'Layout Component',
         page: 'Page Component',
         i18nKey: 'I18n Key',
-        icon: 'Icon',
+        icon: 'Iconify Icon',
         localIcon: 'Local Icon',
         constant: 'Constant',
-        iconTypeTitle: 'Icon Type',
         order: 'Order',
         keepAlive: 'Keep Alive',
         pathParam: 'Path Param',
@@ -382,16 +379,24 @@ const local: App.I18n.Schema = {
         activeMenu: 'Active Menu',
         multiTab: 'Multi Tab',
         fixedIndexInTab: 'Fixed Index In Tab',
-        button: 'Button',
-        buttonCode: 'Button Code',
-        buttonDesc: 'Button Desc',
-        menuStatus: 'Menu Status',
+        permission: 'Permission',
+        permissType: 'Permission Type',
+        permissCode: 'Permission Code',
+        description: 'Permission Description',
+        status: 'Menu Status',
+        tabMenu: 'Menu Info',
+        tabPermission: 'Permission Settings',
+        permissionType: {
+          button: 'Button',
+          column: 'Column',
+          option: 'Dropdown Option'
+        },
         form: {
           home: 'Please select home',
           menuType: 'Please select menu type',
-          menuName: 'Please enter menu name',
-          routeName: 'Please enter route name',
-          routePath: 'Please enter route path',
+          title: 'Please enter menu name',
+          name: 'Please enter route name',
+          path: 'Please enter route path',
           pathParam: 'Please enter path param',
           page: 'Please select page component',
           layout: 'Please select layout component',
@@ -408,10 +413,10 @@ const local: App.I18n.Schema = {
           queryValue: 'Please enter route parameter Value',
           fixedInTab: 'Please select whether to fix in the tab',
           fixedIndexInTab: 'Please enter the index fixed in the tab',
-          button: 'Please select whether it is a button',
-          buttonCode: 'Please enter button code',
-          buttonDesc: 'Please enter button description',
-          menuStatus: 'Please select menu status'
+          permissType: 'Please select permission type',
+          permissCode: 'Please enter permission code',
+          description: 'Please enter permission description',
+          status: 'Please select menu status'
         },
         addMenu: 'Add Menu',
         editMenu: 'Edit Menu',

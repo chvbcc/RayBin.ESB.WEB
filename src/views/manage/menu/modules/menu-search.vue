@@ -4,7 +4,7 @@ import { convertOptions } from '@/utils/common';
 import { enableStatusOptions } from '@/constants/business';
 
 defineOptions({
-  name: 'UserSearch'
+  name: 'MenuSearch'
 });
 
 interface Emits {
@@ -14,7 +14,7 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.SystemManage.UserSearchParams>('model', { required: true });
+const model = defineModel<Api.SystemManage.MenuSearchParams>('model', { required: true });
 
 async function reset() {
   emit('reset');
@@ -30,23 +30,23 @@ async function search() {
     <a-form ref="formRef" :model="model" :label-col="{ span: 4 }">
       <a-row :gutter="[16, 16]" wrap>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.user.username')" name="userName" class="m-0">
-            <a-input v-model:value="model.username" :placeholder="$t('page.manage.user.form.username')" />
+          <a-form-item :label="$t('page.manage.menu.name')" name="name" class="m-0">
+            <a-input v-model:value="model.name" :placeholder="$t('page.manage.menu.form.name')" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.user.employeeName')" name="employeeName" class="m-0">
-            <a-input v-model:value="model.employeeName" :placeholder="$t('page.manage.user.form.employeeName')" />
+          <a-form-item :label="$t('page.manage.menu.path')" name="path" class="m-0">
+            <a-input v-model:value="model.path" :placeholder="$t('page.manage.menu.form.path')" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.user.email')" name="email" class="m-0">
-            <a-input v-model:value="model.email" :placeholder="$t('page.manage.user.form.email')" />
+          <a-form-item :label="$t('page.manage.menu.title')" name="title" class="m-0">
+            <a-input v-model:value="model.title" :placeholder="$t('page.manage.menu.form.title')" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.user.status')" name="userStatus" class="m-0">
-            <a-select v-model:value="model.status":placeholder="$t('page.manage.user.form.status')" :options="convertOptions(enableStatusOptions)" allow-clear />
+          <a-form-item :label="$t('page.manage.menu.status')" name="status" class="m-0">
+            <a-select v-model:value="model.status":placeholder="$t('page.manage.menu.form.status')" :options="convertOptions(enableStatusOptions)" allow-clear />
           </a-form-item>
         </a-col>
         <div class="flex-1">

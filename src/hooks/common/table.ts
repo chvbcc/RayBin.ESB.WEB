@@ -33,8 +33,7 @@ export function useTable<A extends AntDesign.TableApiFn>(config: AntDesign.AntDe
     apiFn,
     apiParams,
     columns: config.columns,
-    transformer: res => {
-      const { records = [], current = 1, size = 10, total = 0 } = res.data || {};
+    transformer: res => { const { records = [], current = 1, size = 10, total = 0 } = res.data || {};
 
       // Ensure that the size is greater than 0, If it is less than 0, it will cause paging calculation errors.
       const pageSize = size <= 0 ? 10 : size;

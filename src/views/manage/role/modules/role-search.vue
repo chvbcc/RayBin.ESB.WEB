@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { $t } from '@/locales';
-import { enableStatusOptions } from '@/constants/business';
+import { $t, language } from '@/locales';
+import { convertOptions } from '@/utils/common';
+import { enableStatusOptions, yesOrNoOptions } from '@/constants/business';
+import { watch } from 'vue';
 
 defineOptions({
   name: 'RoleSearch'
@@ -10,6 +12,8 @@ interface Emits {
   (e: 'reset'): void;
   (e: 'search'): void;
 }
+
+const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
 
 const emit = defineEmits<Emits>();
 
@@ -22,52 +26,58 @@ function reset() {
 function search() {
   emit('search');
 }
+
+// Watch for language changes and update labelCol dynamically
+watch(language, (newLang) => {
+  labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
+});
 </script>
 
 <template>
-  <ACard :title="$t('common.search')" :bordered="false" class="card-wrapper">
-    <AForm :model="model" :label-width="80">
-      <ARow :gutter="[16, 16]" wrap>
-        <ACol :span="24" :md="12" :lg="6">
-          <AFormItem :label="$t('page.manage.role.roleName')" name="roleName" class="m-0">
-            <AInput v-model:value="model.roleName" :placeholder="$t('page.manage.role.form.roleName')" />
-          </AFormItem>
-        </ACol>
-        <ACol :span="24" :md="12" :lg="6">
-          <AFormItem :label="$t('page.manage.role.roleCode')" name="roleCode" class="m-0">
-            <AInput v-model:value="model.roleCode" :placeholder="$t('page.manage.role.form.roleCode')" />
-          </AFormItem>
-        </ACol>
-        <ACol :span="24" :md="12" :lg="6">
-          <AFormItem :label="$t('page.manage.role.roleStatus')" name="status" class="m-0">
-            <ASelect v-model:value="model.status" :placeholder="$t('page.manage.role.form.roleStatus')" allow-clear>
-              <ASelectOption v-for="option in enableStatusOptions" :key="option.value" :value="option.value">
-                {{ $t(option.label) }}
-              </ASelectOption>
-            </ASelect>
-          </AFormItem>
-        </ACol>
-        <ACol :span="24" :md="12" :lg="6">
-          <AFormItem class="m-0">
-            <div class="w-full flex-y-center justify-end gap-12px">
-              <AButton @click="reset">
+  <a-card :title="$t('common.search')" :bordered="false" class="card-wrapper">
+    <a-form :model="model" :label-col="labelCol" class="mr-3">
+      <a-row :gutter="[16, 16]" wrap>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-form-item :label="$t('page.manage.role.roleName')" name="roleName" class="m-0">
+            <a-input v-model:value="model.roleName" :placeholder="$t('page.manage.role.form.roleName')" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-form-item :label="$t('page.manage.role.isSystem')" name="isSystem" class="m-0">
+            <a-select v-model:value="model.isSystem" :placeholder="$t('page.manage.role.form.isSystem')" :options="convertOptions(yesOrNoOptions)" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-form-item :label="$t('page.manage.role.description')" name="roleName" class="m-0">
+            <a-input v-model:value="model.description" :placeholder="$t('page.manage.role.form.roleName')" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-form-item :label="$t('page.manage.role.status')" name="status" class="m-0">
+            <a-select v-model:value="model.status":placeholder="$t('page.manage.role.form.status')" :options="convertOptions(enableStatusOptions)" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-form-item class="m-0" label="&nbsp;" :colon="false">
+            <div class="w-full flex-y-center justify-start gap-12px">
+              <a-button @click="reset">
                 <template #icon>
                   <icon-ic-round-refresh class="align-sub text-icon" />
                 </template>
                 <span class="ml-8px">{{ $t('common.reset') }}</span>
-              </AButton>
-              <AButton type="primary" ghost @click="search">
+              </a-button>
+              <a-button type="primary" ghost @click="search">
                 <template #icon>
                   <icon-ic-round-search class="align-sub text-icon" />
                 </template>
                 <span class="ml-8px">{{ $t('common.search') }}</span>
-              </AButton>
+              </a-button>
             </div>
-          </AFormItem>
-        </ACol>
-      </ARow>
-    </AForm>
-  </ACard>
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-form>
+  </a-card>
 </template>
 
 <style scoped></style>

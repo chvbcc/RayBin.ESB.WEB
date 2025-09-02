@@ -3,7 +3,7 @@ declare namespace Api {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Role
     /* Role search params */
-    type RoleSearchParams = Partial<Pick<Role, 'roleName' | 'IsSystem' |  'Description' | 'status'> & Common.CommonSearchParams>;
+    type RoleSearchParams = Partial<Pick<Role, 'roleName' | 'isSystem' |  'description' | 'status'> & Common.CommonSearchParams>;
 
     /* Role list */
     type RoleList = Common.PaginatingQueryRecord<Role>;
@@ -12,15 +12,15 @@ declare namespace Api {
     type Role = Common.CommonRecord<{
       id: number;
       roleName: string;
-      IsSystem: boolean;
-      Description: string;
+      isSystem: Api.Common.YesOrNo;
+      description: string;
     }>;
 
     /*  Roles dropdown */
     type Roles = Pick<Role, 'id' | 'roleName'>;
 
     /* Role model */
-    type RoleModel = Pick<Role, | 'id' | 'roleName' | 'IsSystem' | 'Description' | 'status'>;
+    type RoleModel = Pick<Role, | 'id' | 'roleName' | 'isSystem' | 'description' | 'status'>;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // User
@@ -53,41 +53,40 @@ declare namespace Api {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Menu
+    /* Menu search params */
+    type MenuSearchParams = Partial<Pick<Menu, 'name' | 'path' | 'title' | 'status'> & Common.CommonSearchParams>;
+
     // menu type "1": directory "2": menu
-    type MenuType = '1' | '2';
+    type MenuType = '0' | '1';
 
-    type MenuButton = { code: string; desc: string; };
+    type PermissionType = '0' | '1' | '2';
 
-    //icon type "1": iconify icon "2": local icon
-    type IconType = '1' | '2';
+    type Permission = { permissCode: string; permissType: string;  description: string; };
 
-    type MenuPropsOfRoute = Pick<
-      import('vue-router').RouteMeta,
-      | 'i18nKey'
-      | 'keepAlive'
-      | 'constant'
-      | 'order'
-      | 'href'
-      | 'hideInMenu'
-      | 'activeMenu'
-      | 'multiTab'
-      | 'fixedIndexInTab'
-      | 'query'
-    >;
+    type MenuPropsOfRoute = Pick<import('vue-router').RouteMeta, | 'i18nKey' | 'keepAlive' | 'constant' | 'order' | 'href' | 'hideInMenu' | 'activeMenu' | 'multiTab' | 'fixedIndexInTab' | 'query'>;
 
     type Menu = Common.CommonRecord<{
-      parentId: number;
+      id: number;
+      parentID: number;
       menuType: MenuType;
-      menuName: string;
-      routeName: string;
-      routePath: string;
+      title: string;
+      name: string;
+      path: string;
       component?: string;
       icon: string;
-      iconType: IconType;
-      buttons?: MenuButton[] | null;
+      localIcon: string;
+      permissions?: Permission[] | null;
       children?: Menu[];
-    }> &
-      MenuPropsOfRoute;
+    }> & MenuPropsOfRoute;
+
+    /** menu model */
+    type MenuModel = Pick<Menu, 'id' | 'menuType' | 'title' | 'name' | 'path' | 'component' | 'order' | 'i18nKey' | 'icon' | 'localIcon' | 'status' | 'parentID' | 'keepAlive' | 'constant' | 'href' | 'hideInMenu' | 'activeMenu' | 'multiTab' | 'fixedIndexInTab'> & {
+      query: NonNullable<Menu['query']>;
+      permissions: NonNullable<Menu['permissions']>;
+      layout: string;
+      page: string;
+      pathParam: string;
+    };
 
     /** menu list */
     type MenuList = Common.PaginatingQueryRecord<Menu>;

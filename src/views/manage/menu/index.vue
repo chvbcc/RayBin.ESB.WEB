@@ -4,6 +4,7 @@ import { $t } from '@/locales';
 import type { Ref } from 'vue';
 import { useBoolean } from '@sa/hooks';
 import { MenuApi } from '@/service/api/manage';
+import MenuSearch from './modules/menu-search.vue';
 import { yesOrNoRecord } from '@/constants/common';
 import SvgIcon from '@/components/custom/svg-icon.vue';
 import { Button, Popconfirm, Tag } from 'ant-design-vue';
@@ -14,54 +15,43 @@ import MenuOperateModal, { type OperateType } from './modules/menu-operate-modal
 const { bool: visible, setTrue: openModal } = useBoolean();
 const { tableWrapperRef, scrollConfig } = useTableScroll();
 
-const { columns, columnChecks, data, loading, pagination, getData, getDataByPage } = useTable({
-  apiFn: MenuApi.fetchGetMenuList,
+const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
+  apiFn: MenuApi.fetchGetPagingList,
   columns: () => [
-    {
-      key: 'id',
-      title: $t('page.manage.menu.id'),
-      align: 'center',
-      dataIndex: 'id'
-    },
     {
       key: 'menuType',
       title: $t('page.manage.menu.menuType'),
       align: 'center',
-      width: 80,
+      width: 100,
       customRender: ({ record }) => {
         const tagMap: Record<Api.SystemManage.MenuType, string> = {
-          1: 'default',
-          2: 'processing'
+          0: 'default',
+          1: 'processing'
         };
-
         const label = $t(menuTypeRecord[record.menuType]);
-
         return <Tag color={tagMap[record.menuType]}>{label}</Tag>;
       }
     },
     {
-      key: 'menuName',
-      title: $t('page.manage.menu.menuName'),
+      key: 'title',
+      title: $t('page.manage.menu.title'),
       align: 'center',
-      minWidth: 120,
       customRender: ({ record }) => {
-        const { i18nKey, menuName } = record;
+        const { i18nKey, title } = record;
 
-        const label = i18nKey ? $t(i18nKey) : menuName;
+        const label = i18nKey ? $t(i18nKey) : title;
 
         return <span>{label}</span>;
       }
     },
     {
       key: 'icon',
-      title: $t('page.manage.menu.icon'),
+      title: $t('page.manage.menu.icon').replace('Iconify', ''),
       align: 'center',
       width: 60,
       customRender: ({ record }) => {
-        const icon = record.iconType === '1' ? record.icon : undefined;
-
-        const localIcon = record.iconType === '2' ? record.icon : undefined;
-
+        const icon = record.icon;
+        const localIcon =  record.localIcon;
         return (
           <div class="flex-center">
             <SvgIcon icon={icon} localIcon={localIcon} class="text-icon" />
@@ -70,36 +60,33 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       }
     },
     {
-      key: 'routeName',
-      title: $t('page.manage.menu.routeName'),
+      key: 'name',
+      title: $t('page.manage.menu.name'),
       align: 'center',
-      dataIndex: 'routeName',
+      dataIndex: 'name',
       minWidth: 120
     },
     {
-      key: 'routePath',
-      title: $t('page.manage.menu.routePath'),
+      key: 'path',
+      title: $t('page.manage.menu.path'),
       align: 'center',
-      dataIndex: 'routePath',
+      dataIndex: 'path',
       minWidth: 120
     },
     {
       key: 'status',
-      title: $t('page.manage.menu.menuStatus'),
+      title: $t('page.manage.menu.status'),
       align: 'center',
       width: 80,
       customRender: ({ record }) => {
         if (record.status === null) {
           return null;
         }
-
         const tagMap: Record<Api.Common.EnableStatus, string> = {
           0: 'success',
           1: 'warning'
         };
-
         const label = $t(enableStatusRecord[record.status]);
-
         return <Tag color={tagMap[record.status]}>{label}</Tag>;
       }
     },
@@ -111,30 +98,13 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       width: 80,
       customRender: ({ record }) => {
         const hide: CommonType.YesOrNo = record.hideInMenu ? 'Y' : 'N';
-
         const tagMap: Record<CommonType.YesOrNo, string> = {
           Y: 'error',
           N: 'default'
         };
-
         const label = $t(yesOrNoRecord[hide]);
-
         return <Tag color={tagMap[hide]}>{label}</Tag>;
       }
-    },
-    {
-      key: 'parentId',
-      dataIndex: 'parentId',
-      title: $t('page.manage.menu.parentId'),
-      width: 90,
-      align: 'center'
-    },
-    {
-      key: 'order',
-      dataIndex: 'order',
-      title: $t('page.manage.menu.order'),
-      align: 'center',
-      width: 60
     },
     {
       key: 'operate',
@@ -143,7 +113,7 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       width: 230,
       customRender: ({ record }) => (
         <div class="flex-center justify-end gap-8px">
-          {record.menuType === '1' && (
+          {record.menuType === '0' && (
             <Button type="primary" ghost size="small" onClick={() => handleAddChildMenu(record)}>
               {$t('page.manage.menu.addChildMenu')}
             </Button>
@@ -172,39 +142,57 @@ function handleAdd() {
 }
 
 async function handleBatchDelete() {
-  // request
-
-  onBatchDeleted();
+  if (checkedRowKeys.value.length === 0) return;
+  const res = await MenuApi.fetchDeletes(checkedRowKeys.value);
+  if (!res.error) {
+    const result = res.response.data;
+    if (result.msg === 'success' && result.data === true) {
+      window.$message?.success($t('common.deleteSuccess'));
+      onBatchDeleted();
+    } else if (result.msg === 'fail') {
+      window.$message?.error(String(result.data));
+    } else {
+      window.$message?.error($t('common.deleteFailed'));
+    }
+  }
 }
 
 function handleDelete(id: number) {
-  // request
-  console.log(id);
-
-  onDeleted();
+  MenuApi.fetchDelete(id).then((res) => {
+    if(!res.error) {
+      const result = res.response.data;
+      if (result.msg === 'success' && result.data === true) {
+        onDeleted();
+      }
+      else if (result.msg === 'fail') {
+        window.$message?.error(String(result.data));
+      }
+      else if (res.response.status != 200) {
+        window.$message?.error($t('common.deleteFailed'));
+      }
+    }
+  })
 }
+
 /** the edit menu data or the parent menu data when adding a child menu */
 const editingData: Ref<Api.SystemManage.Menu | null> = ref(null);
 
 function handleEdit(item: Api.SystemManage.Menu) {
   operateType.value = 'edit';
   editingData.value = { ...item };
-
   openModal();
 }
 
 function handleAddChildMenu(item: Api.SystemManage.Menu) {
   operateType.value = 'addChild';
-
   editingData.value = { ...item };
-
   openModal();
 }
 
 const allPages = ref<string[]>([]);
 
 async function getAllPages() {
-  const { data: pages } = await MenuApi.fetchGetAllPages();
+  const { data: pages } = await MenuApi.fetchGetPages();
   allPages.value = pages || [];
 }
 
@@ -218,11 +206,13 @@ init();
 
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-    <a-card :title="$t('page.manage.menu.title')" :bordered="false" :body-style="{ flex: 1, overflow: 'hidden' }" class="flex-col-stretch sm:flex-1-hidden card-wrapper">
+    <MenuSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
+    <a-card :title="$t('page.manage.menu.pageTitle')" :bordered="false" :body-style="{ flex: 1, overflow: 'hidden' }" class="flex-col-stretch sm:flex-1-hidden card-wrapper">
       <template #extra>
         <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
-      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small" :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="pagination" class="h-full" />
+      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small"
+        :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination" class="h-full" bordered />
       <MenuOperateModal v-model:visible="visible" :operate-type="operateType" :row-data="editingData" :all-pages="allPages" @submitted="getDataByPage" />
     </a-card>
   </div>

@@ -1,32 +1,23 @@
 <script setup lang="tsx">
-import { Button, Popconfirm, Tag } from 'ant-design-vue';
-import { fetchGetRoleList } from '@/service/api';
-import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 import { $t } from '@/locales';
+import { Button, Tag } from 'ant-design-vue';
+import { RoleApi } from '@/service/api/manage';
+import RoleSearch from './modules/role-search.vue';
 import { enableStatusRecord } from '@/constants/business';
 import RoleOperateDrawer from './modules/role-operate-drawer.vue';
-import RoleSearch from './modules/role-search.vue';
+import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
 const { tableWrapperRef, scrollConfig } = useTableScroll();
 
-const {
-  columns,
-  columnChecks,
-  data,
-  loading,
-  getData,
-  getDataByPage,
-  mobilePagination,
-  searchParams,
-  resetSearchParams
-} = useTable({
-  apiFn: fetchGetRoleList,
+const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
+  apiFn: RoleApi.fetchGetPagingList,
   apiParams: {
     current: 1,
     size: 10,
-    status: undefined,
     roleName: undefined,
-    roleCode: undefined
+    isSystem: undefined,
+    description: undefined,
+    status: undefined
   },
   columns: () => [
     {
@@ -44,36 +35,33 @@ const {
       minWidth: 120
     },
     {
-      key: 'roleCode',
-      dataIndex: 'roleCode',
-      title: $t('page.manage.role.roleCode'),
+      key: 'isSystem',
+      dataIndex: 'isSystem',
+      title: $t('page.manage.role.isSystem'),
       align: 'center',
       minWidth: 120
     },
     {
-      key: 'roleDesc',
-      dataIndex: 'roleDesc',
-      title: $t('page.manage.role.roleDesc'),
+      key: 'description',
+      dataIndex: 'description',
+      title: $t('page.manage.role.description'),
       minWidth: 120
     },
     {
       key: 'status',
       dataIndex: 'status',
-      title: $t('page.manage.role.roleStatus'),
+      title: $t('page.manage.role.status'),
       align: 'center',
       width: 100,
       customRender: ({ record }) => {
         if (record.status === null) {
           return null;
         }
-
         const tagMap: Record<Api.Common.EnableStatus, string> = {
-          1: 'success',
-          2: 'warning'
+          0: 'success',
+          1: 'warning'
         };
-
         const label = $t(enableStatusRecord[record.status]);
-
         return <Tag color={tagMap[record.status]}>{label}</Tag>;
       }
     },
@@ -87,11 +75,11 @@ const {
           <Button type="primary" ghost size="small" onClick={() => edit(record.id)}>
             {$t('common.edit')}
           </Button>
-          <Popconfirm onConfirm={() => handleDelete(record.id)} title={$t('common.confirmDelete')}>
+          <a-popconfirm onConfirm={() => handleDelete(record.id)} title={$t('common.confirmDelete')}>
             <Button danger size="small">
               {$t('common.delete')}
             </Button>
-          </Popconfirm>
+          </a-popconfirm>
         </div>
       )
     }
@@ -108,7 +96,6 @@ const {
   rowSelection,
   onBatchDeleted,
   onDeleted
-  // closeDrawer
 } = useTableOperate(data, getData);
 
 async function handleBatchDelete() {
@@ -132,13 +119,14 @@ function edit(id: number) {
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <RoleSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
-    <ACard :title="$t('page.manage.role.title')" :bordered="false" :body-style="{ flex: 1, overflow: 'hidden' }" class="flex-col-stretch sm:flex-1-hidden card-wrapper">
+    <a-card :title="$t('page.manage.role.title')" :bordered="false" :body-style="{ flex: 1, overflow: 'hidden' }" class="flex-col-stretch sm:flex-1-hidden card-wrapper">
       <template #extra>
         <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
-      <ATable ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" :loading="loading" row-key="id" size="small" :pagination="mobilePagination" :scroll="scrollConfig" class="h-full" />
-      <RoleOperateDrawer v-model:visible="drawerVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
-    </ACard>
+      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small"
+        :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination" class="h-full" bordered />
+      <!-- <RoleOperateDrawer v-model:visible="drawerVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" /> -->
+    </a-card>
   </div>
 </template>
 

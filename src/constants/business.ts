@@ -1,40 +1,39 @@
 import { transformRecordToOption } from '@/utils/common';
-
+/** common */
 export const enableStatusRecord: Record<Api.Common.EnableStatus, App.I18n.I18nKey> = {
-  '0': 'page.manage.common.status.enable',
-  '1': 'page.manage.common.status.disable'
+  0: 'common.status.enable',
+  1: 'common.status.disable'
 };
+export const enableStatusOptions = transformRecordToOption(enableStatusRecord);
 
-export const enableStatusOptions: CommonType.Option<Api.Common.EnableStatus>[] = [
-  { value: 0, label: 'page.manage.common.status.enable' },
-  { value: 1, label: 'page.manage.common.status.disable'}
-];
+export const yesOrNoRecord: Record<Api.Common.YesOrNo, App.I18n.I18nKey> = {
+  0: 'common.yesOrNo.no',
+  1: 'common.yesOrNo.yes'
+};
+export const yesOrNoOptions = transformRecordToOption(yesOrNoRecord);
 
+/** user */
 export const userGenderRecord: Record<Api.SystemManage.Gender, App.I18n.I18nKey> = {
   '1': 'page.manage.user.gendertype.male',
   '0': 'page.manage.user.gendertype.female'
 };
+export const userGenderOptions = transformRecordToOption(userGenderRecord);
 
-export const userGenderOptions: CommonType.Option<Api.SystemManage.Gender>[] = [
-  { value: '1', label: 'page.manage.user.gendertype.male' },
-  { value: '0', label: 'page.manage.user.gendertype.female' }
-];
-
+/** menu */
 export const menuTypeRecord: Record<Api.SystemManage.MenuType, App.I18n.I18nKey> = {
-  '1': 'page.manage.menu.type.directory',
-  '2': 'page.manage.menu.type.menu'
+  0: 'page.manage.menu.type.directory',
+  1: 'page.manage.menu.type.menu'
 };
-
 export const menuTypeOptions = transformRecordToOption(menuTypeRecord);
 
-export const menuIconTypeRecord: Record<Api.SystemManage.IconType, App.I18n.I18nKey> = {
-  '1': 'page.manage.menu.iconType.iconify',
-  '2': 'page.manage.menu.iconType.local'
+export const permissionTypeRecord: Record<Api.SystemManage.PermissionType, App.I18n.I18nKey> = {
+  '0': 'page.manage.menu.permissionType.button',
+  '1': 'page.manage.menu.permissionType.column',
+  '2': 'page.manage.menu.permissionType.option'
 };
+export const permissionTypeOptions = transformRecordToOption(permissionTypeRecord);
 
-export const menuIconTypeOptions = transformRecordToOption(menuIconTypeRecord);
-
-
+/** database */
 export const databaseTypeRecord: Record<Api.Connection.DatabaseType, App.I18n.I18nKey> = {
   '0': 'dropdownList.databaseType.hana',
   '1': 'dropdownList.databaseType.mySql',
@@ -46,12 +45,10 @@ export const databaseTypeRecord: Record<Api.Connection.DatabaseType, App.I18n.I1
   '7': 'dropdownList.databaseType.goldenDB',
   '8': 'dropdownList.databaseType.openGauss'
 };
-
 export const databaseTypeOptions = transformRecordToOption(databaseTypeRecord);
 
 export const connectionModeRecord: Record<Api.Connection.ConnectionMode, App.I18n.I18nKey> = {
   '0': 'page.connection.mode.custom',
   '1': 'page.connection.mode.connectionString'
 };
-
 export const connectionModeOptions = transformRecordToOption(connectionModeRecord);

@@ -334,6 +334,10 @@ declare namespace App {
         back: string;
         test: string;
         exists: string;
+        status: {
+          enable: string;
+          disable: string;
+        };
       };
       request: {
         logout: string;
@@ -517,23 +521,17 @@ declare namespace App {
           connectionString: string;
         };
         manage: {
-          common: {
-            status: {
-              enable: string;
-              disable: string;
-            };
-          };
           role: {
             title: string;
             roleName: string;
-            roleCode: string;
-            roleStatus: string;
-            roleDesc: string;
+            isSystem: string;
+            description: string;
+            status: string;
             form: {
               roleName: string;
-              roleCode: string;
-              roleStatus: string;
-              roleDesc: string;
+              isSystem: string;
+              description: string;
+              status: string;
             };
             addRole: string;
             editRole: string;
@@ -577,21 +575,20 @@ declare namespace App {
           };
           menu: {
             home: string;
-            title: string;
+            pageTitle: string;
             id: string;
-            parentId: string;
+            parentID: string;
             menuType: string;
-            menuName: string;
+            title: string;
             constant: string;
-            routeName: string;
-            routePath: string;
+            name: string;
+            path: string;
             pathParam: string;
             layout: string;
             page: string;
             i18nKey: string;
             icon: string;
             localIcon: string;
-            iconTypeTitle: string;
             order: string;
             keepAlive: string;
             href: string;
@@ -600,16 +597,24 @@ declare namespace App {
             multiTab: string;
             fixedIndexInTab: string;
             query: string;
-            button: string;
-            buttonCode: string;
-            buttonDesc: string;
-            menuStatus: string;
+            permission: string;
+            permissType: string;
+            permissCode: string;
+            description: string;
+            status: string;
+            tabMenu: string;
+            tabPermission: string;
+            permissionType: {
+              button: string;
+              column: string;
+              option: string;
+            }
             form: {
               home: string;
               menuType: string;
-              menuName: string;
-              routeName: string;
-              routePath: string;
+              title: string;
+              name: string;
+              path: string;
               pathParam: string;
               layout: string;
               queryKey: string;
@@ -626,10 +631,10 @@ declare namespace App {
               multiTab: string;
               fixedInTab: string;
               fixedIndexInTab: string;
-              button: string;
-              buttonCode: string;
-              buttonDesc: string;
-              menuStatus: string;
+              permissType: string;
+              permissCode: string;
+              description: string;
+              status: string;
             };
             addMenu: string;
             editMenu: string;

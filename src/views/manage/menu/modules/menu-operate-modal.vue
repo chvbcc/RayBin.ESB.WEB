@@ -1,12 +1,13 @@
 <script setup lang="tsx">
-import { computed, nextTick, ref, watch } from 'vue';
-import { SimpleScrollbar } from '@sa/materials';
-import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { $t } from '@/locales';
-import { enableStatusOptions, menuIconTypeOptions, menuTypeOptions } from '@/constants/business';
-import SvgIcon from '@/components/custom/svg-icon.vue';
 import { getLocalIcons } from '@/utils/icon';
-import { RoleApi } from '@/service/api/manage';
+import { RoleApi, MenuApi } from '@/service/api/manage';
+import { translateOptions } from '@/utils/common';
+import { SimpleScrollbar } from '@sa/materials';
+import { computed, nextTick, ref, watch } from 'vue';
+import SvgIcon from '@/components/custom/svg-icon.vue';
+import { useAntdForm, useFormRules } from '@/hooks/common/form';
+import { enableStatusOptions, menuTypeOptions, permissionTypeOptions } from '@/constants/business';
 import {
   getLayoutAndPage,
   getPathParamFromRoutePath,
@@ -36,12 +37,10 @@ interface Emits {
   (e: 'submitted'): void;
 }
 
+const activeKey = ref('1');
 const emit = defineEmits<Emits>();
 
-const visible = defineModel<boolean>('visible', {
-  default: false
-});
-
+const visible = defineModel<boolean>('visible', { default: false });
 const { formRef, validate, resetFields } = useAntdForm();
 const { defaultRequiredRule } = useFormRules();
 
@@ -54,50 +53,23 @@ const title = computed(() => {
   return titles[props.operateType];
 });
 
-type Model = Pick<
-  Api.SystemManage.Menu,
-  | 'menuType'
-  | 'menuName'
-  | 'routeName'
-  | 'routePath'
-  | 'component'
-  | 'order'
-  | 'i18nKey'
-  | 'icon'
-  | 'iconType'
-  | 'status'
-  | 'parentId'
-  | 'keepAlive'
-  | 'constant'
-  | 'href'
-  | 'hideInMenu'
-  | 'activeMenu'
-  | 'multiTab'
-  | 'fixedIndexInTab'
-> & {
-  query: NonNullable<Api.SystemManage.Menu['query']>;
-  buttons: NonNullable<Api.SystemManage.Menu['buttons']>;
-  layout: string;
-  page: string;
-  pathParam: string;
-};
-
 const model = ref(createDefaultModel());
 
-function createDefaultModel(): Model {
+function createDefaultModel(): Api.SystemManage.MenuModel {
   return {
-    menuType: '1',
-    menuName: '',
-    routeName: '',
-    routePath: '',
+    id: 0,
+    menuType: '0',
+    title: '',
+    name: '',
+    path: '',
     pathParam: '',
     component: '',
     layout: '',
     page: '',
     i18nKey: null,
     icon: '',
-    iconType: '1',
-    parentId: 0,
+    localIcon: '',
+    parentID: 0,
     status: 0,
     keepAlive: false,
     constant: false,
@@ -106,19 +78,19 @@ function createDefaultModel(): Model {
     hideInMenu: false,
     activeMenu: null,
     multiTab: false,
-    fixedIndexInTab: null,
+    fixedIndexInTab: 0,
     query: [],
-    buttons: []
+    permissions: []
   };
 }
 
-type RuleKey = Extract<keyof Model, 'menuName' | 'status' | 'routeName' | 'routePath'>;
+type RuleKey = Extract<keyof Api.SystemManage.MenuModel, 'title' | 'status' | 'name' | 'path'>;
 
 const rules: Record<RuleKey, App.Global.FormRule> = {
-  menuName: defaultRequiredRule,
+  title: defaultRequiredRule,
   status: defaultRequiredRule,
-  routeName: defaultRequiredRule,
-  routePath: defaultRequiredRule
+  name: defaultRequiredRule,
+  path: defaultRequiredRule
 };
 
 const disabledMenuType = computed(() => props.operateType === 'edit');
@@ -134,15 +106,13 @@ const localIconOptions = localIcons.map(item => ({
   value: item
 }));
 
-const showLayout = computed(() => model.value.parentId === 0);
-
-const showPage = computed(() => model.value.menuType === '2');
+const showLayout = computed(() => model.value.parentID === 0);
+const showPage = computed(() => model.value.menuType === '1');
 
 const pageOptions = computed(() => {
   const allPages = [...props.allPages];
-
-  if (model.value.routeName && !allPages.includes(model.value.routeName)) {
-    allPages.unshift(model.value.routeName);
+  if (model.value.name && !allPages.includes(model.value.name)) {
+    allPages.unshift(model.value.name);
   }
 
   const opts: CommonType.Option[] = allPages.map(page => ({
@@ -195,15 +165,16 @@ function removeQuery(index: number) {
 
 /** - add a button input */
 function addButton(index: number) {
-  model.value.buttons.splice(index + 1, 0, {
-    code: '',
-    desc: ''
+  model.value.permissions.splice(index + 1, 0, {
+    permissType: '0',
+    permissCode: '',
+    description: ''
   });
 }
 
 /** - remove a button input */
 function removeButton(index: number) {
-  model.value.buttons.splice(index, 1);
+  model.value.permissions.splice(index, 1);
 }
 
 async function handleInitModel() {
@@ -216,23 +187,21 @@ async function handleInitModel() {
   if (props.operateType === 'addChild') {
     const { id } = props.rowData;
 
-    Object.assign(model.value, { parentId: id });
+    Object.assign(model.value, { parentID: id });
   }
 
   if (props.operateType === 'edit') {
     const { component, ...rest } = props.rowData;
-
     const { layout, page } = getLayoutAndPage(component);
-    const { path, param } = getPathParamFromRoutePath(rest.routePath);
-
+    const { path, param } = getPathParamFromRoutePath(rest.path);
     Object.assign(model.value, rest, { layout, page, routePath: path, pathParam: param });
   }
 
   if (!model.value.query) {
     model.value.query = [];
   }
-  if (!model.value.buttons) {
-    model.value.buttons = [];
+  if (!model.value.permissions) {
+    model.value.permissions = [];
   }
 }
 
@@ -241,41 +210,39 @@ function closeDrawer() {
 }
 
 function handleUpdateRoutePathByRouteName() {
-  if (model.value.routeName) {
-    model.value.routePath = getRoutePathByRouteName(model.value.routeName);
+  if (model.value.name) {
+    model.value.path = getRoutePathByRouteName(model.value.name);
   } else {
-    model.value.routePath = '';
+    model.value.path = '';
   }
 }
 
 function handleUpdateI18nKeyByRouteName() {
-  if (model.value.routeName) {
-    model.value.i18nKey = `route.${model.value.routeName}` as App.I18n.I18nKey;
+  if (model.value.name) {
+    model.value.i18nKey = `route.${model.value.name}` as App.I18n.I18nKey;
   } else {
     model.value.i18nKey = null;
   }
 }
 
-function getSubmitParams() {
+function getSubmitData() {
   const { layout, page, pathParam, ...params } = model.value;
-
   const component = transformLayoutAndPageToComponent(layout, page);
-  const routePath = getRoutePathWithParam(model.value.routePath, pathParam);
-
-  params.component = component;
-  params.routePath = routePath;
-
-  return params;
+  const routePath = getRoutePathWithParam(model.value.path, pathParam);
+  return {
+    ...params,
+    layout,
+    page,
+    pathParam,
+    component,
+    path: routePath
+  };
 }
 
 async function handleSubmit() {
   await validate();
-
-  const params = getSubmitParams();
-
-  console.log('params: ', params);
-
-  // request
+  const submitData = getSubmitData();
+  await MenuApi.fetchSave(submitData);
   window.$message?.success($t('common.updateSuccess'));
   closeDrawer();
   emit('submitted');
@@ -290,7 +257,7 @@ watch(visible, () => {
 });
 
 watch(
-  () => model.value.routeName,
+  () => model.value.name,
   () => {
     handleUpdateRoutePathByRouteName();
     handleUpdateI18nKeyByRouteName();
@@ -299,273 +266,234 @@ watch(
 </script>
 
 <template>
-  <AModal v-model:open="visible" :title="title" width="800px">
-    <div class="h-480px">
-      <SimpleScrollbar>
-        <AForm ref="formRef" :model="model" :rules="rules" :label-col="{ lg: 8, xs: 4 }" label-wrap class="pr-20px">
-          <ARow>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.menuType')" name="menuType">
-                <ARadioGroup v-model:value="model.menuType" :disabled="disabledMenuType">
-                  <ARadio v-for="item in menuTypeOptions" :key="item.value" :value="item.value">
-                    {{ $t(item.label) }}
-                  </ARadio>
-                </ARadioGroup>
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.menuName')" name="menuName">
-                <AInput v-model:value="model.menuName" :placeholder="$t('page.manage.menu.form.menuName')" />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.routeName')" name="routeName">
-                <AInput v-model:value="model.routeName" :placeholder="$t('page.manage.menu.form.routeName')" />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.routePath')" name="routePath">
-                <AInput v-model:value="model.routePath" disabled :placeholder="$t('page.manage.menu.form.routePath')" />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.pathParam')" name="pathParam">
-                <AInput v-model:value="model.pathParam" :placeholder="$t('page.manage.menu.form.pathParam')" />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem v-if="showLayout" :label="$t('page.manage.menu.layout')" name="layout">
-                <ASelect
-                  v-model:value="model.layout"
-                  :options="layoutOptions"
-                  :placeholder="$t('page.manage.menu.form.layout')"
-                />
-              </AFormItem>
-            </ACol>
-            <ACol v-if="showPage" :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.page')" name="page">
-                <ASelect
-                  v-model:value="model.page"
-                  :options="pageOptions"
-                  :placeholder="$t('page.manage.menu.form.page')"
-                />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.i18nKey')" name="i18nKey">
-                <AInput v-model:value="model.i18nKey as string" :placeholder="$t('page.manage.menu.form.i18nKey')" />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.order')" name="order">
-                <AInputNumber
-                  v-model:value="model.order as number"
-                  class="w-full"
-                  :placeholder="$t('page.manage.menu.form.order')"
-                />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.iconTypeTitle')" name="iconType">
-                <ARadioGroup v-model:value="model.iconType">
-                  <ARadio v-for="item in menuIconTypeOptions" :key="item.value" :value="item.value">
-                    {{ $t(item.label) }}
-                  </ARadio>
-                </ARadioGroup>
-              </AFormItem>
-            </ACol>
-
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.icon')" name="icon">
-                <template v-if="model.iconType === '1'">
-                  <AInput v-model:value="model.icon" :placeholder="$t('page.manage.menu.form.icon')" class="flex-1">
+  <a-modal v-model:open="visible" :title="title" width="960px">
+    <div class="h-680px">
+      <simple-scrollbar>
+        <a-form ref="formRef" :model="model" :rules="rules" :label-col="{ lg: 8, xs: 4 }" label-wrap class="pr-20px">
+          <a-tabs v-model:activeKey="activeKey">
+          <a-tab-pane key="1" :tab="$t('page.manage.menu.tabMenu')">
+            <a-row>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.menuType')" name="menuType">
+                  <a-radio-group v-model:value="model.menuType" :disabled="disabledMenuType">
+                    <a-radio v-for="item in menuTypeOptions" :key="item.value" :value="item.value">
+                      {{ $t(item.label) }}
+                    </a-radio>
+                  </a-radio-group>
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.title')" name="title">
+                  <a-input v-model:value="model.title" :placeholder="$t('page.manage.menu.form.title')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.name')" name="name">
+                  <a-input v-model:value="model.name" :placeholder="$t('page.manage.menu.form.name')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.path')" name="path">
+                  <a-input v-model:value="model.path" disabled :placeholder="$t('page.manage.menu.form.path')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.pathParam')" name="pathParam">
+                  <a-input v-model:value="model.pathParam" :placeholder="$t('page.manage.menu.form.pathParam')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item v-if="showLayout" :label="$t('page.manage.menu.layout')" name="layout">
+                  <a-select v-model:value="model.layout" :options="layoutOptions" :placeholder="$t('page.manage.menu.form.layout')" />
+                </a-form-item>
+              </a-col>
+              <a-col v-if="showPage" :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.page')" name="page">
+                  <a-select v-model:value="model.page" :options="pageOptions" :placeholder="$t('page.manage.menu.form.page')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.i18nKey')" name="i18nKey">
+                  <a-input v-model:value="model.i18nKey as string" :placeholder="$t('page.manage.menu.form.i18nKey')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.order')" name="order">
+                  <a-input-number v-model:value="model.order as number" class="w-full" :placeholder="$t('page.manage.menu.form.order')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.localIcon')" name="localIcon">
+                    <a-select v-model:value="model.localIcon" :placeholder="$t('page.manage.menu.form.localIcon')" :options="localIconOptions" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.icon')" name="icon">
+                  <a-input v-model:value="model.icon" :placeholder="$t('page.manage.menu.form.icon')" class="flex-1">
                     <template #suffix>
                       <SvgIcon v-if="model.icon" :icon="model.icon" class="text-icon" />
                     </template>
-                  </AInput>
-                </template>
-                <template v-if="model.iconType === '2'">
-                  <ASelect
-                    v-model:value="model.icon"
-                    :placeholder="$t('page.manage.menu.form.localIcon')"
-                    :options="localIconOptions"
-                  />
-                </template>
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.menuStatus')" name="status">
-                <ARadioGroup v-model:value="model.status">
-                  <ARadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value">
-                    {{ $t(item.label) }}
-                  </ARadio>
-                </ARadioGroup>
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.keepAlive')" name="keepAlive">
-                <ARadioGroup v-model:value="model.keepAlive">
-                  <ARadio :value="true">{{ $t('common.yesOrNo.yes') }}</ARadio>
-                  <ARadio :value="false">{{ $t('common.yesOrNo.no') }}</ARadio>
-                </ARadioGroup>
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.constant')" name="constant">
-                <ARadioGroup v-model:value="model.constant">
-                  <ARadio value>
-                    {{ $t('common.yesOrNo.yes') }}
-                  </ARadio>
-                  <ARadio :value="false">
-                    {{ $t('common.yesOrNo.no') }}
-                  </ARadio>
-                </ARadioGroup>
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.href')" name="href">
-                <AInput v-model:value="model.href as string" :placeholder="$t('page.manage.menu.form.href')" />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.hideInMenu')" name="hideInMenu">
-                <ARadioGroup v-model:value="model.hideInMenu">
-                  <ARadio :value="true">{{ $t('common.yesOrNo.yes') }}</ARadio>
-                  <ARadio :value="false">{{ $t('common.yesOrNo.no') }}</ARadio>
-                </ARadioGroup>
-              </AFormItem>
-            </ACol>
-            <ACol v-if="model.hideInMenu" :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.activeMenu')" name="activeMenu">
-                <ASelect
-                  v-model:value="model.activeMenu as string"
-                  :options="pageOptions"
-                  clearable
-                  :placeholder="$t('page.manage.menu.form.activeMenu')"
-                />
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.multiTab')" name="multiTab">
-                <ARadioGroup v-model:value="model.multiTab">
-                  <ARadio value :label="$t('common.yesOrNo.yes')" />
-                  <ARadio :value="false" :label="$t('common.yesOrNo.no')" />
-                </ARadioGroup>
-              </AFormItem>
-            </ACol>
-            <ACol :lg="12" :xs="24">
-              <AFormItem :label="$t('page.manage.menu.fixedIndexInTab')" name="fixedIndexInTab">
-                <AInputNumber
-                  v-model:value="model.fixedIndexInTab as number"
-                  class="w-full"
-                  clearable
-                  :placeholder="$t('page.manage.menu.form.fixedIndexInTab')"
-                />
-              </AFormItem>
-            </ACol>
-            <ACol :span="24">
-              <AFormItem :label-col="{ span: 4 }" :label="$t('page.manage.menu.query')" name="query">
-                <AButton v-if="model.query.length === 0" type="dashed" block @click="addQuery(-1)">
-                  <template #icon>
-                    <icon-carbon-add class="align-sub text-icon" />
+                  </a-input>
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.status')" name="status">
+                  <a-radio-group v-model:value="model.status">
+                    <a-radio v-for="item in enableStatusOptions" :key="item.value" :value="item.value">
+                      {{ $t(item.label) }}
+                    </a-radio>
+                  </a-radio-group>
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.keepAlive')" name="keepAlive">
+                  <a-radio-group v-model:value="model.keepAlive">
+                    <a-radio :value="true">{{ $t('common.yesOrNo.yes') }}</a-radio>
+                    <a-radio :value="false">{{ $t('common.yesOrNo.no') }}</a-radio>
+                  </a-radio-group>
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.constant')" name="constant">
+                  <a-radio-group v-model:value="model.constant">
+                    <a-radio value>
+                      {{ $t('common.yesOrNo.yes') }}
+                    </a-radio>
+                    <a-radio :value="false">
+                      {{ $t('common.yesOrNo.no') }}
+                    </a-radio>
+                  </a-radio-group>
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.href')" name="href">
+                  <a-input v-model:value="model.href as string" :placeholder="$t('page.manage.menu.form.href')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.hideInMenu')" name="hideInMenu">
+                  <a-radio-group v-model:value="model.hideInMenu">
+                    <a-radio :value="true">{{ $t('common.yesOrNo.yes') }}</a-radio>
+                    <a-radio :value="false">{{ $t('common.yesOrNo.no') }}</a-radio>
+                  </a-radio-group>
+                </a-form-item>
+              </a-col>
+              <a-col v-if="model.hideInMenu" :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.activeMenu')" name="activeMenu">
+                  <a-select v-model:value="model.activeMenu as string" :options="pageOptions" clearable :placeholder="$t('page.manage.menu.form.activeMenu')" />
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.multiTab')" name="multiTab">
+                  <a-radio-group v-model:value="model.multiTab">
+                    <a-radio value :label="$t('common.yesOrNo.yes')" />
+                    <a-radio :value="false" :label="$t('common.yesOrNo.no')" />
+                  </a-radio-group>
+                </a-form-item>
+              </a-col>
+              <a-col :lg="12" :xs="24">
+                <a-form-item :label="$t('page.manage.menu.fixedIndexInTab')" name="fixedIndexInTab">
+                  <a-input-number v-model:value="model.fixedIndexInTab as number" class="w-full" clearable :placeholder="$t('page.manage.menu.form.fixedIndexInTab')" />
+                </a-form-item>
+              </a-col>
+              <a-col :span="24">
+                <a-form-item :label-col="{ span: 4 }" :label="$t('page.manage.menu.query')" name="query">
+                  <a-button v-if="model.query.length === 0" type="dashed" block @click="addQuery(-1)">
+                    <template #icon>
+                      <icon-carbon-add class="align-sub text-icon" />
+                    </template>
+                    <span class="ml-8px">{{ $t('common.add') }}</span>
+                  </a-button>
+                  <template v-else>
+                    <div v-for="(item, index) in model.query" :key="index" class="flex gap-3">
+                      <a-col :span="9">
+                        <a-form-item :name="['query', index, 'key']">
+                          <a-input v-model:value="item.key" :placeholder="$t('page.manage.menu.form.queryKey')" class="flex-1" />
+                        </a-form-item>
+                      </a-col>
+                      <a-col :span="9">
+                        <a-form-item :name="['query', index, 'value']">
+                          <a-input v-model:value="item.value" :placeholder="$t('page.manage.menu.form.queryValue')" class="flex-1" />
+                        </a-form-item>
+                      </a-col>
+                      <a-col :span="5">
+                        <a-space class="ml-12px">
+                          <a-button size="middle" @click="addQuery(index)">
+                            <template #icon>
+                              <icon-ic:round-plus class="align-sub text-icon" />
+                            </template>
+                          </a-button>
+                          <a-button size="middle" @click="removeQuery(index)">
+                            <template #icon>
+                              <icon-ic-round-remove class="align-sub text-icon" />
+                            </template>
+                          </a-button>
+                        </a-space>
+                      </a-col>
+                    </div>
                   </template>
-                  <span class="ml-8px">{{ $t('common.add') }}</span>
-                </AButton>
-                <template v-else>
-                  <div v-for="(item, index) in model.query" :key="index" class="flex gap-3">
-                    <ACol :span="9">
-                      <AFormItem :name="['query', index, 'key']">
-                        <AInput
-                          v-model:value="item.key"
-                          :placeholder="$t('page.manage.menu.form.queryKey')"
-                          class="flex-1"
-                        />
-                      </AFormItem>
-                    </ACol>
-                    <ACol :span="9">
-                      <AFormItem :name="['query', index, 'value']">
-                        <AInput
-                          v-model:value="item.value"
-                          :placeholder="$t('page.manage.menu.form.queryValue')"
-                          class="flex-1"
-                        />
-                      </AFormItem>
-                    </ACol>
-                    <ACol :span="5">
-                      <ASpace class="ml-12px">
-                        <AButton size="middle" @click="addQuery(index)">
-                          <template #icon>
-                            <icon-ic:round-plus class="align-sub text-icon" />
-                          </template>
-                        </AButton>
-                        <AButton size="middle" @click="removeQuery(index)">
-                          <template #icon>
-                            <icon-ic-round-remove class="align-sub text-icon" />
-                          </template>
-                        </AButton>
-                      </ASpace>
-                    </ACol>
-                  </div>
-                </template>
-              </AFormItem>
-            </ACol>
-            <ACol :span="24">
-              <AFormItem :label-col="{ span: 4 }" :label="$t('page.manage.menu.button')" name="buttons">
-                <AButton v-if="model.buttons.length === 0" type="dashed" block @click="addButton(-1)">
-                  <template #icon>
-                    <icon-carbon-add class="align-sub text-icon" />
+                </a-form-item>
+              </a-col>
+            </a-row>
+          </a-tab-pane>
+          <a-tab-pane key="2" :tab="$t('page.manage.menu.tabPermission')">
+            <a-row>
+              <a-col :span="24">
+                <a-form-item :label-col="{ span: 4 }" :label="$t('page.manage.menu.permission')" name="permissions">
+                  <a-button v-if="model.permissions.length === 0" type="dashed" block @click="addButton(-1)">
+                    <template #icon>
+                      <icon-carbon-add class="align-sub text-icon" />
+                    </template>
+                    <span class="ml-8px">{{ $t('common.add') }}</span>
+                  </a-button>
+                  <template v-else>
+                    <div v-for="(item, index) in model.permissions" :key="index" class="flex gap-3">
+                      <a-col :span="5">
+                        <a-form-item :name="['permissions', index, 'permissType']">
+                          <a-select v-model:value="item.permissType" :placeholder="$t('page.manage.menu.form.permissType')" :options="translateOptions(permissionTypeOptions)" clearable />
+                        </a-form-item>
+                      </a-col>
+                      <a-col :span="7">
+                        <a-form-item :name="['permissions', index, 'permissCode']">
+                          <a-input v-model:value="item.permissCode" :placeholder="$t('page.manage.menu.form.permissCode')" class="flex-1" />
+                        </a-form-item>
+                      </a-col>
+                      <a-col :span="7">
+                        <a-form-item :name="['permissions', index, 'description']">
+                          <a-input v-model:value="item.description" :placeholder="$t('page.manage.menu.form.description')" class="flex-1" />
+                        </a-form-item>
+                      </a-col>
+                      <a-col :span="5">
+                        <a-space class="ml-12px">
+                          <a-button size="middle" @click="addButton(index)">
+                            <template #icon>
+                              <icon-ic:round-plus class="align-sub text-icon" />
+                            </template>
+                          </a-button>
+                          <a-button size="middle" @click="removeButton(index)">
+                            <template #icon>
+                              <icon-ic-round-remove class="align-sub text-icon" />
+                            </template>
+                          </a-button>
+                        </a-space>
+                      </a-col>
+                    </div>
                   </template>
-                  <span class="ml-8px">{{ $t('common.add') }}</span>
-                </AButton>
-                <template v-else>
-                  <div v-for="(item, index) in model.buttons" :key="index" class="flex gap-3">
-                    <ACol :span="9">
-                      <AFormItem :name="['buttons', index, 'code']">
-                        <AInput
-                          v-model:value="item.code"
-                          :placeholder="$t('page.manage.menu.form.buttonCode')"
-                          class="flex-1"
-                        ></AInput>
-                      </AFormItem>
-                    </ACol>
-                    <ACol :span="9">
-                      <AFormItem :name="['buttons', index, 'desc']">
-                        <AInput
-                          v-model:value="item.desc"
-                          :placeholder="$t('page.manage.menu.form.buttonDesc')"
-                          class="flex-1"
-                        ></AInput>
-                      </AFormItem>
-                    </ACol>
-                    <ACol :span="5">
-                      <ASpace class="ml-12px">
-                        <AButton size="middle" @click="addButton(index)">
-                          <template #icon>
-                            <icon-ic:round-plus class="align-sub text-icon" />
-                          </template>
-                        </AButton>
-                        <AButton size="middle" @click="removeButton(index)">
-                          <template #icon>
-                            <icon-ic-round-remove class="align-sub text-icon" />
-                          </template>
-                        </AButton>
-                      </ASpace>
-                    </ACol>
-                  </div>
-                </template>
-              </AFormItem>
-            </ACol>
-          </ARow>
-        </AForm>
-      </SimpleScrollbar>
-    </div>
-    <template #footer>
-      <ASpace justify="end" :size="16">
-        <AButton @click="closeDrawer">{{ $t('common.cancel') }}</AButton>
-        <AButton type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</AButton>
-      </ASpace>
+                </a-form-item>
+              </a-col>
+            </a-row>
+          </a-tab-pane>
+        </a-tabs>
+      </a-form>
+    </simple-scrollbar>
+  </div>
+  <template #footer>
+      <a-space justify="end" :size="16">
+        <a-button @click="closeDrawer">{{ $t('common.cancel') }}</a-button>
+        <a-button type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</a-button>
+      </a-space>
     </template>
-  </AModal>
+  </a-modal>
 </template>
 
 <style scoped></style>

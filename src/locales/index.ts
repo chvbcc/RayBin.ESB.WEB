@@ -30,6 +30,10 @@ export function setupI18n(app: App) {
   );
 }
 
+export function language(): string {
+  return i18n.global.locale.value;
+}
+
 export const $t = i18n.global.t as App.I18n.$T;
 
 export function setLocale(locale: App.I18n.LangType) {

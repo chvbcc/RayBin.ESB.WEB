@@ -71,26 +71,56 @@ export namespace RoleApi {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 export namespace MenuApi {
   /** 分页列表 */
-  export function fetchGetMenuList() {
+  export function fetchGetPagingList(params?: Api.SystemManage.MenuSearchParams) {
     return request<Api.SystemManage.MenuList>({
       url: '/menu/getPagingList',
-      method: 'get'
+      method: 'get',
+      params
     });
   }
 
-  /** get all pages */
-  export function fetchGetAllPages() {
+  /** 获取所有页面 */
+  export function fetchGetPages() {
     return request<string[]>({
-      url: '/systemManage/getAllPages',
+      url: '/systemManage/getPages',
       method: 'get'
     });
   }
 
-  /** get menu tree */
+  /** 获取菜单树 */
   export function fetchGetMenuTree() {
     return request<Api.SystemManage.MenuTree[]>({
       url: '/systemManage/getMenuTree',
       method: 'get'
+    });
+  }
+
+  export function fetchSave(data: Api.SystemManage.MenuModel) {
+    let url = data.id === 0 ? '/menu/add' : '/menu/update';
+    return request({
+      url: url,
+      method: 'post',
+      data
+    });
+  }
+
+  /** 删除菜单 */
+  export function fetchDelete(id: number) {
+    let url = '/menu/delete';
+    return request({
+      url: url,
+      method: 'delete',
+      params: { id }
+    });
+  }
+
+  export function fetchDeletes(ids: number[]) {
+    let url = '/menu/deletes';
+    return request({
+      headers: { 'Content-Type': 'application/json' },
+      url: url,
+      method: 'delete',
+      data: ids
     });
   }
 }
