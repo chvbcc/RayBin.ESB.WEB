@@ -15,7 +15,7 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.SystemManage.RoleSearchParams>('model', { required: true, default: () => ({ isSystem: 1,  status: 0 }) });
+const model = defineModel<Api.SystemManage.RoleSearchParams>('model', { required: true });
 
 const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
 

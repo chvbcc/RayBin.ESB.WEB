@@ -28,6 +28,19 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       align: 'center'
     },
     {
+      key: 'permission',
+      title: $t('common.permission'),
+      align: 'center',
+      width: 80,
+      customRender: ({ record }) => (
+        <div class="flex-center gap-8px">
+          <Button type="primary" ghost size="small" onClick={() => edit(record.id)}>
+             {$t('common.config')}
+          </Button>
+        </div>
+      )
+    },
+    {
       key: 'roleName',
       dataIndex: 'roleName',
       title: $t('page.manage.role.roleName'),
@@ -39,7 +52,8 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       dataIndex: 'isSystem',
       title: $t('page.manage.role.isSystem'),
       align: 'center',
-      minWidth: 120,
+      width: 88,
+      minWidth: 88,
       customRender: ({ record }) => {
         if (record.isSystem === null) {
           return null;
@@ -113,7 +127,6 @@ async function handleBatchDelete() {
 function handleDelete(id: number) {
   // request
   console.log(id);
-
   onDeleted();
 }
 

@@ -1,3 +1,5 @@
+import { permission } from "node:process";
+
 const local: App.I18n.Schema = {
   system: {
     title: 'RayBin ESB 6.0',
@@ -33,6 +35,7 @@ const local: App.I18n.Schema = {
     modifySuccess: 'Modify Success',
     noData: 'No Data',
     operate: 'Operate',
+    permission: 'Permission',
     pleaseCheckValue: 'Please check whether the value is valid',
     refresh: 'Refresh',
     reset: 'Reset',

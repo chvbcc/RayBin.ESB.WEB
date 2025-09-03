@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
-import { useBoolean } from '@sa/hooks';
 import { computed, ref, watch } from 'vue';
 import { convertOptions } from '@/utils/common';
-import MenuAuthModal from './menu-auth-modal.vue';
-import ButtonAuthModal from './button-auth-modal.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { enableStatusOptions, yesOrNoOptions } from '@/constants/business';
 
@@ -28,8 +25,6 @@ const emit = defineEmits<Emits>();
 const visible = defineModel<boolean>('visible', { default: false });
 const { formRef, validate, resetFields } = useAntdForm();
 const { defaultRequiredRule } = useFormRules();
-const { bool: menuAuthVisible, setTrue: openMenuAuthModal } = useBoolean();
-const { bool: buttonAuthVisible, setTrue: openButtonAuthModal } = useBoolean();
 
 const title = computed(() => {
   const titles: Record<AntDesign.TableOperateType, string> = {
@@ -59,14 +54,14 @@ const rules: Record<RuleKey, App.Global.FormRule> = {
   status: defaultRequiredRule
 };
 
-const roleId = computed(() => props.rowData?.id || -1);
-const isEdit = computed(() => props.operateType === 'edit');
-
 function handleInitModel() {
   model.value = createDefaultModel();
-
   if (props.operateType === 'edit' && props.rowData) {
-    Object.assign(model.value, props.rowData);
+    const rowData = {
+      ...props.rowData,
+      isSystem: Number(props.rowData.isSystem) // 确保是数字类型
+    };
+    Object.assign(model.value, rowData);
   }
 }
 
@@ -84,8 +79,8 @@ async function handleSubmit() {
 
 watch(visible, () => {
   if (visible.value) {
-    handleInitModel();
     resetFields();
+    handleInitModel();
   }
 });
 </script>
@@ -110,12 +105,6 @@ watch(visible, () => {
         <a-input v-model:value="model.description" :placeholder="$t('page.manage.role.form.description')" />
       </a-form-item>
     </a-form>
-    <a-space v-if="isEdit">
-      <a-button @click="openMenuAuthModal">{{ $t('page.manage.role.menuAuth') }}</a-button>
-      <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
-      <a-button @click="openButtonAuthModal">{{ $t('page.manage.role.buttonAuth') }}</a-button>
-      <ButtonAuthModal v-model:visible="buttonAuthVisible" :role-id="roleId" />
-    </a-space>
     <template #footer>
       <div class="flex-y-center justify-end gap-12px">
         <a-button @click="closeDrawer">{{ $t('common.cancel') }}</a-button>
