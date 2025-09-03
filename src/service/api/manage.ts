@@ -82,7 +82,7 @@ export namespace MenuApi {
   /** 获取所有页面 */
   export function fetchGetPages() {
     return request<string[]>({
-      url: '/systemManage/getPages',
+      url: '/menu/getPages',
       method: 'get'
     });
   }
@@ -90,7 +90,7 @@ export namespace MenuApi {
   /** 获取菜单树 */
   export function fetchGetMenuTree() {
     return request<Api.SystemManage.MenuTree[]>({
-      url: '/systemManage/getMenuTree',
+      url: '/menu/getMenuTree',
       method: 'get'
     });
   }

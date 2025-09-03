@@ -94,7 +94,7 @@ declare namespace Api {
     type MenuTree = {
       id: number;
       label: string;
-      pId: number;
+      parentId: number;
       children?: MenuTree[];
     };
   }

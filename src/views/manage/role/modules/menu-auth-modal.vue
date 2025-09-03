@@ -26,47 +26,22 @@ function closeModal() {
 
 const title = computed(() => $t('common.edit') + $t('page.manage.role.menuAuth'));
 
-const home = shallowRef('');
-
-async function getHome() {
-  console.log(props.roleId);
-
-  home.value = 'home';
-}
-
-async function updateHome(val: SelectProps['value']) {
-  // request
-
-  home.value = val as string;
-}
-
-const pages = shallowRef<string[]>([]);
-
-async function getPages() {
-  const { error, data } = await MenuApi.fetchGetPages();
-
-  if (!error) {
-    pages.value = data;
-  }
-}
-
-const pageSelectOptions = computed(() => {
-  const opts: CommonType.Option[] = pages.value.map(page => ({
-    label: page,
-    value: page
-  }));
-
-  return opts;
-});
-
 const tree = shallowRef<DataNode[]>([]);
 
 async function getTree() {
   const { error, data } = await MenuApi.fetchGetMenuTree();
-
   if (!error) {
-    tree.value = recursiveTransform(data);
+    const treeData = transformTreeData(data);
+    tree.value = recursiveTransform(treeData);
   }
+}
+
+function transformTreeData(data: any[]): Api.SystemManage.MenuTree[] {
+  return data.map(item => ({
+    ...item,
+    label: $t(item.label),
+    children: item.children && item.children.length > 0 ? transformTreeData(item.children) : undefined
+  }));
 }
 
 function recursiveTransform(data: Api.SystemManage.MenuTree[]): DataNode[] {
@@ -91,23 +66,16 @@ function recursiveTransform(data: Api.SystemManage.MenuTree[]): DataNode[] {
 const checks = shallowRef<number[]>([]);
 
 async function getChecks() {
-  console.log(props.roleId);
-  // request
   checks.value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21];
 }
 
 function handleSubmit() {
   console.log(checks.value, props.roleId);
-  // request
-
   window.$message?.success?.($t('common.modifySuccess'));
-
   closeModal();
 }
 
 async function init() {
-  getHome();
-  getPages();
   await getTree();
   await getChecks();
 }
@@ -120,11 +88,7 @@ watch(visible, val => {
 </script>
 
 <template>
-  <a-modal v-model:open="visible" :title="title" class="w-480px">
-    <div class="flex-y-center gap-16px pb-12px">
-      <div>{{ $t('page.manage.menu.home') }}</div>
-      <a-select :value="home" :options="pageSelectOptions" class="w-240px" @update:value="updateHome" />
-    </div>
+  <a-modal v-model:open="visible" :title="title" class="w-800px h-600px">
     <a-tree v-model:checked-keys="checks" :tree-data="tree" checkable :height="280" class="h-280px" />
     <template #footer>
       <a-button size="small" class="mt-16px" @click="closeModal">

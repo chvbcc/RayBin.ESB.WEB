@@ -17,6 +17,14 @@ const { tableWrapperRef, scrollConfig } = useTableScroll();
 
 const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
   apiFn: MenuApi.fetchGetPagingList,
+    apiParams: {
+    current: 1,
+    size: 10,
+    name: undefined,
+    path: undefined,
+    title: undefined,
+    status: undefined
+  },
   columns: () => [
     {
       key: 'menuType',
@@ -38,9 +46,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       align: 'center',
       customRender: ({ record }) => {
         const { i18nKey, title } = record;
-
         const label = i18nKey ? $t(i18nKey) : title;
-
         return <span>{label}</span>;
       }
     },

@@ -3,9 +3,9 @@ import { $t } from '@/locales';
 import { Button, Tag } from 'ant-design-vue';
 import { RoleApi } from '@/service/api/manage';
 import RoleSearch from './modules/role-search.vue';
-import { enableStatusRecord } from '@/constants/business';
 import RoleOperateDrawer from './modules/role-operate-drawer.vue';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
+import { enableStatusRecord,yesOrNoRecord } from '@/constants/business';
 
 const { tableWrapperRef, scrollConfig } = useTableScroll();
 
@@ -39,7 +39,15 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       dataIndex: 'isSystem',
       title: $t('page.manage.role.isSystem'),
       align: 'center',
-      minWidth: 120
+      minWidth: 120,
+      customRender: ({ record }) => {
+        if (record.isSystem === null) {
+          return null;
+        }
+        const isSystemValue = record.isSystem ? 1 : 0;
+        const label = $t(yesOrNoRecord[isSystemValue]);
+        return label;
+      }
     },
     {
       key: 'description',
