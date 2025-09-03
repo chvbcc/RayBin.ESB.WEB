@@ -1,16 +1,16 @@
-import { transformRecordToOption } from '@/utils/common';
+import { transformRecordToOption, convertRecordToOption } from '@/utils/common';
 /** common */
 export const enableStatusRecord: Record<Api.Common.EnableStatus, App.I18n.I18nKey> = {
   0: 'common.status.enable',
   1: 'common.status.disable'
 };
-export const enableStatusOptions = transformRecordToOption(enableStatusRecord);
+export const enableStatusOptions = convertRecordToOption(enableStatusRecord);
 
 export const yesOrNoRecord: Record<Api.Common.YesOrNo, App.I18n.I18nKey> = {
   0: 'common.yesOrNo.no',
   1: 'common.yesOrNo.yes'
 };
-export const yesOrNoOptions = transformRecordToOption(yesOrNoRecord);
+export const yesOrNoOptions = convertRecordToOption(yesOrNoRecord);
 
 /** user */
 export const userGenderRecord: Record<Api.SystemManage.Gender, App.I18n.I18nKey> = {
@@ -21,8 +21,8 @@ export const userGenderOptions = transformRecordToOption(userGenderRecord);
 
 /** menu */
 export const menuTypeRecord: Record<Api.SystemManage.MenuType, App.I18n.I18nKey> = {
-  0: 'page.manage.menu.type.directory',
-  1: 'page.manage.menu.type.menu'
+  '0': 'page.manage.menu.type.directory',
+  '1': 'page.manage.menu.type.menu'
 };
 export const menuTypeOptions = transformRecordToOption(menuTypeRecord);
 

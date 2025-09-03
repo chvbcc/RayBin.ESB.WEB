@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { $t } from '@/locales';
+import { watch } from 'vue';
+import { $t, language } from '@/locales';
 import { translateOptions } from '@/utils/common';
 import { databaseTypeOptions } from '@/constants/business';
 
@@ -16,6 +17,8 @@ const emit = defineEmits<Emits>();
 
 const model = defineModel<Api.Connection.ConnectionSearchParams>('model', { required: true });
 
+const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
+
 function reset() {
   emit('reset');
 }
@@ -23,11 +26,16 @@ function reset() {
 function search() {
   emit('search');
 }
+
+// Watch for language changes and update labelCol dynamically
+watch(language, (newLang) => {
+  labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
+});
 </script>
 
 <template>
   <a-card :title="$t('common.search')" :bordered="false" class="card-wrapper">
-    <a-form :model="model"  :label-col="{ span: 4 }" :labelWrap="true">
+    <a-form :model="model"  :label-col="labelCol" :labelWrap="true">
       <a-row :gutter="[16, 16]" wrap>
         <a-col :span="24" :md="12" :lg="12">
           <a-form-item :label="$t('page.connection.connectionName')" name="connectionName" class="m-0">

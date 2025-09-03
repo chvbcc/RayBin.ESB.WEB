@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { $t } from '@/locales';
+import { watch } from 'vue';
+import { $t, language } from '@/locales';
 import { convertOptions } from '@/utils/common';
 import { enableStatusOptions } from '@/constants/business';
 
@@ -16,6 +17,8 @@ const emit = defineEmits<Emits>();
 
 const model = defineModel<Api.SystemManage.MenuSearchParams>('model', { required: true });
 
+const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
+
 async function reset() {
   emit('reset');
 }
@@ -23,11 +26,16 @@ async function reset() {
 async function search() {
   emit('search');
 }
+
+// Watch for language changes and update labelCol dynamically
+watch(language, (newLang) => {
+  labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
+});
 </script>
 
 <template>
   <a-card :title="$t('common.search')" :bordered="false" class="card-wrapper">
-    <a-form ref="formRef" :model="model" :label-col="{ span: 4 }">
+    <a-form ref="formRef" :model="model" :label-col="labelCol">
       <a-row :gutter="[16, 16]" wrap>
         <a-col :span="24" :md="12" :lg="12">
           <a-form-item :label="$t('page.manage.menu.name')" name="name" class="m-0">
@@ -49,10 +57,10 @@ async function search() {
             <a-select v-model:value="model.status":placeholder="$t('page.manage.menu.form.status')" :options="convertOptions(enableStatusOptions)" allow-clear />
           </a-form-item>
         </a-col>
-        <div class="flex-1">
-          <a-form-item class="m-0">
-            <div class="w-full flex-y-center justify-end gap-12px">
-              <a-button @click="reset">
+        <a-col :span="24" :md="12" :lg="12">
+          <a-form-item class="m-0" label="&nbsp;" :colon="false">
+            <div class="w-full flex-y-center justify-start gap-12px">
+              <a-button type="primary" ghost @click="reset">
                 <template #icon>
                   <icon-ic-round-refresh class="align-sub text-icon" />
                 </template>
@@ -66,7 +74,7 @@ async function search() {
               </a-button>
             </div>
           </a-form-item>
-        </div>
+        </a-col>
       </a-row>
     </a-form>
   </a-card>

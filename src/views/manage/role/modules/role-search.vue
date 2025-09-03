@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { watch } from 'vue';
 import { $t, language } from '@/locales';
 import { convertOptions } from '@/utils/common';
 import { enableStatusOptions, yesOrNoOptions } from '@/constants/business';
-import { watch } from 'vue';
 
 defineOptions({
   name: 'RoleSearch'
@@ -13,11 +13,11 @@ interface Emits {
   (e: 'search'): void;
 }
 
-const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
-
 const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.SystemManage.RoleSearchParams>('model', { required: true });
+const model = defineModel<Api.SystemManage.RoleSearchParams>('model', { required: true, default: () => ({ isSystem: 1,  status: 0 }) });
+
+const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
 
 function reset() {
   emit('reset');
@@ -48,8 +48,8 @@ watch(language, (newLang) => {
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.role.description')" name="roleName" class="m-0">
-            <a-input v-model:value="model.description" :placeholder="$t('page.manage.role.form.roleName')" />
+          <a-form-item :label="$t('page.manage.role.description')" name="description" class="m-0">
+            <a-input v-model:value="model.description" :placeholder="$t('page.manage.role.form.description')" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
@@ -60,7 +60,7 @@ watch(language, (newLang) => {
         <a-col :span="24" :md="12" :lg="12">
           <a-form-item class="m-0" label="&nbsp;" :colon="false">
             <div class="w-full flex-y-center justify-start gap-12px">
-              <a-button @click="reset">
+              <a-button type="primary" ghost @click="reset">
                 <template #icon>
                   <icon-ic-round-refresh class="align-sub text-icon" />
                 </template>
