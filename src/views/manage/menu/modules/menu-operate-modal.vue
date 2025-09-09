@@ -8,13 +8,7 @@ import { computed, nextTick, ref, watch } from 'vue';
 import SvgIcon from '@/components/custom/svg-icon.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { enableStatusOptions, menuTypeOptions, permissionTypeOptions } from '@/constants/business';
-import {
-  getLayoutAndPage,
-  getPathParamFromRoutePath,
-  getRoutePathByRouteName,
-  getRoutePathWithParam,
-  transformLayoutAndPageToComponent
-} from './shared';
+import { getLayoutAndPage, getPathParamFromRoutePath, getRoutePathByRouteName, getRoutePathWithParam, transformLayoutAndPageToComponent } from './shared';
 
 defineOptions({
   name: 'MenuOperateModal'
@@ -23,11 +17,8 @@ defineOptions({
 export type OperateType = AntDesign.TableOperateType | 'addChild';
 
 interface Props {
-  /** the type of operation */
   operateType: OperateType;
-  /** the edit menu data or the parent menu data when adding a child menu */
   rowData?: Api.SystemManage.Menu | null;
-  /** all pages */
   allPages: string[];
 }
 
@@ -86,12 +77,30 @@ function createDefaultModel(): Api.SystemManage.MenuModel {
 
 type RuleKey = Extract<keyof Api.SystemManage.MenuModel, 'title' | 'status' | 'name' | 'path'>;
 
-const rules: Record<RuleKey, App.Global.FormRule> = {
-  title: defaultRequiredRule,
-  status: defaultRequiredRule,
-  name: defaultRequiredRule,
-  path: defaultRequiredRule
-};
+const rules= computed<Record<RuleKey, App.Global.FormRule>>(() => {
+  const nameRule: App.Global.FormRule = {
+    required: true,
+    validateTrigger: 'blur',
+    validator: async (_rule: any, value: string) => {
+      const name = (value ?? '').trim();
+      if (!name) {
+        return Promise.reject(new Error(($t('page.manage.menu.form.name') as string)));
+      }
+      const { response } = await MenuApi.fetchCheckName(name, model.value.id);
+      const data = response.data as { code: string; msg: string; data: boolean };
+      if (data.msg==="success" && data.data) {
+        return Promise.reject(new Error($t('common.exists')));
+      }
+      return Promise.resolve();
+    }
+  };
+  return {
+    title: defaultRequiredRule,
+    status: defaultRequiredRule,
+    name: nameRule,
+    path: defaultRequiredRule
+  };
+});
 
 const disabledMenuType = computed(() => props.operateType === 'edit');
 
@@ -139,13 +148,11 @@ const roleOptions = ref<CommonType.Option<number>[]>([]);
 
 async function getRoleOptions() {
   const { error, data } = await RoleApi.fetchGetList();
-
   if (!error) {
     const options = data.map(item => ({
       label: item.roleName,
       value: item.id
     }));
-
     roleOptions.value = [...options];
   }
 }
@@ -165,11 +172,17 @@ function removeQuery(index: number) {
 
 /** - add a button input */
 function addButton(index: number) {
-  model.value.permissions.splice(index + 1, 0, {
+    // 创建新的权限对象
+  const newPermission = {
+    menuID: 0,
     permissType: '0',
     permissCode: '',
     description: ''
-  });
+  };
+  // 使用 splice 添加到数组中，保持响应性
+  model.value.permissions.splice(index + 1, 0, newPermission);
+    // 强制更新响应式系统
+  model.value = { ...model.value };
 }
 
 /** - remove a button input */
@@ -179,18 +192,16 @@ function removeButton(index: number) {
 
 async function handleInitModel() {
   model.value = createDefaultModel();
-
+  debugger;
   if (!props.rowData) return;
-
   await nextTick();
-
   if (props.operateType === 'addChild') {
     const { id } = props.rowData;
-
     Object.assign(model.value, { parentID: id });
   }
 
   if (props.operateType === 'edit') {
+    console.log(props.rowData);
     const { component, ...rest } = props.rowData;
     const { layout, page } = getLayoutAndPage(component);
     const { path, param } = getPathParamFromRoutePath(rest.path);
@@ -206,6 +217,7 @@ async function handleInitModel() {
 }
 
 function closeDrawer() {
+  model.value.permissions = [];
   visible.value = false;
 }
 
@@ -250,8 +262,8 @@ async function handleSubmit() {
 
 watch(visible, () => {
   if (visible.value) {
-    handleInitModel();
     resetFields();
+    handleInitModel();
     getRoleOptions();
   }
 });
@@ -439,7 +451,7 @@ watch(
           <a-tab-pane key="2" :tab="$t('page.manage.menu.tabPermission')">
             <a-row>
               <a-col :span="24">
-                <a-form-item :label-col="{ span: 4 }" :label="$t('page.manage.menu.permission')" name="permissions">
+                <a-form-item :label-col="{ span: 4 }" :label="$t('page.manage.permission.title')" name="permissions">
                   <a-button v-if="model.permissions.length === 0" type="dashed" block @click="addButton(-1)">
                     <template #icon>
                       <icon-carbon-add class="align-sub text-icon" />
@@ -450,17 +462,17 @@ watch(
                     <div v-for="(item, index) in model.permissions" :key="index" class="flex gap-3">
                       <a-col :span="5">
                         <a-form-item :name="['permissions', index, 'permissType']">
-                          <a-select v-model:value="item.permissType" :placeholder="$t('page.manage.menu.form.permissType')" :options="translateOptions(permissionTypeOptions)" clearable />
+                          <a-select v-model:value="item.permissType" :placeholder="$t('page.manage.permission.form.permissType')" :options="translateOptions(permissionTypeOptions)" allow-clear />
                         </a-form-item>
                       </a-col>
                       <a-col :span="7">
                         <a-form-item :name="['permissions', index, 'permissCode']">
-                          <a-input v-model:value="item.permissCode" :placeholder="$t('page.manage.menu.form.permissCode')" class="flex-1" />
+                          <a-input v-model:value="item.permissCode" :placeholder="$t('page.manage.permission.form.permissCode')" class="flex-1" />
                         </a-form-item>
                       </a-col>
                       <a-col :span="7">
                         <a-form-item :name="['permissions', index, 'description']">
-                          <a-input v-model:value="item.description" :placeholder="$t('page.manage.menu.form.description')" class="flex-1" />
+                          <a-input v-model:value="item.description" :placeholder="$t('page.manage.permission.form.description')" class="flex-1" />
                         </a-form-item>
                       </a-col>
                       <a-col :span="5">

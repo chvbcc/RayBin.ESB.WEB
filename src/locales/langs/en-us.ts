@@ -35,7 +35,6 @@ const local: App.I18n.Schema = {
     modifySuccess: 'Modify Success',
     noData: 'No Data',
     operate: 'Operate',
-    permission: 'Permission',
     pleaseCheckValue: 'Please check whether the value is valid',
     refresh: 'Refresh',
     reset: 'Reset',
@@ -382,18 +381,9 @@ const local: App.I18n.Schema = {
         activeMenu: 'Active Menu',
         multiTab: 'Multi Tab',
         fixedIndexInTab: 'Fixed Index In Tab',
-        permission: 'Permission',
-        permissType: 'Permission Type',
-        permissCode: 'Permission Code',
-        description: 'Permission Description',
         status: 'Menu Status',
         tabMenu: 'Menu Info',
         tabPermission: 'Permission Settings',
-        permissionType: {
-          button: 'Button',
-          column: 'Column',
-          option: 'Dropdown Option'
-        },
         form: {
           home: 'Please select home',
           menuType: 'Please select menu type',
@@ -416,9 +406,6 @@ const local: App.I18n.Schema = {
           queryValue: 'Please enter route parameter Value',
           fixedInTab: 'Please select whether to fix in the tab',
           fixedIndexInTab: 'Please enter the index fixed in the tab',
-          permissType: 'Please select permission type',
-          permissCode: 'Please enter permission code',
-          description: 'Please enter permission description',
           status: 'Please select menu status'
         },
         addMenu: 'Add Menu',
@@ -432,7 +419,27 @@ const local: App.I18n.Schema = {
           iconify: 'Iconify Icon',
           local: 'Local Icon'
         }
-      }
+      },
+      permission: {
+        title: 'Permission',
+        menuTitle: 'Menu Name',
+        permissionSetting: 'Permission Setting',
+        permissCode: 'Permission Code',
+        permissType: 'Permission Type',
+        description: 'Permission Description',
+        form: {
+          permissCode: 'Please enter permission code',
+          permissType: 'Please select permission type',
+          description: 'Please enter permission description',
+        },
+        permissionType: {
+          button: 'Button',
+          column: 'Column',
+          option: 'Options'
+        },
+        addPermission: 'Add Permission',
+        editPermission: 'Edit Permission',
+      },
     }
   },
   form: {

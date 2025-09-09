@@ -86,7 +86,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       align: 'center',
       width: 130,
       customRender: ({ record }) => (
-        <div class="flex-center gap-8px">
+        <div class="flex-center justify-end gap-8px">
           <Button type="primary" ghost size="small" onClick={() => edit(record.id)}>
             {$t('common.edit')}
           </Button>

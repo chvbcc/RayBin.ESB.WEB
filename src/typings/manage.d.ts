@@ -51,6 +51,40 @@ declare namespace Api {
     /* User model */
     type UserModel = Pick<User, | 'id' | 'username' | 'password' | 'userAvatar' | 'employeeName' | 'employeeNo' | 'gender' | 'phone' | 'email' | 'weChat' | 'dingDing' | 'status'>;
 
+    /* User dropdown */
+    type Users = Pick<User, 'id' | 'username' | 'employeeName'>;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Permission
+    type PermissionType = '0' | '1' | '2';
+
+    /* Permission by menu id */
+    type PermissionByMenuId = Partial<Pick<Permission, 'menuID'> & Common.CommonSearchParams>;
+
+    type RolePermission = Pick<Permission, 'menuID' | 'permissCode' | 'permissType'>;
+
+    type PermissionModel = Pick<Permission, 'menuID' | 'permissCode' | 'permissType' | 'description'>;
+
+    type RolePermissModel =  {
+        roleMenu: {
+            roleID: number | null | undefined,
+            menuID: number,
+        }[],
+        rolePermiss: {
+            roleID: number,
+            menuID: number,
+            permissCode: string,
+        }[]
+    }
+
+    type Permission = {
+      menuID: number;
+      menuTitle: string;
+      permissCode: string;
+      permissType: string;
+      description: string;
+    };
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Menu
     /* Menu search params */
@@ -58,10 +92,6 @@ declare namespace Api {
 
     // menu type "1": directory "2": menu
     type MenuType = '0' | '1';
-
-    type PermissionType = '0' | '1' | '2';
-
-    type Permission = { permissCode: string; permissType: string;  description: string; };
 
     type MenuPropsOfRoute = Pick<import('vue-router').RouteMeta, | 'i18nKey' | 'keepAlive' | 'constant' | 'order' | 'href' | 'hideInMenu' | 'activeMenu' | 'multiTab' | 'fixedIndexInTab' | 'query'>;
 
@@ -75,7 +105,7 @@ declare namespace Api {
       component?: string;
       icon: string;
       localIcon: string;
-      permissions?: Permission[] | null;
+      permissions?: PermissionModel[] | null;
       children?: Menu[];
     }> & MenuPropsOfRoute;
 

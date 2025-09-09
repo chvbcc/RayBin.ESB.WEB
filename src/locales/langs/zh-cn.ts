@@ -33,7 +33,6 @@ const local: App.I18n.Schema = {
     modifySuccess: '修改成功',
     noData: '无数据',
     operate: '操作',
-    permission: '权限',
     pleaseCheckValue: '请检查输入的值是否合法',
     refresh: '刷新',
     reset: '重置',
@@ -379,19 +378,10 @@ const local: App.I18n.Schema = {
         activeMenu: '高亮的菜单',
         multiTab: '支持多页签',
         fixedIndexInTab: '固定在页签中的序号',
-        permission: '权限',
-        permissType: '权限类型',
-        permissCode: '权限编码',
-        description: '权限描述',
         status: '菜单状态',
         constant: '常量路由',
         tabMenu: '菜单信息',
         tabPermission: '权限设置',
-        permissionType: {
-          button: '按钮',
-          column: '表格列',
-          option: '下拉选项'
-        },
         form: {
           home: '请选择首页',
           menuType: '请选择菜单类型',
@@ -414,9 +404,6 @@ const local: App.I18n.Schema = {
           multiTab: '请选择是否支持多标签',
           fixedInTab: '请选择是否固定在页签中',
           fixedIndexInTab: '请输入固定在页签中的序号',
-          permissType: '请选择权限类型',
-          permissCode: '请输入按钮编码',
-          description: '请输入按钮描述',
           status: '请选择菜单状态'
         },
         addMenu: '新增菜单',
@@ -430,7 +417,27 @@ const local: App.I18n.Schema = {
           iconify: 'iconify图标',
           local: '本地图标'
         }
-      }
+      },
+      permission: {
+        title: '权限',
+        menuTitle: '菜单名称',
+        permissionSetting: '权限设置',
+        permissCode: '权限编码',
+        permissType: '权限类型',
+        description: '权限描述',
+        form: {
+          permissCode: '请输入权限编码',
+          permissType: '请选择权限类型',
+          description: '请输入权限描述',
+        },
+        permissionType: {
+          button: '按钮',
+          column: '表格列',
+          option: '选项'
+        },
+        addPermission: '新增权限',
+        editPermission: '编辑权限',
+      },
     }
   },
   form: {

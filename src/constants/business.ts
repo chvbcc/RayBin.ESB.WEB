@@ -27,9 +27,9 @@ export const menuTypeRecord: Record<Api.SystemManage.MenuType, App.I18n.I18nKey>
 export const menuTypeOptions = transformRecordToOption(menuTypeRecord);
 
 export const permissionTypeRecord: Record<Api.SystemManage.PermissionType, App.I18n.I18nKey> = {
-  '0': 'page.manage.menu.permissionType.button',
-  '1': 'page.manage.menu.permissionType.column',
-  '2': 'page.manage.menu.permissionType.option'
+  '0': 'page.manage.permission.permissionType.button',
+  '1': 'page.manage.permission.permissionType.column',
+  '2': 'page.manage.permission.permissionType.option'
 };
 export const permissionTypeOptions = transformRecordToOption(permissionTypeRecord);
 

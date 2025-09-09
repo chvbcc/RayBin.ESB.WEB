@@ -28,7 +28,11 @@ export function fetchGetModel(id: number) {
 
 /** check connection name*/
 export function fetchCheckName(connectionName: string, createUserId: number, id: number) {
-  return request({url: '/connection/checkName', params: { connectionName, createUserId, id }});
+  return request({
+    url: '/connection/checkName',
+    method: 'get',
+    params: { connectionName, createUserId, id }
+  });
 }
 
 /** save connection */

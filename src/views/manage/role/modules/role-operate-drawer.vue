@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
 import { computed, ref, watch } from 'vue';
+import { RoleApi } from '@/service/api/manage';
 import { convertOptions } from '@/utils/common';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { enableStatusOptions, yesOrNoOptions } from '@/constants/business';
@@ -48,20 +49,31 @@ function createDefaultModel(): Api.SystemManage.RoleModel {
 
 type RuleKey = Extract<keyof Api.SystemManage.RoleModel, 'roleName' | 'isSystem' | 'status'>;
 
-const rules: Record<RuleKey, App.Global.FormRule> = {
-  roleName: defaultRequiredRule,
+const rules =computed<Record<RuleKey, App.Global.FormRule>>(() => ({
+  roleName: {
+    required: true,
+    validator: async (_rule: any, value: string) => {
+      const name = (value ?? '').trim();
+      if (!name) {
+        return Promise.reject(new Error(($t('page.manage.role.form.roleName') as string)));
+      }
+      const { response } = await RoleApi.fetchCheckName(name, model.value.id);
+      const data = response.data as { code: string; msg: string; data: boolean };
+      if (data.msg==="success" && data.data) {
+        return Promise.reject(new Error($t('common.exists')));
+      }
+      return Promise.resolve();
+    },
+    trigger: 'blur'
+  },
   isSystem: defaultRequiredRule,
   status: defaultRequiredRule
-};
+}));
 
 function handleInitModel() {
   model.value = createDefaultModel();
   if (props.operateType === 'edit' && props.rowData) {
-    const rowData = {
-      ...props.rowData,
-      isSystem: Number(props.rowData.isSystem) // 确保是数字类型
-    };
-    Object.assign(model.value, rowData);
+    Object.assign(model.value, props.rowData);
   }
 }
 
@@ -79,8 +91,8 @@ async function handleSubmit() {
 
 watch(visible, () => {
   if (visible.value) {
-    resetFields();
     handleInitModel();
+    resetFields();
   }
 });
 </script>

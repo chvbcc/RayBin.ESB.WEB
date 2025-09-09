@@ -1,12 +1,16 @@
 <script setup lang="tsx">
+import { ref } from 'vue';
 import { $t } from '@/locales';
 import { Button, Tag } from 'ant-design-vue';
 import { RoleApi } from '@/service/api/manage';
 import RoleSearch from './modules/role-search.vue';
+import { useAuthStore } from '@/store/modules/auth';
+import PermissionModal from './modules/permission-modal.vue';
 import RoleOperateDrawer from './modules/role-operate-drawer.vue';
-import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 import { enableStatusRecord,yesOrNoRecord } from '@/constants/business';
+import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
+const authStore = useAuthStore();
 const { tableWrapperRef, scrollConfig } = useTableScroll();
 
 const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
@@ -28,19 +32,6 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       align: 'center'
     },
     {
-      key: 'permission',
-      title: $t('common.permission'),
-      align: 'center',
-      width: 80,
-      customRender: ({ record }) => (
-        <div class="flex-center gap-8px">
-          <Button type="primary" ghost size="small" onClick={() => edit(record.id)}>
-             {$t('common.config')}
-          </Button>
-        </div>
-      )
-    },
-    {
       key: 'roleName',
       dataIndex: 'roleName',
       title: $t('page.manage.role.roleName'),
@@ -52,8 +43,8 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       dataIndex: 'isSystem',
       title: $t('page.manage.role.isSystem'),
       align: 'center',
-      width: 88,
-      minWidth: 88,
+      width: 98,
+      minWidth: 98,
       customRender: ({ record }) => {
         if (record.isSystem === null) {
           return null;
@@ -91,16 +82,25 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       key: 'operate',
       title: $t('common.operate'),
       align: 'center',
-      width: 130,
+      width: 170,
       customRender: ({ record }) => (
-        <div class="flex-center gap-8px">
+        <div class="flex-center justify-end">
+          {record.roleName.toLowerCase() !== 'admin' && (
+            <Button type="primary" ghost size="small" onClick={() => handlePermission(record.id)}>
+              {$t('page.manage.permission.title')}
+            </Button>
+          )}
+          <span class="mr-2" />
           <Button type="primary" ghost size="small" onClick={() => edit(record.id)}>
             {$t('common.edit')}
           </Button>
+          <span class="mr-2" />
           <a-popconfirm onConfirm={() => handleDelete(record.id)} title={$t('common.confirmDelete')}>
-            <Button danger size="small">
-              {$t('common.delete')}
-            </Button>
+            {record.isSystem === 0 && (
+                <Button danger size="small">
+                  {$t('common.delete')}
+                </Button>
+              )}
           </a-popconfirm>
         </div>
       )
@@ -120,14 +120,37 @@ const {
   onDeleted
 } = useTableOperate(data, getData);
 
+// 权限弹窗控制
+const permissionModalVisible = ref(false);
+const currentRoleId = ref<number | null>(null);
+
+function handlePermission(id: number) {
+  if (authStore.isAdmin()) { return; }
+  currentRoleId.value = id;
+  const roleData = data.value.find(item => item.id === id) || null;
+  editingData.value = roleData;
+  permissionModalVisible.value = true;
+}
+
 async function handleBatchDelete() {
   onBatchDeleted();
 }
 
 function handleDelete(id: number) {
-  // request
-  console.log(id);
-  onDeleted();
+  RoleApi.fetchDelete(id).then((res) => {
+    if(!res.error) {
+      const result = res.response.data;
+      if (result.msg === 'success' && result.data === true) {
+        onDeleted();
+      }
+      else if (result.msg === 'fail') {
+        window.$message?.error(String(result.data));
+      }
+      else if (res.response.status != 200) {
+        window.$message?.error($t('common.deleteFailed'));
+      }
+    }
+  })
 }
 
 function edit(id: number) {
@@ -145,6 +168,7 @@ function edit(id: number) {
       <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small"
         :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination" class="h-full" bordered />
       <RoleOperateDrawer v-model:visible="drawerVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
+      <PermissionModal v-model:visible="permissionModalVisible" :role-id="currentRoleId" @submitted="getDataByPage" />
     </a-card>
   </div>
 </template>

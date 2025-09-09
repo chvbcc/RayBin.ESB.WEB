@@ -57,13 +57,49 @@ function createDefaultModel(): Api.SystemManage.UserModel {
 type RuleKey = Extract<keyof Api.SystemManage.User, 'username' | 'password' | 'employeeName' | 'email' | 'status'>;
 
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => ({
-
-  username: { required: true, min: 3, max: 20, message: $t('page.manage.user.form.usernameLength'), trigger: 'blur' },
+  username: {
+    required: true,
+    validator: async (_rule: any, value: string) => {
+      const userName = (value ?? '').trim();
+      if (!userName) {
+        return Promise.reject(new Error(($t('page.manage.user.form.username') as string)));
+      }
+      if (userName.length < 3 || userName.length > 20) {
+        return Promise.reject(new Error(($t('page.manage.user.form.usernameLength') as string)));
+      }
+      const { response } = await UserApi.fetchCheckUserName(userName, model.value.id);
+      const data = response.data as { code: string; msg: string; data: boolean };
+      if (data.msg==="success" && data.data) {
+        return Promise.reject(new Error($t('common.exists')));
+      }
+      return Promise.resolve();
+    },
+    trigger: 'blur'
+  },
   password: model.value.id === 0
     ? { required: true, min: 6, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' }
     : { required: false, min: 0, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' },
   employeeName: defaultRequiredRule,
-  email: { required: true, type: 'email', message: $t('page.manage.user.form.email'), trigger: 'blur' },
+  email: {
+    required: true,
+    validator: async (_rule: any, value: string) => {
+      const email = (value ?? '').trim();
+      if (!email) {
+        return Promise.reject(new Error(($t('page.manage.user.form.email') as string)));
+      }
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        return Promise.reject(new Error(($t('page.manage.user.form.email') as string)));
+      }
+      const { response } = await UserApi.fetchCheckEmail(email, model.value.id);
+      const data = response.data as { code: string; msg: string; data: boolean };
+      if (data.msg==="success" && data.data) {
+        return Promise.reject(new Error($t('common.exists')));
+      }
+      return Promise.resolve();
+    },
+    trigger: 'blur'
+  },
   status: defaultRequiredRule
 }));
 

@@ -125,10 +125,15 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     }
   }
 
+  function isAdmin() {
+    return userInfo.roles.includes('admin');
+  }
+
   return {
     token,
     userInfo,
     isStaticSuper,
+    isAdmin,
     isLogin,
     loginLoading,
     resetStore,

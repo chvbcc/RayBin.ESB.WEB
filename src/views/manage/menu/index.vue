@@ -83,7 +83,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       key: 'status',
       title: $t('page.manage.menu.status'),
       align: 'center',
-      width: 80,
+      width: 100,
       customRender: ({ record }) => {
         if (record.status === null) {
           return null;
@@ -101,7 +101,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       title: $t('page.manage.menu.hideInMenu'),
       dataIndex: 'hideInMenu',
       align: 'center',
-      width: 80,
+      width: 120,
       customRender: ({ record }) => {
         const hide: CommonType.YesOrNo = record.hideInMenu ? 'Y' : 'N';
         const tagMap: Record<CommonType.YesOrNo, string> = {
@@ -186,6 +186,7 @@ const editingData: Ref<Api.SystemManage.Menu | null> = ref(null);
 function handleEdit(item: Api.SystemManage.Menu) {
   operateType.value = 'edit';
   editingData.value = { ...item };
+  console.log(editingData.value);
   openModal();
 }
 

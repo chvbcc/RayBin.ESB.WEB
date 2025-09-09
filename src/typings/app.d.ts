@@ -314,7 +314,6 @@ declare namespace App {
         modifySuccess: string;
         noData: string;
         operate: string;
-        permission: string;
         pleaseCheckValue: string;
         refresh: string;
         reset: string;
@@ -598,18 +597,9 @@ declare namespace App {
             multiTab: string;
             fixedIndexInTab: string;
             query: string;
-            permission: string;
-            permissType: string;
-            permissCode: string;
-            description: string;
             status: string;
             tabMenu: string;
             tabPermission: string;
-            permissionType: {
-              button: string;
-              column: string;
-              option: string;
-            }
             form: {
               home: string;
               menuType: string;
@@ -632,9 +622,6 @@ declare namespace App {
               multiTab: string;
               fixedInTab: string;
               fixedIndexInTab: string;
-              permissType: string;
-              permissCode: string;
-              description: string;
               status: string;
             };
             addMenu: string;
@@ -648,6 +635,26 @@ declare namespace App {
               iconify: string;
               local: string;
             };
+          };
+          permission: {
+            title: string;
+            menuTitle: string;
+            permissionSetting: string;
+            permissCode: string;
+            permissType: string;
+            description: string;
+            form: {
+              permissCode: string;
+              permissType: string;
+              description: string;
+            };
+            permissionType: {
+              button: string;
+              column: string;
+              option: string;
+            };
+            addPermission: string;
+            editPermission: string;
           };
         };
       };

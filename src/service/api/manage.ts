@@ -10,6 +10,24 @@ export namespace UserApi {
     });
   }
 
+  /** 检查用户名 */
+  export function fetchCheckUserName(userName: string, id?: number) {
+    return request({
+      url: '/user/checkUserName',
+      method: 'get',
+      params: { userName, id }
+    });
+  }
+
+  /** 检查邮箱 */
+  export function fetchCheckEmail(email: string, id?: number) {
+    return request({
+      url: '/user/checkEmail',
+      method: 'get',
+      params: { email, id }
+    });
+  }
+
   /** 保存用户 */
   export function fetchSave(data: Api.SystemManage.UserModel) {
     let url = data.id === 0 ? '/user/add' : '/user/update';
@@ -51,6 +69,15 @@ export namespace RoleApi {
     });
   }
 
+  /** 检查名称 */
+  export function fetchCheckName(roleName: string, id?: number) {
+    return request({
+      url: '/role/checkName',
+      method: 'get',
+      params: { roleName, id }
+    });
+  }
+
   /** 获取所有角色 */
   export function fetchGetList() {
     return request<Api.SystemManage.Roles[]>({
@@ -67,6 +94,77 @@ export namespace RoleApi {
       params: { userId }
     });
   }
+
+  /** 保存角色 */
+  export function fetchSave(data: Api.SystemManage.RoleModel) {
+    const submitData = {
+      ...data,
+      isSystem: Boolean (data.isSystem)
+    };
+    let url = data.id === 0 ? '/role/add' : '/role/update';
+    return request({
+      url: url,
+      method: 'post',
+      data: submitData
+    });
+  }
+
+  /** 删除角色 */
+  export function fetchDelete(id: number) {
+    let url = '/role/delete';
+    return request({
+      url: url,
+      method: 'delete',
+      params: { id }
+    });
+  }
+
+  export function fetchDeletes(ids: number[]) {
+    let url = '/role/deletes';
+    return request({
+      headers: { 'Content-Type': 'application/json' },
+      url: url,
+      method: 'delete',
+      data: ids
+    });
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+export namespace PermissionApi {
+    /** 权限列表 */
+  export function fetchGetPermission(menuId: number, permissType?: string) {
+    return request<Api.SystemManage.Permission[]>({
+      url: '/permission/getPermissionList',
+      method: 'get',
+      params: { menuId, permissType }
+    });
+  }
+
+  export function fetchGetRoleMenu(params?: number) {
+    return request<number[]>({
+      url: '/permission/getRoleMenuList',
+      method: 'get',
+      params: { roleId: params }
+    });
+  }
+
+  export function fetchGetRolePermiss(roleId: number, menuId: number) {
+    return request<Api.SystemManage.RolePermission[]>({
+      url: '/permission/getRolePermissList',
+      method: 'get',
+      params: { roleId, menuId }
+    });
+  }
+
+  export function fetchSave(data: Api.SystemManage.RolePermissModel) {
+    let url = '/permission/save';
+    return request({
+      url: url,
+      method: 'post',
+      data
+    });
+  }
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 export namespace MenuApi {
@@ -76,6 +174,15 @@ export namespace MenuApi {
       url: '/menu/getPagingList',
       method: 'get',
       params
+    });
+  }
+
+  /** 检查名称 */
+  export function fetchCheckName(name: string, id?: number) {
+    return request({
+      url: '/menu/checkName',
+      method: 'get',
+      params: { name, id }
     });
   }
 
