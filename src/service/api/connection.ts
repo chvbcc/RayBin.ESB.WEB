@@ -9,6 +9,14 @@ export function fetchTest(data: Api.Connection.ConnectionModel) {
   })
 }
 
+/** get connection options   */
+export function fetchGetConnectionOptions() {
+  return request<Api.Connection.ConnectionOptions>({
+    url: '/connection/getOptions',
+    method: 'get'
+  });
+}
+
 /** get connection list */
 export function fetchGetPagingList(params?: Api.Connection.ConnectionSearchParams) {
   return request<Api.Connection.ConnectionList>({

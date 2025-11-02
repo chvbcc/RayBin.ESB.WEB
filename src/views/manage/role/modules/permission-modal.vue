@@ -6,7 +6,7 @@ import { computed, shallowRef, watch, ref } from 'vue';
 import type { DataNode } from 'ant-design-vue/es/tree';
 import type { TableColumnsType } from 'ant-design-vue';
 import { MenuApi, PermissionApi } from '@/service/api/manage';
-import { permissionTypeOptions, permissionTypeRecord } from '@/constants/business';
+import { permissionTypeOptions, permissionTypeRecord } from '@/constants/manage';
 
 defineOptions({
   name: 'PermissionModal'

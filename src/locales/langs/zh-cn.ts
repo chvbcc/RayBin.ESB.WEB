@@ -237,7 +237,7 @@ const local: App.I18n.Schema = {
     },
     about: {
       title: '关于',
-      introduction: `SoybeanAdmin 是一个优雅且功能强大的后台管理模板，基于最新的前端技术栈，包括 Vue3, Vite5, TypeScript, Pinia 和 UnoCSS。它内置了丰富的主题配置和组件，代码规范严谨，实现了自动化的文件路由系统。此外，它还采用了基于 ApiFox 的在线Mock数据方案。SoybeanAdmin 为您提供了一站式的后台管理解决方案，无需额外配置，开箱即用。同样是一个快速学习前沿技术的最佳实践。`,
+      introduction: `SoybeanAdmin 是一个优雅且功能强大的后台管理模板，基于最新的前端技术栈，包括 Vue3, Vite5, TypeScript, Pinia 和 UnoCSS。它内置了丰富的主题配置和组件，代码规范严谨，实现了自动化的文件路由系统。`,
       projectInfo: {
         title: '项目信息',
         version: '版本',
@@ -301,6 +301,55 @@ const local: App.I18n.Schema = {
       },
       connectionSuccess: '连接成功',
       connectionString: '连接字符串',
+    },
+    task: {
+      id: '任务编号',
+      taskType: '任务类型',
+      taskName: '任务名称',
+      runMode: '运行方式',
+      runTime: '运行时间',
+      runFrequency: '运行频率',
+      dataHandle: '数据处理',
+      programmeLanguage: '编程语言',
+      dataHandleScript: '数据处理脚本',
+      isDebug: '调试模式',
+      status: '任务状态',
+      description: '任务描述',
+      createUserID: '创建用户',
+      createTime: '创建时间',
+      form: {
+        taskType: '请选择任务类型',
+        taskName: '请输入任务名称',
+        runMode: '请选择运行方式',
+        runTime: '请输入运行时间',
+        runFrequency: '请输入运行频率',
+        dataHandle: '请选择数据处理',
+        programmeLanguage: '请选择编程语言',
+        dataHandleScript: '请输入数据处理脚本',
+        isDebug: '请选择调试模式',
+        status: '请选择任务状态',
+        description: '请输入任务描述',
+      },
+      taskStatus: {
+        normal: '正常',
+        paused: '暂停'
+      }
+    },
+    database: {
+      title: '数据库任务',
+      titleBaseInfo: '基本信息',
+      titleDataMapping: '数据映射',
+      taskID: '任务编号',
+      connectionID: '数据连接',
+      dataObjectType: '对象类型',
+      dataMapping: '数据映射',
+      createUserID: '创建用户',
+      createTime: '创建时间',
+      form: {
+        connectionID: '请选择数据连接',
+        dataObjectType: '请选择对象类型',
+        dataMapping: '请输入数据映射',
+      }
     },
     manage: {
       role: {
@@ -497,6 +546,23 @@ const local: App.I18n.Schema = {
       polarDB: 'PolarDB',
       goldenDB: 'GoldenDB',
       openGauss: 'OpenGauss'
+    },
+    taskType: {
+      database: '数据库任务',
+      webApi: '网络接口任务',
+      industry: '工业PLC任务'
+    },
+    runMode: {
+      manualOperation: '手动运行',
+      everyDay: '每天运行',
+      monthly: '每月运行',
+      annually: '每年运行',
+      timeInterval: '时间间隔',
+    },
+    dataObjectType: {
+      table: '表',
+      view: '视图',
+      storedProcedure: '存储过程'
     }
   },
 };

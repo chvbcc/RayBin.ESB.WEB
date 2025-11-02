@@ -3,7 +3,7 @@ import { $t } from '@/locales';
 import { computed, ref, watch } from 'vue';
 import { RoleApi, UserApi } from '@/service/api/manage';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { enableStatusOptions, userGenderOptions } from '@/constants/business';
+import { enableStatusOptions, userGenderOptions } from '@/constants/manage';
 
 defineOptions({
   name: 'UserOperate  Modal'
@@ -183,7 +183,7 @@ watch(visible, () => {
             <a-form-item :label="$t('page.manage.user.gender')" name="gender">
               <a-radio-group v-model:value="model.gender">
                 <a-radio v-for="item in userGenderOptions" :key="item.value" :value="item.value">
-                  {{ $t(item.label) }}
+                  {{ $t(item.label as App.I18n.I18nKey) }}
                 </a-radio>
               </a-radio-group>
             </a-form-item>
@@ -217,7 +217,7 @@ watch(visible, () => {
             <a-form-item :label="$t('page.manage.user.status')" name="status">
               <a-radio-group v-model:value="model.status">
                 <a-radio v-for="item in enableStatusOptions" :key="item.value" :value="item.value">
-                  {{ $t(item.label) }}
+                  {{ $t(item.label as App.I18n.I18nKey) }}
                 </a-radio>
               </a-radio-group>
             </a-form-item>

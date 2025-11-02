@@ -5,6 +5,7 @@ declare namespace Api {
 
     /* Connection list */
     type ConnectionList = Common.PaginatingQueryRecord<Connection>;
+    type ConnectionOptions = Pick<Connection, 'id' | 'connectionName'>[];
 
     /* Hana, MySql, Oracle, SqlServer, PostgreSQL, OceanBase, PolarDB, GoldenDB, OpenGauss  */
     type DatabaseType = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';

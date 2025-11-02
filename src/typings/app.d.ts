@@ -520,6 +520,55 @@ declare namespace App {
           connectionSuccess: string;
           connectionString: string;
         };
+        task: {
+          id: string;
+          taskType: string;
+          taskName: string;
+          runMode: string;
+          runTime: string;
+          runFrequency: string;
+          dataHandle: string;
+          programmeLanguage: string;
+          dataHandleScript: string;
+          isDebug: string;
+          status: string;
+          description: string;
+          createUserID: string;
+          createTime: string;
+          form: {
+            taskType: string;
+            taskName: string;
+            runMode: string;
+            runTime: string;
+            runFrequency: string;
+            dataHandle: string;
+            programmeLanguage: string;
+            dataHandleScript: string;
+            isDebug: string;
+            status: string;
+            description: string;
+          };
+          taskStatus: {
+            normal: string;
+            paused: string;
+          };
+        };
+        database: {
+          title: string;
+          titleBaseInfo: string;
+          titleDataMapping: string;
+          taskID: string;
+          connectionID: string;
+          dataObjectType: string;
+          dataMapping: string;
+          createUserID: string;
+          createTime: string;
+          form: {
+            connectionID: string;
+            dataObjectType: string;
+            dataMapping: string;
+          };
+        };
         manage: {
           role: {
             title: string;
@@ -691,6 +740,23 @@ declare namespace App {
           polarDB: string;
           goldenDB: string;
           openGauss: string;
+        };
+        taskType: {
+          database: string;
+          webApi: string;
+          industry: string;
+        };
+        runMode: {
+          manualOperation: string;
+          everyDay: string;
+          monthly: string;
+          annually: string;
+          timeInterval: string;
+        };
+        dataObjectType: {
+          table: string;
+          view: string;
+          storedProcedure: string;
         };
       };
     };

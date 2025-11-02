@@ -5,12 +5,11 @@ import type { Ref } from 'vue';
 import { useBoolean } from '@sa/hooks';
 import { MenuApi } from '@/service/api/manage';
 import MenuSearch from './modules/menu-search.vue';
-import { yesOrNoRecord } from '@/constants/common';
 import SvgIcon from '@/components/custom/svg-icon.vue';
 import { Button, Popconfirm, Tag } from 'ant-design-vue';
-import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 import MenuOperateModal, { type OperateType } from './modules/menu-operate-modal.vue';
+import { enableStatusRecord, menuTypeRecord } from '@/constants/manage';
 
 const { bool: visible, setTrue: openModal } = useBoolean();
 const { tableWrapperRef, scrollConfig } = useTableScroll();
@@ -103,13 +102,9 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       align: 'center',
       width: 120,
       customRender: ({ record }) => {
-        const hide: CommonType.YesOrNo = record.hideInMenu ? 'Y' : 'N';
-        const tagMap: Record<CommonType.YesOrNo, string> = {
-          Y: 'error',
-          N: 'default'
-        };
-        const label = $t(yesOrNoRecord[hide]);
-        return <Tag color={tagMap[hide]}>{label}</Tag>;
+        const color = record.hideInMenu ? 'error' : 'default';
+        const label = record.hideInMenu ? $t('common.yesOrNo.yes') : $t('common.yesOrNo.no');
+        return <Tag color={color}>{label}</Tag>;
       }
     },
     {

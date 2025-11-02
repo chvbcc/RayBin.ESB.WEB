@@ -108,7 +108,7 @@ export function parseConnectionModel(model: Api.Connection.ConnectionModel) {
       break;
     }
     case '3': // SQL Server: Server=host,port;Database=...;User Id=...;Password=...;
-      cs = `Server=${host}${port ? `,${port}` : ''};Database=${db};User Id=${user};Password=${pwd};`;
+      cs = `Server=${host}${port ? `,${port}` : ''};Database=${db};User Id=${user};Password=${pwd};TrustServerCertificate=true;`;
       break;
     case '4': // PostgreSQL
     case '8': // Host=...;Database=...;Username=...;Password=...;Port=...

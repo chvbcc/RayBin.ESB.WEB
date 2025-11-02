@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue';
 import { RoleApi } from '@/service/api/manage';
 import { convertOptions } from '@/utils/common';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { enableStatusOptions, yesOrNoOptions } from '@/constants/business';
+import { enableStatusOptions, yesOrNoOptions } from '@/constants/common';
 
 defineOptions({
   name: 'RoleOperateDrawer'
@@ -109,7 +109,7 @@ watch(visible, () => {
       <a-form-item :label="$t('page.manage.role.status')" name="status">
         <a-radio-group v-model:value="model.status">
           <a-radio v-for="item in enableStatusOptions" :key="item.value" :value="item.value">
-            {{ $t(item.label) }}
+            {{ $t(item.label as App.I18n.I18nKey) }}
           </a-radio>
         </a-radio-group>
       </a-form-item>

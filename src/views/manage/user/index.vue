@@ -4,7 +4,7 @@ import { Button, Tag } from 'ant-design-vue';
 import  { UserApi }  from '@/service/api/manage';
 import UserSearch from './modules/user-search.vue';
 import UserOperateModal from './modules/user-operate-modal.vue';
-import { enableStatusRecord, userGenderRecord } from '@/constants/business';
+import { enableStatusRecord, userGenderRecord } from '@/constants/manage';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
 const { tableWrapperRef, scrollConfig } = useTableScroll();
@@ -158,8 +158,7 @@ function edit(id: number) {
       <template #extra>
         <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
-      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small"
-        :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination" class="h-full" bordered />
+      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small" :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination" class="h-full" bordered />
       <UserOperateModal v-model:visible="modalVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
     </a-Card>
   </div>

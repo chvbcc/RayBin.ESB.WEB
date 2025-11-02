@@ -21,6 +21,7 @@ declare namespace Api {
 
     /** yesOrNo 0: No  1: Yes */
     type YesOrNo = 0 | 1;
+    type BooleanYesOrNo = 'false' | 'true';
 
     /** enable status  0: enabled  1: disabled */
     type EnableStatus = 0 | 1;
@@ -30,13 +31,9 @@ declare namespace Api {
       /** record id */
       id: number;
       /** record creator */
-      createBy: string;
+      createUserID: number;
       /** record create time */
       createTime: string;
-      /** record updater */
-      updateBy: string;
-      /** record update time */
-      updateTime: string;
       /** record status */
       status: EnableStatus;
     } & T;

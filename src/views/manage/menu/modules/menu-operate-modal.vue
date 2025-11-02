@@ -7,7 +7,7 @@ import { SimpleScrollbar } from '@sa/materials';
 import { computed, nextTick, ref, watch } from 'vue';
 import SvgIcon from '@/components/custom/svg-icon.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { enableStatusOptions, menuTypeOptions, permissionTypeOptions } from '@/constants/business';
+import { enableStatusOptions, menuTypeOptions, permissionTypeOptions } from '@/constants/manage';
 import { getLayoutAndPage, getPathParamFromRoutePath, getRoutePathByRouteName, getRoutePathWithParam, transformLayoutAndPageToComponent } from './shared';
 
 defineOptions({
@@ -289,7 +289,7 @@ watch(
                 <a-form-item :label="$t('page.manage.menu.menuType')" name="menuType">
                   <a-radio-group v-model:value="model.menuType" :disabled="disabledMenuType">
                     <a-radio v-for="item in menuTypeOptions" :key="item.value" :value="item.value">
-                      {{ $t(item.label) }}
+                      {{ $t(item.label as App.I18n.I18nKey) }}
                     </a-radio>
                   </a-radio-group>
                 </a-form-item>
@@ -352,7 +352,7 @@ watch(
                 <a-form-item :label="$t('page.manage.menu.status')" name="status">
                   <a-radio-group v-model:value="model.status">
                     <a-radio v-for="item in enableStatusOptions" :key="item.value" :value="item.value">
-                      {{ $t(item.label) }}
+                      {{ $t(item.label as App.I18n.I18nKey) }}
                     </a-radio>
                   </a-radio-group>
                 </a-form-item>

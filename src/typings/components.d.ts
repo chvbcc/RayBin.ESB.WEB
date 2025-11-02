@@ -8,12 +8,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AAlert: typeof import('ant-design-vue/es')['Alert']
+    AAutoComplete: typeof import('ant-design-vue/es')['AutoComplete']
     ABreadcrumb: typeof import('ant-design-vue/es')['Breadcrumb']
     ABreadcrumbItem: typeof import('ant-design-vue/es')['BreadcrumbItem']
     AButton: typeof import('ant-design-vue/es')['Button']
     ACard: typeof import('ant-design-vue/es')['Card']
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
     ACol: typeof import('ant-design-vue/es')['Col']
+    ADatePicker: typeof import('ant-design-vue/es')['DatePicker']
     ADescriptions: typeof import('ant-design-vue/es')['Descriptions']
     ADescriptionsItem: typeof import('ant-design-vue/es')['DescriptionsItem']
     ADivider: typeof import('ant-design-vue/es')['Divider']
@@ -51,6 +53,7 @@ declare module 'vue' {
     ATag: typeof import('ant-design-vue/es')['Tag']
     ATextarea: typeof import('ant-design-vue/es')['Textarea']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
+    ATransfer: typeof import('ant-design-vue/es')['Transfer']
     ATree: typeof import('ant-design-vue/es')['Tree']
     AWatermark: typeof import('ant-design-vue/es')['Watermark']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
@@ -85,6 +88,7 @@ declare module 'vue' {
     LookForward: typeof import('./../components/custom/look-forward.vue')['default']
     MenuToggler: typeof import('./../components/common/menu-toggler.vue')['default']
     PinToggler: typeof import('./../components/common/pin-toggler.vue')['default']
+    RelationDiagram: typeof import('./../components/pages/relation-diagram.vue')['default']
     ReloadButton: typeof import('./../components/common/reload-button.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -93,6 +97,7 @@ declare module 'vue' {
     SystemLogo: typeof import('./../components/common/system-logo.vue')['default']
     TableColumnSetting: typeof import('./../components/advanced/table-column-setting.vue')['default']
     TableHeaderOperation: typeof import('./../components/advanced/table-header-operation.vue')['default']
+    TaskSearch: typeof import('./../components/pages/task-search.vue')['default']
     ThemeSchemaSwitch: typeof import('./../components/common/theme-schema-switch.vue')['default']
     WaveBg: typeof import('./../components/custom/wave-bg.vue')['default']
   }

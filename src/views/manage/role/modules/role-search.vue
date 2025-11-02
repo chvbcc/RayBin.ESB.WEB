@@ -2,7 +2,7 @@
 import { watch } from 'vue';
 import { $t, language } from '@/locales';
 import { convertOptions } from '@/utils/common';
-import { enableStatusOptions, yesOrNoOptions } from '@/constants/business';
+import { enableStatusOptions, yesOrNoOptions } from '@/constants/common';
 
 defineOptions({
   name: 'RoleSearch'

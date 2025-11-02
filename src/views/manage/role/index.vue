@@ -7,7 +7,7 @@ import RoleSearch from './modules/role-search.vue';
 import { useAuthStore } from '@/store/modules/auth';
 import PermissionModal from './modules/permission-modal.vue';
 import RoleOperateDrawer from './modules/role-operate-drawer.vue';
-import { enableStatusRecord,yesOrNoRecord } from '@/constants/business';
+import { enableStatusRecord,yesOrNoRecord } from '@/constants/task';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
 const authStore = useAuthStore();

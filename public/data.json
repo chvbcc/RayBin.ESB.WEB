@@ -1,0 +1,119 @@
+[
+  {
+    "id": "1",
+    "zIndex": 1,
+    "position": { "x": 10, "y": 0 },
+    "size": { "width": 150, "height": 28 },
+    "attrs": { "text": { "text": "课程" } },
+    "visible": true,
+    "shape": "er-rect",
+    "ports": [
+      {
+        "id": "1-1",
+        "group": "list",
+        "keyType": "2",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "ID", "fontWeight": "bold", "fill": "red" },
+          "portTypeLabel": { "text": "STRING", "fontWeight": "bold", "fill": "red" }
+        }
+      },
+      {
+        "id": "1-2",
+        "group": "list",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "Name" },
+          "portTypeLabel": { "text": "STRING" }
+        }
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "zIndex": 1,
+    "position": { "x": 180, "y": 0 },
+    "size": { "width": 150, "height": 28 },
+    "attrs": { "text": { "text": "老师" } },
+    "visible": true,
+    "shape": "er-rect",
+    "ports": [
+      {
+        "id": "2-1",
+        "group": "list",
+        "keyType": "1",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "ID", "fontWeight": "bold" },
+          "portTypeLabel": { "text": "STRING", "fontWeight": "bold" }
+        }
+      },
+      {
+        "id": "2-2",
+        "group": "list",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "CourseID" },
+          "portTypeLabel": { "text": "STRING" }
+        }
+      },
+      {
+        "id": "2-3",
+        "group": "list",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "Name" },
+          "portTypeLabel": { "text": "STRING" }
+        }
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "zIndex": 1,
+    "position": { "x": 350, "y": 0 },
+    "size": { "width": 150, "height": 28 },
+    "attrs": { "text": { "text": "学生" } },
+    "visible": true,
+    "shape": "er-rect",
+    "ports": [
+      {
+        "id": "3-1",
+        "group": "list",
+        "keyType": "1",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "ID", "fontWeight": "bold" },
+          "portTypeLabel": { "text": "STRING", "fontWeight": "bold" }
+        }
+      },
+      {
+        "id": "3-2",
+        "group": "list",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "CourseID" },
+          "portTypeLabel": { "text": "STRING" }
+        }
+      },
+      {
+        "id": "3-3",
+        "group": "list",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "TeacherID" },
+          "portTypeLabel": { "text": "STRING" }
+        }
+      },
+      {
+        "id": "3-4",
+        "group": "list",
+        "attrs": {
+          "portBody": { "width": 150, "height": 28 },
+          "portNameLabel": { "text": "Name" },
+          "portTypeLabel": { "text": "STRING" }
+        }
+      }
+    ]
+  }
+]

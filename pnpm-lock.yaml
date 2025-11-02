@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@antv/x6':
+        specifier: ^2.18.1
+        version: 2.18.1
+      '@antv/x6-vue-shape':
+        specifier: ^2.1.2
+        version: 2.1.2(@antv/x6@2.18.1)(vue@3.5.13(typescript@5.7.3))
       '@better-scroll/core':
         specifier: 2.5.1
         version: 2.5.1
@@ -65,9 +71,6 @@ importers:
       vue:
         specifier: 3.5.13
         version: 3.5.13(typescript@5.7.3)
-      vue-draggable-plus:
-        specifier: 0.6.0
-        version: 0.6.0(@types/sortablejs@1.15.8)
       vue-i18n:
         specifier: 11.1.1
         version: 11.1.1(vue@3.5.13(typescript@5.7.3))
@@ -314,6 +317,25 @@ packages:
 
   '@antfu/utils@8.1.0':
     resolution: {integrity: sha512-XPR7Jfwp0FFl/dFYPX8ZjpmU4/1mIXTjnZ1ba48BLMyKOV62/tiRjdsFcPs2hsYcSud4tzk7w3a3LjX8Fu3huA==}
+
+  '@antv/x6-common@2.0.17':
+    resolution: {integrity: sha512-37g7vmRkNdYzZPdwjaMSZEGv/MMH0S4r70/Jwoab1mioycmuIBN73iyziX8m56BvJSDucZ3J/6DU07otWqzS6A==}
+
+  '@antv/x6-geometry@2.0.5':
+    resolution: {integrity: sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==}
+
+  '@antv/x6-vue-shape@2.1.2':
+    resolution: {integrity: sha512-lfLNJ2ztK8NP2JBAWTD6m5Wol0u6tOqj2KdOhWZoT8EtEw9rMmAdxsr8uTi9MRJO9pDMM0nbsR3cidnMh7VeDQ==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^2.0.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+
+  '@antv/x6@2.18.1':
+    resolution: {integrity: sha512-FkWdbLOpN9J7dfJ+kiBxzowSx2N6syBily13NMVdMs+wqC6Eo5sLXWCZjQHateTFWgFw7ZGi2y9o3Pmdov1sXw==}
 
   '@babel/code-frame@7.26.2':
     resolution: {integrity: sha512-RJlIHRueQgwWitWgF8OdFYGZX328Ax5BCemNGlqHfplnRT9ESi8JkFlvaVYbS+UubVY6dpv87Fs2u5M29iNFVQ==}
@@ -1240,9 +1262,6 @@ packages:
 
   '@types/qs@6.9.18':
     resolution: {integrity: sha512-kK7dgTYDyGqS+e2Q4aK9X3D7q234CIZ1Bv0q/7Z5IwRDoADNU81xXJK/YVyLbLTZCoIwUoDoffFeF+p/eIklAA==}
-
-  '@types/sortablejs@1.15.8':
-    resolution: {integrity: sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==}
 
   '@types/svgo@2.6.4':
     resolution: {integrity: sha512-l4cmyPEckf8moNYHdJ+4wkHvFxjyW6ulm9l4YGaOxeyBWPhBOT0gvni1InpFPdzx1dKf/2s62qGITwxNWnPQng==}
@@ -4224,6 +4243,10 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  utility-types@3.11.0:
+    resolution: {integrity: sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==}
+    engines: {node: '>= 4'}
+
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
@@ -4322,11 +4345,13 @@ packages:
       '@vue/composition-api':
         optional: true
 
-  vue-draggable-plus@0.6.0:
-    resolution: {integrity: sha512-G5TSfHrt9tX9EjdG49InoFJbt2NYk0h3kgjgKxkFWr3ulIUays0oFObr5KZ8qzD4+QnhtALiRwIqY6qul4egqw==}
+  vue-demi@0.14.10:
+    resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
+    engines: {node: '>=12'}
+    hasBin: true
     peerDependencies:
-      '@types/sortablejs': ^1.15.0
-      '@vue/composition-api': '*'
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
     peerDependenciesMeta:
       '@vue/composition-api':
         optional: true
@@ -4492,6 +4517,25 @@ snapshots:
   '@antfu/utils@0.7.10': {}
 
   '@antfu/utils@8.1.0': {}
+
+  '@antv/x6-common@2.0.17':
+    dependencies:
+      lodash-es: 4.17.21
+      utility-types: 3.11.0
+
+  '@antv/x6-geometry@2.0.5': {}
+
+  '@antv/x6-vue-shape@2.1.2(@antv/x6@2.18.1)(vue@3.5.13(typescript@5.7.3))':
+    dependencies:
+      '@antv/x6': 2.18.1
+      vue: 3.5.13(typescript@5.7.3)
+      vue-demi: 0.14.10(vue@3.5.13(typescript@5.7.3))
+
+  '@antv/x6@2.18.1':
+    dependencies:
+      '@antv/x6-common': 2.0.17
+      '@antv/x6-geometry': 2.0.5
+      utility-types: 3.11.0
 
   '@babel/code-frame@7.26.2':
     dependencies:
@@ -5258,8 +5302,6 @@ snapshots:
   '@types/nprogress@0.2.3': {}
 
   '@types/qs@6.9.18': {}
-
-  '@types/sortablejs@1.15.8': {}
 
   '@types/svgo@2.6.4':
     dependencies:
@@ -8764,6 +8806,8 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
+  utility-types@3.11.0: {}
+
   validate-npm-package-license@3.0.4:
     dependencies:
       spdx-correct: 3.2.0
@@ -8862,9 +8906,9 @@ snapshots:
     dependencies:
       vue: 3.5.13(typescript@5.7.3)
 
-  vue-draggable-plus@0.6.0(@types/sortablejs@1.15.8):
+  vue-demi@0.14.10(vue@3.5.13(typescript@5.7.3)):
     dependencies:
-      '@types/sortablejs': 1.15.8
+      vue: 3.5.13(typescript@5.7.3)
 
   vue-eslint-parser@9.4.3(eslint@9.20.0(jiti@2.4.2)):
     dependencies:

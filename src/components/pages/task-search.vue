@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { watch } from 'vue';
 import { $t, language } from '@/locales';
-import { convertOptions } from '@/utils/common';
-import { enableStatusOptions } from '@/constants/task';
+import { translateOptions, convertOptions } from '@/utils/common';
+import { runModeOptions, taskStatusOptions } from '@/constants/task';
 
 defineOptions({
-  name: 'MenuSearch'
+  name: 'TaskSearch'
 });
 
 interface Emits {
@@ -15,15 +15,15 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.SystemManage.MenuSearchParams>('model', { required: true });
+const model = defineModel<Api.Task.TaskSearchParams>('model', { required: true });
 
 const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
 
-async function reset() {
+function reset() {
   emit('reset');
 }
 
-async function search() {
+function search() {
   emit('search');
 }
 
@@ -35,36 +35,36 @@ watch(language, (newLang) => {
 
 <template>
   <a-card :title="$t('common.search')" :bordered="false" class="card-wrapper">
-    <a-form ref="formRef" :model="model" :label-col="labelCol">
+    <a-form :model="model"  :label-col="labelCol" :labelWrap="true">
       <a-row :gutter="[16, 16]" wrap>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.menu.name')" name="name" class="m-0">
-            <a-input v-model:value="model.name" :placeholder="$t('page.manage.menu.form.name')" />
+          <a-form-item :label="$t('page.task.taskName')" name="taskName" class="m-0">
+            <a-input v-model:value="model.taskName" :placeholder="$t('page.task.form.taskName')" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.menu.path')" name="path" class="m-0">
-            <a-input v-model:value="model.path" :placeholder="$t('page.manage.menu.form.path')" />
+          <a-form-item :label="$t('page.task.description')" name="description" class="m-0">
+            <a-input v-model:value="model.description" :placeholder="$t('page.task.form.description')" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.menu.title')" name="title" class="m-0">
-            <a-input v-model:value="model.title" :placeholder="$t('page.manage.menu.form.title')" />
+          <a-form-item :label="$t('page.task.runMode')" name="runMode" class="m-0">
+            <a-select v-model:value="model.runMode" :placeholder="$t('page.task.form.runMode')" :options="translateOptions(runModeOptions)" allow-clear />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.manage.menu.status')" name="status" class="m-0">
-            <a-select v-model:value="model.status":placeholder="$t('page.manage.menu.form.status')" :options="convertOptions(enableStatusOptions)" allow-clear />
+          <a-form-item :label="$t('page.task.status')" name="status" class="m-0">
+            <a-select v-model:value="model.status" :placeholder="$t('page.task.form.status')" :options="convertOptions(taskStatusOptions)" allow-clear />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item class="m-0" label="&nbsp;" :colon="false">
+          <a-form-item label="&nbsp;" :colon="false" class="m-0">
             <div class="w-full flex-y-center justify-start gap-12px">
               <a-button type="primary" ghost @click="reset">
-                <template #icon>
-                  <icon-ic-round-refresh class="align-sub text-icon" />
-                </template>
-                <span class="ml-8px">{{ $t('common.reset') }}</span>
+                  <template #icon>
+                    <icon-ic-round-refresh class="align-sub text-icon" />
+                  </template>
+                  <span class="ml-8px">{{ $t('common.reset') }}</span>
               </a-button>
               <a-button type="primary" ghost @click="search">
                 <template #icon>

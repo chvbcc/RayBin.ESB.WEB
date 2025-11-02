@@ -304,6 +304,55 @@ const local: App.I18n.Schema = {
       connectionSuccess: 'Connection Successful',
       connectionString: 'Connection String'
     },
+    task: {
+      id: 'Task No.',
+      taskType: 'Task Type',
+      taskName: 'Task Name',
+      runMode: 'Run Mode',
+      runTime: 'Run Time',
+      runFrequency: 'Run Frequency',
+      dataHandle: 'Data Handle',
+      programmeLanguage: 'Programme Language',
+      dataHandleScript: 'Data Handle Script',
+      isDebug: 'Is Debug',
+      status: 'Task Status',
+      description: 'Task Description',
+      createUserID: 'Create User ID',
+      createTime: 'Create Time',
+      form: {
+        taskType: 'Please select task type',
+        taskName: 'Please enter task name',
+        runMode: 'Please select run mode',
+        runTime: 'Please enter run time',
+        runFrequency: 'Please enter run frequency',
+        dataHandle: 'Please select data handle',
+        programmeLanguage: 'Please select programme language',
+        dataHandleScript: 'Please enter data handle script',
+        isDebug: 'Please select is debug',
+        description: 'Please enter task description',
+        status: 'Please select task status'
+      },
+      taskStatus: {
+        normal: 'Normal',
+        paused: 'Paused'
+      }
+    },
+    database: {
+      title: 'Database Task',
+      titleBaseInfo: 'Basic Info',
+      titleDataMapping: 'Data Mapping',
+      taskID: 'Task No.',
+      connectionID: 'Data Connection',
+      dataObjectType: 'Data Object Type',
+      dataMapping: 'Data Mapping',
+      createUserID: 'Create User ID',
+      createTime: 'Create Time',
+      form: {
+        connectionID: 'Please select data connection',
+        dataObjectType: 'Please select data object type',
+        dataMapping: 'Please enter data mapping',
+      }
+    },
     manage: {
       role: {
         title: 'Role List',
@@ -499,6 +548,23 @@ const local: App.I18n.Schema = {
       polarDB: 'PolarDB',
       goldenDB: 'GoldenDB',
       openGauss: 'OpenGauss'
+    },
+    taskType: {
+      database: 'Database',
+      webApi: 'WebApi',
+      industry: 'Industry PLC'
+    },
+    runMode: {
+      manualOperation: 'Manual Operation',
+      everyDay: 'Every Day',
+      monthly: 'Monthly',
+      annually: 'Annually',
+      timeInterval: 'Time Interval',
+    },
+    dataObjectType: {
+      table: 'Table',
+      view: 'View',
+      storedProcedure: 'Stored Procedure'
     }
   },
 };

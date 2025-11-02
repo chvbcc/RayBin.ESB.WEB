@@ -31,6 +31,7 @@ export function convertRecordToOption<T extends Record<number, string>>(record: 
     label
   })) as CommonType.Option<keyof T>[];
 }
+
 /**
  * Translate options
  *
@@ -69,3 +70,4 @@ export function toggleHtmlClass(className: string) {
     remove
   };
 }
+
