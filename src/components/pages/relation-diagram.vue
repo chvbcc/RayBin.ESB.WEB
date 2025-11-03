@@ -11,8 +11,9 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, onBeforeUnmount, ref, defineProps, defineEmits, watch } from 'vue'
   import { Graph, Cell, Shape } from '@antv/x6'
+  import { autoLayoutGraph } from '@/utils/dagreLayout';
+  import { onMounted, onBeforeUnmount, ref, defineProps, defineEmits, watch, nextTick } from 'vue'
 
   // 图实例
   const graph = ref<Graph>();
@@ -89,6 +90,8 @@
     // 合并用户配置和默认配置
     const defaultConfig = {
       container: graphContainer.value,
+      scroller: { enabled: true, pannable: true },
+      interacting: { nodeMovable: true },
       connecting: {
         allowBlank: false, // 不允许连接到空白位置
         allowLoop: false,  // 不允许自连接
@@ -157,6 +160,10 @@
         const y = e.clientY - containerRect.top;
         showNodeContextMenu(x, y, node, target.getAttribute('port') || '');
       }
+    });
+
+    graph.value.on('node:move', ({ node }: { node: any }) => {
+      node.setData({ isDragged: true });
     });
 
     // 触发初始化完成事件
@@ -269,28 +276,33 @@
     if (!graph.value) return;
     // 创建一个表节点
     const tableNode = graph.value.createNode({
-      // shape: 'er-rect', // 使用自定义的表节点形状
-      // x: 100, // 节点的初始 x 坐标
-      // y: 100, // 节点的初始 y 坐标
-      // width: NODE_WIDTH, // 节点宽度
-      // height: 24, // 节点高度
-      // connectionId: 1, // 节点的唯一标识符
-      // "visible": true,
-      // attrs: {
-      //   text: {
-      //     text: '新表', // 节点的标签
-      //   },
-      // },
-      // ports: {
-      //   items: [
-      //     { id: 'port1', group: 'list', attrs: { portNameLabel: { text: '字段1' }, portTypeLabel: { text: 'int' } } },
-      //     { id: 'port2', group: 'list', attrs: { portNameLabel: { text: '字段2' }, portTypeLabel: { text: 'varchar' } } },
-      //   ],
-      // },
+      id: `table_${Date.now()}`,
+      shape: 'er-rect',
+      width: 168,
+      height: 28,
+      data: { isDragged: false, tableName: '新表' },
+      attrs: { text: { text: '新表' } },
+      ports: [
+          {
+            id: 'port0',
+            group: 'list',
+            attrs: {
+              portBody: { "width": 168, "height": 28 },
+              portNameLabel: { text: 'name' },
+              portTypeLabel: { text: 'varchar' }
+            }
+          }
+        ]
     });
     // 将节点添加到图中
     graph.value.addNode(tableNode);
+
+    // 居中显示新添加的节点
+    //nextTick(() => {
+      autoLayoutGraph(graph);
+    //});
   }
+
   //#endregion
 
   // #region 组件挂载和卸载
@@ -323,7 +335,7 @@
 
 <style scoped>
   .main         { width: 100%; border: #ECF0F1 1px solid; margin: 0px; background-color: #fCfCfC;}
-  .er-box       { width: 100%; height: 50vh; }
+  .er-box       { width: 100%; height: 50vh; overflow: auto; position: relative; }
   .context-menu { position: absolute;  background: white; border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 1000; min-width: 120px; border-radius: 4px; text-align: left; }
   .context-menu > div { padding: 6px 12px; cursor: pointer; font-size: 12px; }
   .context-menu > div:hover { background: #f0f0f0; }

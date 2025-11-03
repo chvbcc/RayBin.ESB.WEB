@@ -1,82 +1,79 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
 import { computed, ref, watch } from 'vue';
-import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { fetchGetTableList, fetchGetViewList, fetchGetStoredProcedureList } from '@/service/api/database';
+import { fetchGetDataObjectList } from '@/service/api/database';
 
+// 定义组件名称
 defineOptions({
-  name: 'DataObject  Modal'
+  name: 'DataObjectModal'
 });
 
+// 组件属性定义
 interface Props {
-  dataObjectType: Api.Task.DataObjectType;
-  selectedTableNames: Api.Task.selectedDataObject[];
+  selectedDataObjectNames: string[];
   connectionId: number | undefined;
+  dataObjectType: Api.Task.DataObjectType;
 }
 
 const props = defineProps<Props>();
-const dataSource = ref<string[]>([]);
-
-interface Emits {
-  (e: 'submitted'): void;
-}
-
-const emit = defineEmits<Emits>();
-
+const dataSource = ref<{ key: string; title: string }[]>([]);
+const targetKeys = ref<string[]>([...props.selectedDataObjectNames]);
 const visible = defineModel<boolean>('visible', { default: false });
+const title = computed(() => {return $t('page.database.dataObjectModalTitle');});
 
-const { formRef, validate, resetFields } = useAntdForm();
-const { defaultRequiredRule } = useFormRules();
-
-// 1. 定义标题
-const title = computed(() => {
-  return $t('page.manage.user.addUser');
-});
-
-// 8. 关闭模态框
-function closeModal() {
-  visible.value = false;
-}
-
-const oriTargetKeys = selectedDataObject.filter(item => +item.key % 3 > 1).map(item => item.key);
-
-const disabled = ref<boolean>(false);
-
-const targetKeys = ref<string[]>(oriTargetKeys);
-
-const handleChange = (nextTargetKeys: string[], direction: string, moveKeys: string[]) => {
-  console.log('targetKeys: ', nextTargetKeys);
-  console.log('direction: ', direction);
-  console.log('moveKeys: ', moveKeys);
-};
+// 定义对话框返回的数据 emit
+const emit = defineEmits<{(e: 'updateData', payload: { deleteItems: string[]; addItems: string[] }): void;}>();
 
 // 获取数据
-async function fetchData() {
-  const response = await fetch('/api/getData');
-  dataSource.value = await response.json();
+async function getDataObjectList() {
+  if (!props.connectionId) { dataSource.value = []; return;}
+  const response = await fetchGetDataObjectList(props.connectionId, props.dataObjectType);
+  if (!response.error) {
+    dataSource.value = response.data.map((item: string) => ({key: item, title: item }));
+  }
+}
+
+// 搜索过滤函数（可选但推荐）
+const filterOption = (inputValue: string, option: any) => {
+  return option.title.toLowerCase().includes(inputValue.toLowerCase());
+};
+
+// 确认
+function handleConfirm() {
+  const deleteItems = props.selectedDataObjectNames.filter(name => !targetKeys.value.includes(name));
+  const addItems = targetKeys.value.filter(name => !props.selectedDataObjectNames.includes(name));
+  emit('updateData', { deleteItems, addItems });
+  closeModal();
+}
+
+// 关闭模态框
+function closeModal() {
+  visible.value = false;
 }
 
 // 监听弹出框的显示状态
 watch(visible, async (newVal) => {
   if (newVal) {
-    await fetchData(); // 弹出框打开时获取数据
+    await getDataObjectList(); // 弹出框打开时获取数据
+    targetKeys.value = [...props.selectedDataObjectNames];
   }
 });
 </script>
 
 <template>
   <a-modal v-model:open="visible" :title="title" width="800px">
-    <div class="h-518px overflow-y-auto">
-      <a-form ref="formRef" :model="model" :rules="rules" :label-col="{ span: 5 }">
-        <a-transfer v-model:target-keys="targetKeys" :data-source="dataSource" show-search :filter-option="filterOption" :render="item => item.title" @change="handleChange" @search="handleSearch" :listStyle="{ width: '100%', height: '500px' }" />
-      </a-form>
-    </div>
+    <a-transfer v-model:target-keys="targetKeys" :data-source="dataSource" :rowKey="record => record.key!" :render="record => record.title" show-search :filter-option="filterOption" :list-style="{ width: '45%', height: '500px' }" />
     <template #footer>
       <a-space :size="13">
         <a-button @click="closeModal">{{ $t('common.cancel') }}</a-button>
-        <a-button type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</a-button>
+        <a-button type="primary" @click="handleConfirm">{{ $t('common.confirm') }}</a-button>
       </a-space>
     </template>
   </a-modal>
 </template>
-<style scoped></style>
+
+<style scoped>
+::v-deep(:where(.css-dev-only-do-not-override-si047h).ant-btn.ant-btn-sm) {
+  padding: 0px 7px 7px 7px !important;
+}
+</style>

@@ -27,6 +27,7 @@ export function fetchSave(data: Api.Task.TaskDatabaseModel) {
 }
 
 export function fetchGetData() {
+  //return [];
   return fetch('data.json')
     .then((response) => {
       if (!response.ok) {

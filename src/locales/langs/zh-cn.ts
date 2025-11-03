@@ -56,7 +56,8 @@ const local: App.I18n.Schema = {
     status: {
       enable: '启用',
       disable: '禁用'
-    }
+    },
+    fetchingDataError: '获取数据失败，请稍后重试!'
   },
   request: {
     logout: '请求失败后登出用户',
@@ -339,6 +340,7 @@ const local: App.I18n.Schema = {
       title: '数据库任务',
       titleBaseInfo: '基本信息',
       titleDataMapping: '数据映射',
+      dataObjectModalTitle: '选择数据对象',
       taskID: '任务编号',
       connectionID: '数据连接',
       dataObjectType: '对象类型',

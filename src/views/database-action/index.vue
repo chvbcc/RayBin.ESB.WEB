@@ -27,7 +27,7 @@ const operateType = ref<'add' | 'edit'>('add');
 
 const model = ref<Api.Task.TaskDatabaseModel>(createDefaultModel());
 const dataSource = ref<any[]>([]);
-const selectedDataObjectNames = ref<[]>;
+const selectedDataObjectNames = ref<string[]>([]);
 
 // 根据语言动态设置 labelCol 宽度
 const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '100px' } };
@@ -142,6 +142,10 @@ function handleBack() {
   router.push({ name: 'database' });
 }
 
+function handleAdd() {
+  relationDiagramRef.value?.addTable();
+}
+
 // isDebug 计算属性，用于在 Select 组件中绑定 'true'/'false' 字符串值
 const booleanYesOrNoValue = computed({
   get: () => model.value.isDebug ? 'true' : 'false',
@@ -221,6 +225,9 @@ watch(language, (newLang) => {
               <RelationDiagram ref="relationDiagramRef" :data-source="dataSource" />
             </a-col>
             <a-col :span="24" :md="24" :lg="24" class="bottom-button">
+              <a-button type="primary" @click="handleAdd" class="blue-btn mr-8 pl-6">
+                {{$t('common.add')}}
+              </a-button>
               <a-button type="primary" @click="handleSave" class="blue-btn mr-8 pl-6">
                 {{$t('common.save')}}
               </a-button>
@@ -231,7 +238,7 @@ watch(language, (newLang) => {
           </a-row>
       </a-card>
     </a-form>
-    <DataObjectModal v-model:visible="modalVisible" :connection-id="model.connectionID" :data-object-type="model.dataObjectType" :selected-table-names="selectedDataObjectNames" />
+    <DataObjectModal v-model:visible="modalVisible" :connection-id="model.connectionID" :data-object-type="model.dataObjectType" :selected-data-object-names="selectedDataObjectNames" />
   </div>
 </template>
 

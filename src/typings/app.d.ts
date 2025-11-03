@@ -338,6 +338,7 @@ declare namespace App {
           enable: string;
           disable: string;
         };
+        fetchingDataError: string;
       };
       request: {
         logout: string;
@@ -557,6 +558,7 @@ declare namespace App {
           title: string;
           titleBaseInfo: string;
           titleDataMapping: string;
+          dataObjectModalTitle: string;
           taskID: string;
           connectionID: string;
           dataObjectType: string;

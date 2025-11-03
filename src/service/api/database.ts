@@ -1,5 +1,18 @@
 import { request } from '../request';
 
+export function fetchGetDataObjectList(id: number, dataObjectType: Api.Task.DataObjectType) {
+  switch (dataObjectType) {
+    case 'table':
+      return fetchGetTableList(id);
+    case 'view':
+      return fetchGetViewList(id);
+    case 'storedProcedure':
+      return fetchGetStoredProcedureList(id);
+    default:
+      return Promise.reject(new Error('Invalid data object type'));
+  }
+}
+
 export function fetchGetTableList(id: number) {
   return request({
     url: '/database/getTableList',

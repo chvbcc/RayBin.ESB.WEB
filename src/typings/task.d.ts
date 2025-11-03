@@ -20,11 +20,6 @@ declare namespace Api {
     /* Task list */
     type TaskList = Common.PaginatingQueryRecord<Task>;
 
-    type selectedDataObject = {
-      key: string;
-      title: string;
-    }
-
     type Task = {
       id: number;
       taskType: TaskType;

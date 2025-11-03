@@ -58,7 +58,8 @@ const local: App.I18n.Schema = {
     status: {
       enable: 'Enable',
       disable: 'Disable'
-    }
+    },
+    fetchingDataError: 'Failed to fetch data, please try again later!'
   },
   request: {
     logout: 'Logout user after request failed',
@@ -341,6 +342,7 @@ const local: App.I18n.Schema = {
       title: 'Database Task',
       titleBaseInfo: 'Basic Info',
       titleDataMapping: 'Data Mapping',
+      dataObjectModalTitle: 'Data Object Selection',
       taskID: 'Task No.',
       connectionID: 'Data Connection',
       dataObjectType: 'Data Object Type',
