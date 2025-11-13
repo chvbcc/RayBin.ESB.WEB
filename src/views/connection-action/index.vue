@@ -51,9 +51,10 @@ function createDefaultModel(): Api.Connection.ConnectionModel {
 onMounted(async () => {
   const id = Number(route.query.id ?? 0);
   if (id) {
-    const { response } = await fetchGetModel(id);
-    const data = response.data as { code: string; msg: string; data: Api.Connection.ConnectionModel };
-    model.value = (data?.data && Object.keys(data.data).length > 0) ? data.data as Api.Connection.ConnectionModel : createDefaultModel();
+    const { error, data } = await fetchGetModel(id);
+    if (!error && data) {
+      model.value = { ...createDefaultModel(), ...data };
+    }
   }
 });
 
@@ -96,10 +97,10 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
 
 
 // 5. 添加数据库类型变化的watch监听
-watch(() => model.value.databaseType, (newType) => {
-    getConnectionStringByType(newType, model.value);
-    parseConnectionString(model.value);
-});
+const handleDatabaseTypeChange = (value: string) => {
+  getConnectionStringByType(value, model.value);
+  parseConnectionString(model.value);
+};
 
 // 6. 添加连接字符串变化的watch监听
 watch(() => [
@@ -187,7 +188,7 @@ function handleBack() {
             </a-col>
             <a-col :span="18">
               <a-form-item :label="$t('page.connection.databaseType')" name="databaseType" class="m-2">
-                <a-select v-model:value="model.databaseType" :placeholder="$t('page.connection.form.databaseType')" :options="translateOptions(databaseTypeOptions)" allow-clear />
+                <a-select v-model:value="model.databaseType" :placeholder="$t('page.connection.form.databaseType')" :options="translateOptions(databaseTypeOptions)" allow-clear @change?="handleDatabaseTypeChange" />
               </a-form-item>
             </a-col>
             <a-col :span="18">

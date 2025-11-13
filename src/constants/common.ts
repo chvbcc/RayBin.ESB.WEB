@@ -7,14 +7,11 @@ export const yesOrNoRecord: Record<Api.Common.YesOrNo, App.I18n.I18nKey> = {
 };
 export const yesOrNoOptions = convertRecordToOption(yesOrNoRecord);
 
-
 export const enableStatusRecord: Record<Api.Common.EnableStatus, App.I18n.I18nKey> = {
   0: 'common.status.enable',
   1: 'common.status.disable'
 };
 export const enableStatusOptions = convertRecordToOption(enableStatusRecord);
-
-
 
 /** boolean yes or no **/
 /** yes or no **/

@@ -68,7 +68,10 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       dataIndex: 'runTime',
       title: $t('page.task.runTime'),
       align: 'center',
-      minWidth: 120
+      minWidth: 120,
+      customRender: ({ record }) => {
+        return record.runTime == '0001-01-01T00:00:00' ? '' : record.runTime;
+      }
     },
     {
       key: 'status',
@@ -112,21 +115,14 @@ async function handleAdd() {
   router.push({ name: 'database-action' });
 }
 
-function handleDelete(id: number) {
-  fetchDelete(id).then((res) => {
-    if(!res.error) {
-      const result = res.response.data;
-      if (result.msg === 'success' && result.data === true) {
-        onDeleted();
-      }
-      else if (result.msg === 'fail') {
-        window.$message?.error(String(result.data));
-      }
-      else if (res.response.status != 200) {
-        window.$message?.error($t('common.deleteFailed'));
-      }
-    }
-  })
+async function handleDelete(id: number) {
+  const { error } = await fetchDelete(id);
+  if (!error) {
+    onDeleted();
+    window.$message?.success($t('common.deleteSuccess'));
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
+  }
 }
 
 function handleEdit(id: number) {

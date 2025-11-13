@@ -1,107 +1,54 @@
-import { graphlib, layout } from '@dagrejs/dagre';
-import { Graph } from '@antv/x6';
+import { Graph, Node } from '@antv/x6';
 
-function isNodeTerminal(term: any): term is { cell: string } {
-  return term != null && typeof term === 'object' && 'cell' in term;
-}
-
-interface LayoutOptions {
-  rankdir?: 'TB' | 'BT' | 'LR' | 'RL';
-  nodesep?: number;
-  ranksep?: number;
-}
-
-function createDagreLayout(
-  nodes: Array<{
-    id: string;
-    width: number;
-    height: number;
-    x?: number;
-    y?: number;
-    isDragged?: boolean;
-    visible?: boolean;
-  }>,
-  edges: Array<{ source: string; target: string }>,
-  options: LayoutOptions = {}
-) {
-  const g = new graphlib.Graph();
-  g.setGraph({
-    rankdir: options.rankdir || 'TB',
-    nodesep: options.nodesep || 60,
-    ranksep: options.ranksep || 80,
-  });
-  g.setDefaultEdgeLabel(() => ({}));
-
-  const layoutNodes = nodes.filter(node => !node.isDragged && node.visible !== false);
-  layoutNodes.forEach(node => {
-    g.setNode(node.id, { width: node.width, height: node.height });
-  });
-
-  edges.forEach(edge => {
-    if (g.hasNode(edge.source) && g.hasNode(edge.target)) {
-      g.setEdge(edge.source, edge.target);
-    }
-  });
-
-  layout(g);
-
-  return nodes.map(node => {
-    if (node.isDragged || node.visible === false) {
-      return { id: node.id, x: node.x, y: node.y };
-    } else {
-      const pos = g.node(node.id);
-      return { id: node.id, x: pos.x, y: pos.y };
-    }
-  });
-}
-
-export function autoLayoutGraph(graphRef: { value: Graph | undefined }) {
+// 网格布局算法：从左到右，自动换行
+export function autoLayoutGraph(graphRef: { value: Graph | undefined }, node: Node) {
   const graph = graphRef.value;
-  if (!graph) return;
+  if (!node || !graph) return;
 
   const nodes = graph.getNodes();
-  const edges = graph.getEdges();
+  if (!nodes) return;
 
-  const dagreNodes = nodes.map(node => {
-    const data = node.getData();
-    return {
-      id: node.id,
-      width: node.size().width,
-      height: node.size().height,
-      x: node.position().x,
-      y: node.position().y,
-      isDragged: data?.isDragged ?? false,
-    };
-  });
+  const container = graph.container;
+  if (!container) return;
 
-  const dagreEdges = edges
-    .map(edge => {
-      const source = edge.getSource();
-      const target = edge.getTarget();
-      if (isNodeTerminal(source) && isNodeTerminal(target)) {
-        return { source: source.cell, target: target.cell };
-      }
-      return null;
-    })
-    .filter((e): e is { source: string; target: string } => e !== null);
+  const nodeCount: number = nodes.length;
 
-  const newPositions = createDagreLayout(dagreNodes, dagreEdges, {
-    rankdir: 'LR', // 从左到右排列
-    nodesep: 60,   // 节点水平间距
-    ranksep: 80,   // 节点垂直间距
-  });
+  // 设置节点间距和边距
+  const horizontalSpacing = 50; // 水平间距
+  const verticalSpacing = 120;  // 垂直间距
+  const margin = 20;
 
-  const nodeMap = new Map(nodes.map(node => [node.id, node]));
+  // 获取容器宽度，用于计算每行能容纳的节点数    // 边距
+  const containerWidth = container.clientWidth - margin * 2;
 
-  graph.batchUpdate(() => {
-    newPositions.forEach(pos => {
-      if (pos.x == null || pos.y == null) return;
-      const node = nodeMap.get(pos.id);
-      if (node && !node.getData()?.isDragged) {
-        node.setPosition(pos.x, pos.y);
-      }
+  if (nodeCount - 1 > 0) {
+    let totalWidth = 0;
+    nodes.forEach((node) => {
+      const size = node.size();
+      totalWidth += size.width || 150;
     });
-  });
+    const avgNodeWidth = totalWidth / nodeCount;
+    const maxNodesPerRow = Math.max(1, Math.floor((containerWidth + horizontalSpacing) / (avgNodeWidth + horizontalSpacing)));
 
-  graph.centerContent();
+    // 计算当前节点应该放置的行和列
+    const index = nodes.indexOf(node);
+    const row = Math.floor(index / maxNodesPerRow);
+    const col = index % maxNodesPerRow;
+
+    // 计算节点位置
+    const x = margin + col * (avgNodeWidth + horizontalSpacing);
+    const y = margin + row * verticalSpacing;
+
+    // 设置节点位置
+    graph.batchUpdate(() => {
+      node.setPosition(x, y);
+    });
+  } else {
+    // 第一个节点，放在左上角
+    const x = margin;
+    const y = margin;
+    graph.batchUpdate(() => {
+      node.setPosition(x, y);
+    });
+  }
 }

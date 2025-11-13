@@ -291,6 +291,7 @@ declare namespace App {
         action: string;
         add: string;
         addSuccess: string;
+        addFailed: string;
         backToHome: string;
         batchDelete: string;
         cancel: string;
@@ -551,6 +552,7 @@ declare namespace App {
           };
           taskStatus: {
             normal: string;
+            draft: string;
             paused: string;
           };
         };
@@ -565,11 +567,27 @@ declare namespace App {
           dataMapping: string;
           createUserID: string;
           createTime: string;
+          addMapping: string;
           form: {
             connectionID: string;
             dataObjectType: string;
             dataMapping: string;
           };
+        };
+        taskLog: {
+          title: string;
+          taskID: string;
+          taskType: string;
+          taskName: string;
+          logLevel: string;
+          message: string;
+          spentTime?: string;
+          createTime: string;
+          form: {
+              taskType: string;
+              logLevel: string;
+              taskName: string;
+          }
         };
         manage: {
           role: {
@@ -760,6 +778,12 @@ declare namespace App {
           view: string;
           storedProcedure: string;
         };
+        logLevel: {
+          info: string,
+          warning: string,
+          error: string,
+          debug: string
+        }
       };
     };
 

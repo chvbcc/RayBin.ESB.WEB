@@ -14,6 +14,7 @@ declare namespace Api {
       roleName: string;
       isSystem: Api.Common.YesOrNo;
       description: string;
+      status: Api.Common.EnableStatus;
     }>;
 
     /*  Roles dropdown */
@@ -46,6 +47,7 @@ declare namespace Api {
       email: string;
       weChat: string;
       dingDing: string;
+      status: Api.Common.EnableStatus;
     }>;
 
     /* User model */
@@ -107,6 +109,7 @@ declare namespace Api {
       localIcon: string;
       permissions?: PermissionModel[] | null;
       children?: Menu[];
+      status: Api.Common.EnableStatus;
     }> & MenuPropsOfRoute;
 
     /** menu model */

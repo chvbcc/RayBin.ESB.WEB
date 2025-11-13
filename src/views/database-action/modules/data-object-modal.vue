@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
 import { computed, ref, watch } from 'vue';
-import { fetchGetDataObjectList } from '@/service/api/database';
+import { fetchGetDataObjectList, fetchGetDataObjects } from '@/service/api/database';
 
 // 定义组件名称
 defineOptions({
@@ -22,14 +22,17 @@ const visible = defineModel<boolean>('visible', { default: false });
 const title = computed(() => {return $t('page.database.dataObjectModalTitle');});
 
 // 定义对话框返回的数据 emit
-const emit = defineEmits<{(e: 'updateData', payload: { deleteItems: string[]; addItems: string[] }): void;}>();
+const emit = defineEmits<{
+  (e: 'delete', deleteItems: string[], dataObjectType: Api.Task.DataObjectType): void;
+  (e: 'add', dataObjectNodes: Api.Task.DataObjectNode[]): void;
+}>();
 
 // 获取数据
 async function getDataObjectList() {
   if (!props.connectionId) { dataSource.value = []; return;}
-  const response = await fetchGetDataObjectList(props.connectionId, props.dataObjectType);
-  if (!response.error) {
-    dataSource.value = response.data.map((item: string) => ({key: item, title: item }));
+  const { error, data  } = await fetchGetDataObjectList(props.connectionId, props.dataObjectType);
+  if (!error) {
+    dataSource.value = data.map((item: string) => ({key: item, title: item }));
   }
 }
 
@@ -39,10 +42,18 @@ const filterOption = (inputValue: string, option: any) => {
 };
 
 // 确认
-function handleConfirm() {
+async function handleConfirm() {
   const deleteItems = props.selectedDataObjectNames.filter(name => !targetKeys.value.includes(name));
+  if (deleteItems.length > 0) {
+    emit('delete', deleteItems, props.dataObjectType);
+  }
   const addItems = targetKeys.value.filter(name => !props.selectedDataObjectNames.includes(name));
-  emit('updateData', { deleteItems, addItems });
+  if (addItems.length > 0) {
+    const { error, data } = await fetchGetDataObjects(props.connectionId!, props.dataObjectType, addItems);
+    if (!error && data.result) {
+      emit('add', data.result as Api.Task.DataObjectNode[]);
+    }
+  }
   closeModal();
 }
 

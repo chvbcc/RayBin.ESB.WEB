@@ -90,21 +90,14 @@ async function handleAdd() {
   router.push({ name: 'connection-action' });
 }
 
-function handleDelete(id: number) {
-  fetchDelete(id).then((res) => {
-    if(!res.error) {
-      const result = res.response.data;
-      if (result.msg === 'success' && result.data === true) {
-        onDeleted();
-      }
-      else if (result.msg === 'fail') {
-        window.$message?.error(String(result.data));
-      }
-      else if (res.response.status != 200) {
-        window.$message?.error($t('common.deleteFailed'));
-      }
-    }
-  })
+async function handleDelete(id: number) {
+  const { error } = await fetchDelete(id);
+  if (!error) {
+    onDeleted();
+    window.$message?.success($t('common.deleteSuccess'));
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
+  }
 }
 
 function handleEdit(id: number) {

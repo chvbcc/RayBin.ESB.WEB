@@ -1,28 +1,28 @@
 <template>
-  <div class="main">
-    <div ref="graphContainer" class="er-box" @contextmenu.prevent></div>
+    <div ref="graphContainer" class="x6-graph" @contextmenu.prevent ></div>
     <div id="context-menu" class="context-menu" v-show="contextMenu.visible" :style="{ left: contextMenu.x + 'px', top: contextMenu.y + 'px' }">
       <div @click="handleMenuClick('Key')">主键</div>
       <div @click="handleMenuClick('OutKey')">输出主键</div>
       <div @click="handleMenuClick('DeleteKey')">删除主键</div>
       <div @click="handleMenuClick('DeleteTable')">删除表视图</div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
-  import { Graph, Cell, Shape } from '@antv/x6'
+  import { Graph, Cell, Shape, Node } from '@antv/x6'
   import { autoLayoutGraph } from '@/utils/dagreLayout';
   import { onMounted, onBeforeUnmount, ref, defineProps, defineEmits, watch, nextTick } from 'vue'
 
+  // #region 1. 参数定义
   // 图实例
   const graph = ref<Graph>();
   const graphContainer = ref<HTMLDivElement>();
 
   // 右键菜单状态
   const contextMenu = ref({ visible: false, x: 0, y: 0, node: null as Cell | null, portId: null as string | null })
+  // #endregion
 
-  // #region 组件属性
+  // #region 2. 组件属性
   const props = defineProps({
     // 可以传入自定义的配置选项
     config: { type: Object, default: () => ({}) },
@@ -30,14 +30,14 @@
   })
   // #endregion
 
-  // #region 组件事件
+  // #region 3. 组件事件
   const emit = defineEmits([
     'init',       // 初始化完成事件
     'dataLoaded', // 数据加载完成事件
   ])
   // #endregion
 
-  // #region 注册端口布局
+  // #region 4. 注册端口布局
   Graph.registerPortLayout('erPortPosition',(portsPositionArgs) => {
       return portsPositionArgs.map((_, index) => {
         return {
@@ -50,7 +50,7 @@
   )
   // #endregion
 
-  // #region 注册节点
+  // #region 5. 注册节点
   Graph.registerNode('er-rect',
     {
       inherit: 'rect',
@@ -72,8 +72,8 @@
             ],
             attrs: {
               portBody: { strokeWidth: 1, stroke: '#7F8C8D', fill: '#ECF0F1', magnet: true },
-              portNameLabel: { ref: 'portBody', refX: 6,  refY: 10, fontSize: 11, fill: '#333333' },
-              portTypeLabel: { ref: 'portBody', refX: 95, refY: 10, fontSize: 11, fill: '#333333' },
+              portNameLabel: { ref: 'portBody', refX: 6,  refY: 10, fontSize: 11, fill: '#333333', magnet: true },
+              portTypeLabel: { ref: 'portBody', refY: 10, fontSize: 11, fill: '#333333', magnet: true },
             },
             position: 'erPortPosition',
           },
@@ -84,21 +84,18 @@
   )
   // #endregion
 
-  // #region 初始化ER图
+  // #region 6. 初始化ER图
   function initGraph() {
     if (!graphContainer.value) return;
     // 合并用户配置和默认配置
     const defaultConfig = {
       container: graphContainer.value,
+      panning: true,
       scroller: { enabled: true, pannable: true },
-      interacting: { nodeMovable: true },
       connecting: {
         allowBlank: false, // 不允许连接到空白位置
         allowLoop: false,  // 不允许自连接
-        router: {
-          name: 'er',
-          args: { offset: 26, direction: 'H' },
-        },
+        router: { name: 'er', args: { offset: 26, direction: 'H' } },
         createEdge() {
           return new Shape.Edge({
             attrs: {
@@ -107,9 +104,53 @@
           })
         },
         validateConnection(args: any) {
-          const { sourcePort, targetPort } = args;
+          const { sourceView, targetView, sourcePort, targetPort } = args;
           // 规则1：必须连接端口
           if (!sourcePort || !targetPort) return false;
+
+          // 获取 graph 实例
+          const graphInstance = graph.value;
+          if (!graphInstance) return false;
+
+          // 源与目标节点 ID
+          const sourceNodeId = sourceView.cell.id;
+          const targetNodeId = targetView.cell.id;
+          if (!targetNodeId) return false;
+
+          // 获取目标节点
+          const targetNode = graphInstance.getCellById(targetNodeId);
+          if (!targetNode) return false;
+
+          // 规则2：只有Table 与 StoredProcedure 才能被连接
+          // 获取自定义属性 dataObjectType
+          const targetDataObjectType = targetNode.getData()?.dataObjectType ?? targetNode.data?.dataObjectType ?? (targetNode as any).dataObjectType;
+
+          // 只允许连接到 dataObjectType === 'table' 的节点
+          if (targetDataObjectType === 'view') return false;
+
+          // 规则3：禁止目标节点被同一个源多次连接
+
+          // 检查是否已存在：同一个源节点 → 同一个目标节点的同一个目标端口
+          const exists = graphInstance.getEdges().some(edge => {
+            return (
+              edge.getSourceCellId() === sourceNodeId &&
+              edge.getTargetCellId() === targetNodeId &&
+              edge.getTargetPortId() === targetPort
+            );
+          });
+
+          if (exists) { return false; }
+
+          // // 规则3：一个 target 只能被同一个 source 节点连接 禁止多对一
+          // // 获取所有以 targetNodeId 为 target 的边
+          // const incomingEdges = graphInstance.getEdges().filter(edge => { return edge.getTargetCellId() === targetNodeId;});
+
+          // // 如果已经有入边
+          // if (incomingEdges.length > 0) {
+          //   // 检查是否来自同一个源节点
+          //   const existingSourceId = incomingEdges[0].getSourceCellId();
+          //   if (existingSourceId !== sourceNodeId) { return false; }
+          // }
           return true;
         },
       }
@@ -162,8 +203,14 @@
       }
     });
 
+    // 节点拖拽事件前设置显示层级
     graph.value.on('node:move', ({ node }: { node: any }) => {
-      node.setData({ isDragged: true });
+      node.setZIndex(10);
+    });
+
+    // 节点拖拽事件后重置显示层级
+    graph.value.on('node:moved', ({ node }: { node: any }) => {
+      node.setZIndex(1);
     });
 
     // 触发初始化完成事件
@@ -231,11 +278,11 @@
   // #endregion
 
   // #region 设置数据
-  function setData(data?: any[]) {
-    if (data) {
-      if (!graph.value) return;
+
+  function setData(data?: { cells: any[] }) {
+    if (data && graph.value) {
       const cells: Cell[] = [];
-      data.forEach((item: any) => {
+      data.cells.forEach((item: any) => {
         if (item.shape === 'edge') {
           cells.push(graph.value!.createEdge(item))
         } else {
@@ -260,11 +307,19 @@
   }
   // #endregion
 
+  // #region 画布大小处理函数
+  function handleResize() {
+    if (graph.value) {
+      graph.value.resize(); // 关键：通知 X6 重新计算尺寸
+    }
+  }
+  // #endregion
+
   // #region 监控数据
   watch(() => props.dataSource,
     (newData) => {
       if (newData && newData.length > 0) {
-        setData(newData); // 调用 setData 方法加载数据
+        setData({ cells: newData }); // 调用 setData 方法加载数据
       }
     },
     { immediate: true } // 立即执行一次以加载初始数据
@@ -272,47 +327,42 @@
   // #endregion
 
   // #region 添加表节点
-  function addTable() {
-    if (!graph.value) return;
-    // 创建一个表节点
-    const tableNode = graph.value.createNode({
-      id: `table_${Date.now()}`,
-      shape: 'er-rect',
-      width: 168,
-      height: 28,
-      data: { isDragged: false, tableName: '新表' },
-      attrs: { text: { text: '新表' } },
-      ports: [
-          {
-            id: 'port0',
-            group: 'list',
-            attrs: {
-              portBody: { "width": 168, "height": 28 },
-              portNameLabel: { text: 'name' },
-              portTypeLabel: { text: 'varchar' }
-            }
-          }
-        ]
+  function addDataObjects(dataObjectNodes: Api.Task.DataObjectNode[]) {
+    if (!graph.value || !dataObjectNodes) return;
+    dataObjectNodes.forEach(dataObjectNode => {
+      // 创建 tableNode
+        const tableNode: Node = graph.value!.createNode({
+        id: dataObjectNode.id,
+        shape: dataObjectNode.shape,
+        width: dataObjectNode.width,
+        height: dataObjectNode.height,
+        x: dataObjectNode.x,
+        y: dataObjectNode.y,
+        zIndex: 1,
+        data: dataObjectNode.data,
+        attrs: dataObjectNode.attrs,
+        ports: dataObjectNode.ports
+      });
+      // 将节点添加到图中
+      graph.value!.addNode(tableNode);
+      // 居中显示新添加的节点
+      nextTick(() => {
+        autoLayoutGraph(graph, tableNode);
+      });
     });
-    // 将节点添加到图中
-    graph.value.addNode(tableNode);
-
-    // 居中显示新添加的节点
-    //nextTick(() => {
-      autoLayoutGraph(graph);
-    //});
   }
-
   //#endregion
 
   // #region 组件挂载和卸载
   onMounted(() => {
     initGraph();
     document.addEventListener('click', hideContextMenu);
+    window.addEventListener('resize', handleResize);
   });
 
   onBeforeUnmount(() => {
     document.removeEventListener('click', hideContextMenu);
+    window.removeEventListener('resize', handleResize);
     if (graph.value) {
       graph.value.dispose();
       graph.value = undefined;
@@ -320,12 +370,42 @@
   });
   // #endregion
 
+  // #region 根据label名称删除多个节点
+  function deleteDataObjects(nodeNames: string[], dataObjectType: Api.Task.DataObjectType): boolean {
+    if (!graph.value || !nodeNames || nodeNames.length === 0) return false;
+
+    // 获取所有节点
+    const nodes = graph.value.getNodes();
+    let deleted = false;
+
+    // 查找并删除匹配标签的节点
+    nodes.forEach(node => {
+      const nodeLabel = node.attr('text/text') as string;
+      // 检查节点标签是否在提供的名称数组中
+      if (nodeNames.includes(nodeLabel) && node.getData().dataObjectType === dataObjectType) {
+        // 获取与该节点相关的所有边
+        const edges = graph.value!.getEdges();
+        const connectedEdges = edges.filter(edge => {
+          return edge.getSourceCellId() === node.id || edge.getTargetCellId() === node.id;
+        });
+        // 删除相关的边
+        connectedEdges.forEach(edge => graph.value?.removeEdge(edge));
+        // 删除节点
+        graph.value?.removeNode(node);
+        deleted = true;
+      }
+    });
+    return deleted;
+  }
+  // #endregion
+
   // #region 暴露公共方法给父组件
   const exposeMethods = {
     getData,
     getDataObjectNames,
     setData,
-    addTable
+    addDataObjects,
+    deleteDataObjects,
   };
 
   // 暴露方法
@@ -334,8 +414,7 @@
 </script>
 
 <style scoped>
-  .main         { width: 100%; border: #ECF0F1 1px solid; margin: 0px; background-color: #fCfCfC;}
-  .er-box       { width: 100%; height: 50vh; overflow: auto; position: relative; }
+  .x6-graph { width:100% !important; height: 100% !important; }
   .context-menu { position: absolute;  background: white; border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 1000; min-width: 120px; border-radius: 4px; text-align: left; }
   .context-menu > div { padding: 6px 12px; cursor: pointer; font-size: 12px; }
   .context-menu > div:hover { background: #f0f0f0; }

@@ -21,10 +21,12 @@ export const runModeRecord: Record<Api.Task.RunMode, App.I18n.I18nKey> = {
 };
 export const runModeOptions = transformRecordToOption(runModeRecord);
 
+
 /** task status **/
 export const taskStatusRecord: Record<Api.Task.TaskStatus, App.I18n.I18nKey> = {
   0: 'page.task.taskStatus.normal',
-  1: 'page.task.taskStatus.paused'
+  1: 'page.task.taskStatus.draft',
+  2: 'page.task.taskStatus.paused',
 };
 export const taskStatusOptions = convertRecordToOption(taskStatusRecord);
 

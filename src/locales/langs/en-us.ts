@@ -1,5 +1,3 @@
-import { permission } from "node:process";
-
 const local: App.I18n.Schema = {
   system: {
     title: 'RayBin ESB 6.0',
@@ -12,6 +10,7 @@ const local: App.I18n.Schema = {
     action: 'Action',
     add: 'Add',
     addSuccess: 'Add Success',
+    addFailed: 'Add Failed',
     backToHome: 'Back to home',
     batchDelete: 'Batch Delete',
     cancel: 'Cancel',
@@ -313,7 +312,7 @@ const local: App.I18n.Schema = {
       runTime: 'Run Time',
       runFrequency: 'Run Frequency',
       dataHandle: 'Data Handle',
-      programmeLanguage: 'Programme Language',
+      programmeLanguage: 'Program Language',
       dataHandleScript: 'Data Handle Script',
       isDebug: 'Is Debug',
       status: 'Task Status',
@@ -335,6 +334,7 @@ const local: App.I18n.Schema = {
       },
       taskStatus: {
         normal: 'Normal',
+        draft: 'Draft',
         paused: 'Paused'
       }
     },
@@ -347,6 +347,7 @@ const local: App.I18n.Schema = {
       connectionID: 'Data Connection',
       dataObjectType: 'Data Object Type',
       dataMapping: 'Data Mapping',
+      addMapping: 'Add Mapping',
       createUserID: 'Create User ID',
       createTime: 'Create Time',
       form: {
@@ -354,6 +355,21 @@ const local: App.I18n.Schema = {
         dataObjectType: 'Please select data object type',
         dataMapping: 'Please enter data mapping',
       }
+    },
+    taskLog: {
+      title: 'Task Log',
+      taskID: 'Task No.',
+      taskType: 'Task Type',
+      taskName: 'Task Name',
+      logLevel: 'Log Level',
+      message: 'Message',
+      spentTime: 'Spent Time (ms)',
+      createTime: 'Create Time',
+      form: {
+        taskType: 'Please select task type',
+        logLevel: 'Please select log level',
+        taskName: 'Please enter task name',
+      },
     },
     manage: {
       role: {
@@ -567,6 +583,12 @@ const local: App.I18n.Schema = {
       table: 'Table',
       view: 'View',
       storedProcedure: 'Stored Procedure'
+    },
+    logLevel: {
+      info: 'Info',
+      warning: 'Warning',
+      error: 'Error',
+      debug: 'Debug'
     }
   },
 };

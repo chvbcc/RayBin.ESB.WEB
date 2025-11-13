@@ -1,11 +1,12 @@
 // 将JSON数据转换为Api.SystemManage.MenuTree[]类型
+
 export function convertToMenuTree(data: any[]): Api.SystemManage.MenuTree[] {
   return data.map(item => {
     return {
       id: item.id,
       label: item.title, // 将title转换为label
       parentId: item.parentID, // 将parentID转换为parentId
-      children: item.children && item.children.length > 0 
+      children: item.children && item.children.length > 0
         ? convertToMenuTree(item.children)
         : undefined
     };

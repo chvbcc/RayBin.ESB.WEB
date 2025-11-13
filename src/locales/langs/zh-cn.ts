@@ -10,6 +10,7 @@ const local: App.I18n.Schema = {
     action: '操作',
     add: '新增',
     addSuccess: '添加成功',
+    addFailed: '添加失败',
     backToHome: '返回首页',
     batchDelete: '批量删除',
     cancel: '取消',
@@ -333,6 +334,7 @@ const local: App.I18n.Schema = {
       },
       taskStatus: {
         normal: '正常',
+        draft: '草稿',
         paused: '暂停'
       }
     },
@@ -345,6 +347,7 @@ const local: App.I18n.Schema = {
       connectionID: '数据连接',
       dataObjectType: '对象类型',
       dataMapping: '数据映射',
+      addMapping: '新增映射',
       createUserID: '创建用户',
       createTime: '创建时间',
       form: {
@@ -352,6 +355,21 @@ const local: App.I18n.Schema = {
         dataObjectType: '请选择对象类型',
         dataMapping: '请输入数据映射',
       }
+    },
+    taskLog: {
+      title: '任务日志',
+      taskID: '任务编号',
+      taskType: '任务类型',
+      taskName: '任务名称',
+      logLevel: '日志级别',
+      message: '日志信息',
+      spentTime: '耗时 (ms)',
+      createTime: '创建时间',
+      form: {
+        taskType: '请选择任务类型',
+        logLevel: '请选择日志级别',
+        taskName: '请输入任务名称',
+      },
     },
     manage: {
       role: {
@@ -565,6 +583,12 @@ const local: App.I18n.Schema = {
       table: '表',
       view: '视图',
       storedProcedure: '存储过程'
+    },
+    logLevel: {
+      info: '信息',
+      warning: '警告',
+      error: '错误',
+      debug: '调试'
     }
   },
 };

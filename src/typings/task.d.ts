@@ -12,43 +12,63 @@ declare namespace Api {
     /* Data handle 0 No, 1 Yes */
     type DataHandle = 0 | 1;
 
-    /* Task status 0 No, 1 Enabled */
-    type TaskStatus = 0 | 1;
+    /* Task status 0 Normal, 1 Draft 2 Disable */
+    type TaskStatus = 0 | 1 | 2;
 
     type DataObjectType = 'table' | 'view' | 'storedProcedure';
 
     /* Task list */
     type TaskList = Common.PaginatingQueryRecord<Task>;
 
-    type Task = {
+    type Task = Common.CommonRecord<{
       id: number;
       taskType: TaskType;
       taskName: string;
       runMode: RunMode;
       runTime: string;
-      runFrequency: string;
+      runFrequency: number;
       dataHandle: DataHandle;
       programmeLanguage: string;
       dataHandleScript: string;
       isDebug: boolean;
       status: TaskStatus;
       description: string;
-      createUserID: number;
-      createTime: string;
+    }>;
+    type TaskModel = Pick<Task, | 'id' | 'taskType' | 'taskName' | 'runMode' | 'runTime' | 'runFrequency' | 'dataHandle' | 'programmeLanguage' | 'dataHandleScript' | 'isDebug' | 'status' | 'description'>;
+
+
+    /* Mapping Dialog */
+    type DialogModal = {
+      connectionID: number | undefined;
+      dataObjectType: DataObjectType;
     };
 
     /* Task database */
     type TaskDatabase = {
       id: number;
       taskID: number;
-      connectionID: number | undefined;
-      dataObjectType: DataObjectType;
       dataMapping: string;
-      createUserID: number;
-      createTime: string;
+      diagramData: string;
     };
 
-    type TaskDatabaseModel = Task & TaskDatabase;
+    type DataObjectNode = {
+      id: string;
+      shape: string;
+      width: number;
+      height: number;
+      x: number;
+      y: number;
+      data?: Record<string, any>;
+      attrs?: Record<string, any>;
+      ports?: Array<{
+        id: string;
+        group: string;
+        keyType: string;
+        attrs: Record<string, any>;
+      }>;
+    }
+
+    type TaskDatabaseModel = { task: TaskModel; taskDatabase: TaskDatabase;};
     /* Task webapi */
     /* Task industry plc */
   }
