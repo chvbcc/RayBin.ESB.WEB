@@ -71,20 +71,31 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'database',
     path: '/database',
-    component: 'layout.base$view.database',
+    component: 'layout.base',
     meta: {
       title: 'database',
       i18nKey: 'route.database'
-    }
-  },
-  {
-    name: 'database-action',
-    path: '/database-action',
-    component: 'layout.base$view.database-action',
-    meta: {
-      title: 'database-action',
-      i18nKey: 'route.database-action'
-    }
+    },
+    children: [
+      {
+        name: 'database_action',
+        path: '/database/action',
+        component: 'view.database_action',
+        meta: {
+          title: 'database_action',
+          i18nKey: 'route.database_action'
+        }
+      },
+      {
+        name: 'database_default',
+        path: '/database/default',
+        component: 'view.database_default',
+        meta: {
+          title: 'database_default',
+          i18nKey: 'route.database_default'
+        }
+      }
+    ]
   },
   {
     name: 'home',
@@ -113,20 +124,31 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'industria',
     path: '/industria',
-    component: 'layout.base$view.industria',
+    component: 'layout.base',
     meta: {
       title: 'industria',
       i18nKey: 'route.industria'
-    }
-  },
-  {
-    name: 'industria-action',
-    path: '/industria-action',
-    component: 'layout.base$view.industria-action',
-    meta: {
-      title: 'industria-action',
-      i18nKey: 'route.industria-action'
-    }
+    },
+    children: [
+      {
+        name: 'industria_action',
+        path: '/industria/action',
+        component: 'view.industria_action',
+        meta: {
+          title: 'industria_action',
+          i18nKey: 'route.industria_action'
+        }
+      },
+      {
+        name: 'industria_default',
+        path: '/industria/default',
+        component: 'view.industria_default',
+        meta: {
+          title: 'industria_default',
+          i18nKey: 'route.industria_default'
+        }
+      }
+    ]
   },
   {
     name: 'login',
@@ -282,19 +304,30 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'webapi',
     path: '/webapi',
-    component: 'layout.base$view.webapi',
+    component: 'layout.base',
     meta: {
       title: 'webapi',
       i18nKey: 'route.webapi'
-    }
-  },
-  {
-    name: 'webapi-action',
-    path: '/webapi-action',
-    component: 'layout.base$view.webapi-action',
-    meta: {
-      title: 'webapi-action',
-      i18nKey: 'route.webapi-action'
-    }
+    },
+    children: [
+      {
+        name: 'webapi_action',
+        path: '/webapi/action',
+        component: 'view.webapi_action',
+        meta: {
+          title: 'webapi_action',
+          i18nKey: 'route.webapi_action'
+        }
+      },
+      {
+        name: 'webapi_default',
+        path: '/webapi/default',
+        component: 'view.webapi_default',
+        meta: {
+          title: 'webapi_default',
+          i18nKey: 'route.webapi_default'
+        }
+      }
+    ]
   }
 ];

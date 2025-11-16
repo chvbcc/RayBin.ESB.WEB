@@ -24,11 +24,13 @@ declare module "@elegant-router/types" {
     "connection_action": "/connection/action";
     "connection_default": "/connection/default";
     "database": "/database";
-    "database-action": "/database-action";
+    "database_action": "/database/action";
+    "database_default": "/database/default";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
     "industria": "/industria";
-    "industria-action": "/industria-action";
+    "industria_action": "/industria/action";
+    "industria_default": "/industria/default";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
     "manage": "/manage";
     "manage_menu": "/manage/menu";
@@ -44,7 +46,8 @@ declare module "@elegant-router/types" {
     "tasklog": "/tasklog";
     "user-center": "/user-center";
     "webapi": "/webapi";
-    "webapi-action": "/webapi-action";
+    "webapi_action": "/webapi/action";
+    "webapi_default": "/webapi/default";
   };
 
   /**
@@ -81,11 +84,9 @@ declare module "@elegant-router/types" {
     | "500"
     | "connection"
     | "database"
-    | "database-action"
     | "home"
     | "iframe-page"
     | "industria"
-    | "industria-action"
     | "login"
     | "manage"
     | "message"
@@ -94,7 +95,6 @@ declare module "@elegant-router/types" {
     | "tasklog"
     | "user-center"
     | "webapi"
-    | "webapi-action"
   >;
 
   /**
@@ -118,11 +118,11 @@ declare module "@elegant-router/types" {
     | "login"
     | "connection_action"
     | "connection_default"
-    | "database-action"
-    | "database"
+    | "database_action"
+    | "database_default"
     | "home"
-    | "industria-action"
-    | "industria"
+    | "industria_action"
+    | "industria_default"
     | "manage_menu"
     | "manage_role"
     | "manage_token_action"
@@ -134,8 +134,8 @@ declare module "@elegant-router/types" {
     | "suspended"
     | "tasklog"
     | "user-center"
-    | "webapi-action"
-    | "webapi"
+    | "webapi_action"
+    | "webapi_default"
   >;
 
   /**
