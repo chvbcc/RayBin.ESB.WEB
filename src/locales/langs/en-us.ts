@@ -172,7 +172,8 @@ const local: App.I18n.Schema = {
     'iframe-page': 'Iframe',
     home: 'Home',
     connection: 'Database Connection',
-    "connection-action": 'Database Connection',
+    connection_default: 'Database Connection',
+    connection_action: 'Database Connection',
     database: 'Database Task',
     "database-action": 'Database Task',
     webapi: 'Web API Task',
@@ -188,6 +189,9 @@ const local: App.I18n.Schema = {
     manage_user: 'User Manage',
     'manage_user-detail': 'User Detail',
     manage_role: 'Role Manage',
+    manage_token: 'Token Manage',
+    manage_token_default: 'Token Manage',
+    manage_token_action: 'Token',
     manage_menu: 'Menu Manage',
   },
   page: {
@@ -370,6 +374,34 @@ const local: App.I18n.Schema = {
         logLevel: 'Please select log level',
         taskName: 'Please enter task name',
       },
+    },
+    token: {
+      title: 'Token Management',
+      tokenName: 'Token Name',
+      method: 'Request Method',
+      requestUrl: 'Request URL',
+      timeOut: 'Timeout (seconds)',
+      queryParameters: 'Query Parameters',
+      bodyType: 'Body Type',
+      bodyContent: 'Body Content',
+      header: 'Header',
+      authType: 'Auth Type',
+      authContent: 'Auth Content',
+      programmeLanguage: 'Program Language',
+      checkCallResult: 'Call Result',
+      tokenField: 'Token Field',
+      description: 'Description',
+      createUserID: 'Create User ID',
+      createTime: 'Create Time',
+      form: {
+        tokenName: 'Please enter token name',
+        method: 'Please select request method',
+        requestUrl: 'Please enter request URL',
+        timeOut: 'Please enter timeout (seconds)',
+        programmeLanguage: 'Please select program language',
+        checkCallResult: 'Please enter expression to call result',
+        tokenField: 'Please enter return token field',
+      }
     },
     manage: {
       role: {
@@ -589,6 +621,11 @@ const local: App.I18n.Schema = {
       warning: 'Warning',
       error: 'Error',
       debug: 'Debug'
+    },
+    requestType: {
+      call: 'Call API',
+      pull: 'Pull Data',
+      push: 'Push Data'
     }
   },
 };

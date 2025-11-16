@@ -36,7 +36,7 @@ async function getDataObjectList() {
   }
 }
 
-// 搜索过滤函数（可选但推荐）
+// 搜索过滤函数
 const filterOption = (inputValue: string, option: any) => {
   return option.title.toLowerCase().includes(inputValue.toLowerCase());
 };

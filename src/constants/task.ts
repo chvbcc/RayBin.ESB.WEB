@@ -44,3 +44,6 @@ export const dataObjectTypeRecord: Record<Api.Task.DataObjectType, App.I18n.I18n
   'storedProcedure': 'dropdownList.dataObjectType.storedProcedure'
 };
 export const dataObjectTypeOptions = transformRecordToOption(dataObjectTypeRecord);
+
+
+export const programmeLanguageOptions = [{ label: 'C#', value: '7000' }, { label: 'Python', value: '7001' }];

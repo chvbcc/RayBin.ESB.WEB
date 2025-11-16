@@ -1,11 +1,11 @@
 <script setup lang="tsx">
+import dayjs from 'dayjs';
 import { $t } from '@/locales';
 import { computed } from 'vue';
 import TaskLogSearch from './modules/tasklog-search.vue';
 import { taskTypeRecord, logLevelRecord } from '@/constants/log';
 import { useTable, useTableOperate } from '@/hooks/common/table';
 import { fetchGetPagingList, fetchDelete } from '@/service/api/log';
-import { debug } from 'console';
 
 const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
   apiFn: fetchGetPagingList,
@@ -21,6 +21,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
     {
       key: 'taskID',
       dataIndex: 'taskID',
+
       title: $t('page.taskLog.taskID'),
       width: 120,
       align: 'center'
@@ -82,7 +83,10 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       dataIndex: 'createTime',
       title: $t('page.taskLog.createTime'),
       align: 'center',
-      width: 150
+      width: 150,
+      customRender: ({ record }) => {
+        return record.createTime ? dayjs(record.createTime).format('YYYY-MM-DD') : '';
+      }
     }
   ]
 });

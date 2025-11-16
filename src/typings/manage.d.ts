@@ -130,6 +130,34 @@ declare namespace Api {
       parentId: number;
       children?: MenuTree[];
     };
-  }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Token
+    /* Token search params */
+    type TokenSearchParams = Partial<Pick<Token, 'tokenName' | 'method' | 'requestUrl' | 'startCreateTime' | 'endCreateTime'> & Common.CommonSearchParams>;
+
+    /* Token */
+    type Token = Common.CommonRecord<{
+      tokenName: string;
+      method: string;
+      requestUrl: string;
+      timeOut: number;
+      queryParameters: string;
+      bodyType: string;
+      bodyContent: string;
+      headers: string;
+      authType: string;
+      authContent: string;
+      programmeLanguage: string;
+      checkCallResult: string;
+      tokenField: string;
+      description: string;
+      startCreateTime: string | undefined;
+      endCreateTime: string | undefined;
+    }>;
+
+    type TokenList = Common.PaginatingQueryRecord<Token>;
+    /* Token model */
+    //type UserModel = Pick<User, | 'id' | 'username' | 'password' | 'userAvatar' | 'employeeName' | 'employeeNo' | 'gender' | 'phone' | 'email' | 'weChat' | 'dingDing' | 'status'>;
+  }
 }

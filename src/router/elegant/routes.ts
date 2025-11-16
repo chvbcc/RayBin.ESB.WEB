@@ -42,20 +42,31 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'connection',
     path: '/connection',
-    component: 'layout.base$view.connection',
+    component: 'layout.base',
     meta: {
       title: 'connection',
       i18nKey: 'route.connection'
-    }
-  },
-  {
-    name: 'connection-action',
-    path: '/connection-action',
-    component: 'layout.base$view.connection-action',
-    meta: {
-      title: 'connection-action',
-      i18nKey: 'route.connection-action'
-    }
+    },
+    children: [
+      {
+        name: 'connection_action',
+        path: '/connection/action',
+        component: 'view.connection_action',
+        meta: {
+          title: 'connection_action',
+          i18nKey: 'route.connection_action'
+        }
+      },
+      {
+        name: 'connection_default',
+        path: '/connection/default',
+        component: 'view.connection_default',
+        meta: {
+          title: 'connection_default',
+          i18nKey: 'route.connection_default'
+        }
+      }
+    ]
   },
   {
     name: 'database',
@@ -165,6 +176,35 @@ export const generatedRoutes: GeneratedRoute[] = [
           order: 2,
           roles: ['R_SUPER']
         }
+      },
+      {
+        name: 'manage_token',
+        path: '/manage/token',
+        component: 'view.manage_token',
+        meta: {
+          title: 'manage_token',
+          i18nKey: 'route.manage_token'
+        },
+        children: [
+          {
+            name: 'manage_token_action',
+            path: '/manage/token/action',
+            component: 'view.manage_token_action',
+            meta: {
+              title: 'manage_token_action',
+              i18nKey: 'route.manage_token_action'
+            }
+          },
+          {
+            name: 'manage_token_default',
+            path: '/manage/token/default',
+            component: 'view.manage_token_default',
+            meta: {
+              title: 'manage_token_default',
+              i18nKey: 'route.manage_token_default'
+            }
+          }
+        ]
       },
       {
         name: 'manage_user',

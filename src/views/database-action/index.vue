@@ -7,11 +7,11 @@
   import DataObjectModal from './modules/data-object-modal.vue';
   import DataHandleModal from './modules/data-handle-modal.vue';
   import { useAntdForm, useFormRules } from '@/hooks/common/form';
-  import { convertOptions, translateOptions } from '@/utils/common';
   import { fetchGetConnectionOptions } from '@/service/api/connection';
   import RelationDiagram from '@/components/pages/relation-diagram.vue';
+  import { convertOptions, translateOptions, convertDateTime } from '@/utils/common';
   import { fetchCheckName, fetchSave, fetchGetModel } from '@/service/api/task-database';
-  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions, dataObjectTypeOptions, taskStatusOptions } from '@/constants/task';
+  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions, dataObjectTypeOptions, taskStatusOptions, programmeLanguageOptions } from '@/constants/task';;
 
   // #region 1. 参数定义
   const route = useRoute();
@@ -26,7 +26,6 @@
   const relationDiagramRef =  ref<InstanceType<typeof RelationDiagram>>();
 
   const connectionOptions = ref<{ label: string; value: number }[]>([]);
-  const programmeLanguageOptions = ref<{ label: string; value: string }[]>([{ label: 'C#', value: '7000' }, { label: 'Python', value: '7001' }]);
   const dataHandleModalVisible = ref(false);
   const dataObjectModalVisible = ref(false);
 
@@ -41,6 +40,13 @@
   // 定义默认模型
   const model = ref<Api.Task.TaskDatabaseModel>(createDefaultModel());
 
+  const runTimeValue = computed<string | undefined>({
+    get: () => convertDateTime(model.value.task.runTime),
+    set: value => {
+        model.value.task.runTime = convertDateTime(value);
+    }
+  });
+
   function createDefaultModel(): Api.Task.TaskDatabaseModel {
     return {
       task: {
@@ -49,7 +55,7 @@
         taskName: '',
         runMode: '6000',
         runFrequency: 0, // 应为数字类型
-        runTime: '',
+        runTime: undefined,
         dataHandle: 0, // 新增（根据 DataHandle 类型应为 0 或 1）
         programmeLanguage: '',
         dataHandleScript: '',
@@ -148,7 +154,10 @@
     if (id) {
       const { error, data } = await fetchGetModel(id);
       if (!error && data) {
-        model.value = { ...createDefaultModel(), ...data };
+        model.value = {
+          task: { ...createDefaultModel().task, ...data.task },
+          taskDatabase: { ...createDefaultModel().taskDatabase, ...data.taskDatabase }
+        };
         relationDiagramRef.value?.setData(JSON.parse(data.taskDatabase.diagramData));
       }
     }
@@ -174,8 +183,13 @@
   async function handleSave() {
     formRefTask.value?.validate().then(async () => {
       model.value.taskDatabase.diagramData = JSON.stringify(relationDiagramRef.value?.getData());
+      const payload: Api.Task.TaskDatabaseModel = {
+        task: { ...model.value.task },
+        taskDatabase: { ...model.value.taskDatabase }
+      };
+
       // 提交保存
-      const { error } = await fetchSave(model.value);
+      const { error } = await fetchSave(payload);
       if (!error) {
         window.$message?.success($t('common.addSuccess'));
         appStore.tabStore.removeActiveTab();
@@ -204,6 +218,7 @@
 
   // #region 9. 添加数据对象
   function handleAdd(dataObjectNodes: Api.Task.DataObjectNode[]) {
+    console.log(dataObjectNodes);
     relationDiagramRef.value?.addDataObjects(dataObjectNodes);
   }
   // #endregion
@@ -261,7 +276,7 @@
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.task.runTime')" name="runTime" class="m-0">
-                <a-date-picker v-model:value="model.task.runTime" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss"show-time :placeholder="$t('page.task.runTime')" style="width: 100%;" />
+                <a-date-picker v-model:value="runTimeValue" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss"show-time :placeholder="$t('page.task.runTime')" style="width: 100%;" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">

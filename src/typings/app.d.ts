@@ -581,7 +581,7 @@ declare namespace App {
           taskName: string;
           logLevel: string;
           message: string;
-          spentTime?: string;
+          spentTime: string;
           createTime: string;
           form: {
               taskType: string;
@@ -589,6 +589,34 @@ declare namespace App {
               taskName: string;
           }
         };
+        token : {
+          title: string;
+          tokenName: string;
+          method: string;
+          requestUrl: string;
+          timeOut: string;
+          queryParameters: string;
+          bodyType: string;
+          bodyContent: string;
+          header: string;
+          authType: string;
+          authContent: string;
+          programmeLanguage: string;
+          checkCallResult: string;
+          tokenField: string;
+          description: string;
+          createUserID: string;
+          createTime: string;
+          form: {
+            tokenName: string;
+            method: string;
+            requestUrl: string;
+            timeOut: string;
+            programmeLanguage: string;
+            checkCallResult: string;
+            tokenField: string;
+          };
+        }
         manage: {
           role: {
             title: string;
@@ -783,7 +811,12 @@ declare namespace App {
           warning: string,
           error: string,
           debug: string
-        }
+        },
+        requestType: {
+          call: string;
+          pull: string;
+          push: string;
+        };
       };
     };
 

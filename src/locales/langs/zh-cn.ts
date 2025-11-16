@@ -172,7 +172,8 @@ const local: App.I18n.Schema = {
     'iframe-page': '外链页面',
     home: '首页',
     connection: '数据库连接',
-    "connection-action": '数据库连接',
+    connection_default: '数据库连接',
+    connection_action: '数据库连接',
     database: '数据库任务',
     "database-action": '数据库任务',
     webapi: '网络接口任务',
@@ -188,6 +189,9 @@ const local: App.I18n.Schema = {
     manage_user: '用户管理',
     'manage_user-detail': '用户详情',
     manage_role: '角色管理',
+    manage_token: '令牌管理',
+    manage_token_default: '令牌管理',
+    manage_token_action: '令牌',
     manage_menu: '菜单管理',
   },
   page: {
@@ -370,6 +374,34 @@ const local: App.I18n.Schema = {
         logLevel: '请选择日志级别',
         taskName: '请输入任务名称',
       },
+    },
+    token: {
+      title: '授权管理',
+      tokenName: '令牌名称',
+      method: '请求方法',
+      requestUrl: '请求URL',
+      timeOut: '超时时间 (秒)',
+      queryParameters: '查询参数',
+      bodyType: '请求体类型',
+      bodyContent: '请求体内容',
+      header: '请求头',
+      authType: '认证类型',
+      authContent: '认证内容',
+      programmeLanguage: '编程语言',
+      checkCallResult: '调用结果',
+      tokenField: '令牌字段',
+      description: '描述',
+      createUserID: '创建用户',
+      createTime: '创建时间',
+      form: {
+        tokenName: '请输入令牌名称',
+        method: '请选择请求方法',
+        requestUrl: '请输入请求URL',
+        timeOut: '请输入超时时间',
+        programmeLanguage: '请选择编程语言',
+        checkCallResult: '请输入检查调用结果的表达式',
+        tokenField: '请输入返回的令牌字段',
+      }
     },
     manage: {
       role: {
@@ -589,6 +621,11 @@ const local: App.I18n.Schema = {
       warning: '警告',
       error: '错误',
       debug: '调试'
+    },
+    requestType: {
+      call: '调用接口',
+      pull: '拉取数据',
+      push: '推送数据'
     }
   },
 };

@@ -1,23 +1,25 @@
 <script setup lang="tsx">
+import dayjs from 'dayjs';
 import { $t } from '@/locales';
-import { Button, Tag } from 'ant-design-vue';
-import  { UserApi }  from '@/service/api/manage';
-import UserSearch from './modules/user-search.vue';
-import UserOperateModal from './modules/user-operate-modal.vue';
-import { enableStatusRecord, userGenderRecord } from '@/constants/manage';
+import { useRouter } from 'vue-router';
+import { Button } from 'ant-design-vue';
+import { useAppStore } from '@/store/modules/app';
+import TokenSearch from './modules/token-search.vue';
+import  { TokenApi }  from '@/service/api/manage';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
+const router = useRouter();
+const appStore = useAppStore();
 const { tableWrapperRef, scrollConfig } = useTableScroll();
 
 const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
-  apiFn: UserApi.fetchGetPagingList,
+  apiFn: TokenApi.fetchGetPagingList,
   apiParams: {
     current: 1,
     size: 10,
-    username: undefined,
-    employeeName: undefined,
-    email: undefined,
-    status: undefined,
+    tokenName: undefined,
+    method: undefined,
+    requestUrl: undefined,
   },
   columns: () => [
     {
@@ -28,56 +30,34 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       width: 64
     },
     {
-      key: 'username',
-      dataIndex: 'username',
-      title: $t('page.manage.user.username'),
+      key: 'tokenName',
+      dataIndex: 'tokenName',
+      title: $t('page.token.tokenName'),
       align: 'center',
-      minWidth: 100
+      minWidth: 120
     },
     {
-      key: 'gender',
-      title: $t('page.manage.user.gender'),
+      key: 'method',
+      dataIndex: 'method',
+      title: $t('page.token.method'),
       align: 'center',
-      dataIndex: 'gender',
-      width: 100,
+      width: 130,
+    },
+    {
+      key: 'requestUrl',
+      dataIndex: 'requestUrl',
+      title: $t('page.token.requestUrl'),
+      align: 'center',
+      minWidth: 180
+    },
+    {
+      key: 'createTime',
+      dataIndex: 'createTime',
+      title: $t('page.taskLog.createTime'),
+      align: 'center',
+      width: 150,
       customRender: ({ record }) => {
-        if (record.gender === null) {
-          return null;
-        }
-        const label = $t(userGenderRecord[record.gender]);
-        return label;
-      }
-    },
-    {
-      key: 'employeeName',
-      dataIndex: 'employeeName',
-      title: $t('page.manage.user.employeeName'),
-      align: 'center',
-      width: 120
-    },
-    {
-      key: 'email',
-      dataIndex: 'email',
-      title: $t('page.manage.user.email'),
-      align: 'center',
-      minWidth: 200
-    },
-    {
-      key: 'status',
-      dataIndex: 'status',
-      title: $t('page.manage.user.status'),
-      align: 'center',
-      width: 100,
-      customRender: ({ record }) => {
-        if (record.status === null) {
-          return null;
-        }
-        const tagMap: Record<Api.Common.EnableStatus, string> = {
-          0: 'success',
-          1: 'warning'
-        };
-        const label = $t(enableStatusRecord[record.status]);
-        return <Tag color={tagMap[record.status]}>{label}</Tag>;
+        return record.createTime ? dayjs(record.createTime).format('YYYY-MM-DD') : '';
       }
     },
     {
@@ -101,11 +81,8 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
   ]
 });
 
+
 const {
-  drawerVisible: modalVisible,
-  operateType,
-  editingData,
-  handleAdd,
   handleEdit,
   checkedRowKeys,
   rowSelection,
@@ -115,7 +92,7 @@ const {
 
 async function handleBatchDelete() {
   if (checkedRowKeys.value.length === 0) return;
-  const res = await UserApi.fetchDeletes(checkedRowKeys.value);
+  const res = await TokenApi.fetchDeletes(checkedRowKeys.value);
   if (res.error) { window.$message?.error($t('common.deleteFailed')); return; }
   const result = res.response.data;
   if (result.msg === 'success') {
@@ -128,7 +105,7 @@ async function handleBatchDelete() {
 }
 
 async function handleDelete(id: number) {
-  const res = await UserApi.fetchDelete(id);
+  const res = await TokenApi.fetchDelete(id);
   if (res.error) { window.$message?.error($t('common.deleteFailed')); return; }
   const result = res.response.data;
   if (result.msg === 'success') {
@@ -143,18 +120,23 @@ async function handleDelete(id: number) {
 function edit(id: number) {
   handleEdit(id);
 }
-</script>
 
+function handleAdd() {
+  appStore.tabStore.removeActiveTab();
+  router.push({ name: 'manage_token_action' });
+}
+
+</script>
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-    <UserSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
-    <a-card :title="$t('page.manage.user.title')" :bordered="false" :body-style="{ flex: 1, overflow: 'hidden' }" class="flex-col-stretch sm:flex-1-hidden card-wrapper">
+    <TokenSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
+    <a-card :title="$t('page.token.title')" :bordered="false" class="card-wrapper sm:flex-1-hidden">
       <template #extra>
         <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
-      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small" :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination" class="h-full" bordered />
-      <UserOperateModal v-model:visible="modalVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
-    </a-Card>
+      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small"
+        :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination"  class="h-full" bordered />
+    </a-card>
   </div>
 </template>
 

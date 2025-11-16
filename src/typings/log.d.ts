@@ -18,8 +18,8 @@ declare namespace Api {
       logLevel: LogLevel;
       message: string;
       spentTime: number;
-      startCreateTime: any;
-      endCreateTime: any;
+      startCreateTime: string | undefined;
+      endCreateTime: string | undefined;
     }>;
 
     /* TaskLog model */

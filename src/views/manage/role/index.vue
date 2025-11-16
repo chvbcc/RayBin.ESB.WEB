@@ -46,12 +46,12 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       width: 98,
       minWidth: 98,
       customRender: ({ record }) => {
-        if (record.isSystem === null) {
+        if (record.isSystem === null || record.isSystem === undefined) {
           return null;
         }
-        const isSystemValue = record.isSystem ? 1 : 0;
-        const label = $t(yesOrNoRecord[isSystemValue]);
-        return label;
+        const isSystemValue = Number(record.isSystem);
+        const key = yesOrNoRecord[isSystemValue as Api.Common.YesOrNo];
+        return key ? $t(key) : record.isSystem;
       }
     },
     {
@@ -96,7 +96,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
           </Button>
           <span class="mr-2" />
           <a-popconfirm onConfirm={() => handleDelete(record.id)} title={$t('common.confirmDelete')}>
-            {record.isSystem === 0 && (
+            {Number(record.isSystem) === 0 && (
                 <Button danger size="small">
                   {$t('common.delete')}
                 </Button>
@@ -133,24 +133,30 @@ function handlePermission(id: number) {
 }
 
 async function handleBatchDelete() {
-  onBatchDeleted();
+  if (checkedRowKeys.value.length === 0) return;
+  const res = await RoleApi.fetchDeletes(checkedRowKeys.value);
+  if (res.error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = res.response.data;
+  if (result.msg === 'success') {
+    onBatchDeleted();
+  } else if (result.msg === 'fail') {
+    window.$message?.error(String(result.data));
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
+  }
 }
 
-function handleDelete(id: number) {
-  RoleApi.fetchDelete(id).then((res) => {
-    if(!res.error) {
-      const result = res.response.data;
-      if (result.msg === 'success' && result.data === true) {
-        onDeleted();
-      }
-      else if (result.msg === 'fail') {
-        window.$message?.error(String(result.data));
-      }
-      else if (res.response.status != 200) {
-        window.$message?.error($t('common.deleteFailed'));
-      }
-    }
-  })
+async function handleDelete(id: number) {
+  const res = await RoleApi.fetchDelete(id);
+  if (res.error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = res.response.data;
+  if (result.msg === 'success') {
+    onDeleted();
+  } else if (result.msg === 'fail') {
+    window.$message?.error(String(result.data));
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
+  }
 }
 
 function edit(id: number) {

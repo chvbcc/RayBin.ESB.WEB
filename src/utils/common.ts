@@ -1,4 +1,5 @@
 import { $t } from '@/locales';
+import dayjs from 'dayjs';
 
 /**
  * Transform record to option
@@ -71,3 +72,10 @@ export function toggleHtmlClass(className: string) {
   };
 }
 
+export function convertDateTime(dateTime: string | undefined | null ) {
+  if (!dateTime || dateTime === '0001-01-01T00:00:00' || dateTime === '1900-01-01T00:00:00') {
+    return undefined;
+  }
+  const day = dayjs(dateTime);
+  return day.format('YYYY-MM-DDTHH:mm:ss');
+}

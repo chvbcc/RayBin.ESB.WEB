@@ -25,7 +25,7 @@ declare namespace Api {
       taskType: TaskType;
       taskName: string;
       runMode: RunMode;
-      runTime: string;
+      runTime: string | null | undefined;
       runFrequency: number;
       dataHandle: DataHandle;
       programmeLanguage: string;
@@ -69,7 +69,31 @@ declare namespace Api {
     }
 
     type TaskDatabaseModel = { task: TaskModel; taskDatabase: TaskDatabase;};
-    /* Task webapi */
+
+    /* Task WebApi */
+    // 8000  Call,  8001 Pull, 8002 Push
+    type RequestType = '8000' | '8001' | '8002';
+
+    type TaskWebApi = Common.CommonRecord<{
+      id: number;
+      taskID: number;
+      requestType: RequestType;
+      method: string;
+      requestUrl: string;
+      timeOut: number;
+      queryParameters: string;
+      bodyType: string;
+      bodyContent: string;
+      headers: string;
+      authType: string;
+      authContent: string;
+      responseType: string;
+      responseContent: string;
+      judgeCallResult: string;
+      handleCallResult: string;
+      dataMapping: string;
+      diagramData: string;
+    }>;
     /* Task industry plc */
   }
 }

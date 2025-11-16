@@ -231,3 +231,33 @@ export namespace MenuApi {
     });
   }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+export namespace TokenApi {
+  /** 分页列表 */
+  export function fetchGetPagingList(params?: Api.SystemManage.TokenSearchParams) {
+    return request<Api.SystemManage.TokenList>({
+      url: '/token/getPagingList',
+      method: 'get',
+      params
+    });
+  }
+
+  export function fetchDelete(id: number) {
+    let url = '/token/delete';
+    return request({
+      url: url,
+      method: 'delete',
+      params: { id }
+    });
+  }
+
+  export function fetchDeletes(ids: number[]) {
+    let url = '/token/deletes';
+    return request({
+      headers: { 'Content-Type': 'application/json' },
+      url: url,
+      method: 'delete',
+      data: ids
+    });
+  }
+}

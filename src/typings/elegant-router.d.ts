@@ -21,7 +21,8 @@ declare module "@elegant-router/types" {
     "404": "/404";
     "500": "/500";
     "connection": "/connection";
-    "connection-action": "/connection-action";
+    "connection_action": "/connection/action";
+    "connection_default": "/connection/default";
     "database": "/database";
     "database-action": "/database-action";
     "home": "/home";
@@ -32,6 +33,9 @@ declare module "@elegant-router/types" {
     "manage": "/manage";
     "manage_menu": "/manage/menu";
     "manage_role": "/manage/role";
+    "manage_token": "/manage/token";
+    "manage_token_action": "/manage/token/action";
+    "manage_token_default": "/manage/token/default";
     "manage_user": "/manage/user";
     "manage_user-detail": "/manage/user-detail/:id";
     "message": "/message";
@@ -76,7 +80,6 @@ declare module "@elegant-router/types" {
     | "404"
     | "500"
     | "connection"
-    | "connection-action"
     | "database"
     | "database-action"
     | "home"
@@ -113,8 +116,8 @@ declare module "@elegant-router/types" {
     | "500"
     | "iframe-page"
     | "login"
-    | "connection-action"
-    | "connection"
+    | "connection_action"
+    | "connection_default"
     | "database-action"
     | "database"
     | "home"
@@ -122,6 +125,8 @@ declare module "@elegant-router/types" {
     | "industria"
     | "manage_menu"
     | "manage_role"
+    | "manage_token_action"
+    | "manage_token_default"
     | "manage_user-detail"
     | "manage_user"
     | "message"

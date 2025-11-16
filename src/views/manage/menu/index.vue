@@ -145,34 +145,28 @@ function handleAdd() {
 async function handleBatchDelete() {
   if (checkedRowKeys.value.length === 0) return;
   const res = await MenuApi.fetchDeletes(checkedRowKeys.value);
-  if (!res.error) {
-    const result = res.response.data;
-    if (result.msg === 'success' && result.data === true) {
-      window.$message?.success($t('common.deleteSuccess'));
-      onBatchDeleted();
-    } else if (result.msg === 'fail') {
-      window.$message?.error(String(result.data));
-    } else {
-      window.$message?.error($t('common.deleteFailed'));
-    }
+  if (res.error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = res.response.data;
+  if (result.msg === 'success') {
+    onBatchDeleted();
+  } else if (result.msg === 'fail') {
+    window.$message?.error(String(result.data));
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
   }
 }
 
-function handleDelete(id: number) {
-  MenuApi.fetchDelete(id).then((res) => {
-    if(!res.error) {
-      const result = res.response.data;
-      if (result.msg === 'success' && result.data === true) {
-        onDeleted();
-      }
-      else if (result.msg === 'fail') {
-        window.$message?.error(String(result.data));
-      }
-      else if (res.response.status != 200) {
-        window.$message?.error($t('common.deleteFailed'));
-      }
-    }
-  })
+async function handleDelete(id: number) {
+  const res = await MenuApi.fetchDelete(id);
+  if (res.error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = res.response.data;
+  if (result.msg === 'success') {
+    onDeleted();
+  } else if (result.msg === 'fail') {
+    window.$message?.error(String(result.data));
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
+  }
 }
 
 /** the edit menu data or the parent menu data when adding a child menu */

@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { Dayjs } from 'dayjs';
-import { $t, language } from '@/locales';
-import { watch, computed } from 'vue';
-import { translateOptions, convertOptions } from '@/utils/common';
-import { taskTypeOptions, logLevelOptions } from '@/constants/log';
 import dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
+import { watch, computed } from 'vue';
+import { $t, language } from '@/locales';
+import { methodOptions } from '@/constants/token';
 
 defineOptions({
-  name: 'TaskLogSearch'
+  name: 'TokenSearch'
 });
 
 interface Emits {
@@ -19,7 +18,7 @@ type RangeValue = [Dayjs, Dayjs];
 
 const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.Log.TaskLogSearchParams>('model', { required: true });
+const model = defineModel<Api.SystemManage.TokenSearchParams>('model', { required: true });
 
 const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
 
@@ -52,7 +51,6 @@ const dateRange = computed<RangeValue | undefined>({
   }
 });
 
-
 // Watch for language changes and update labelCol dynamically
 watch(language, (newLang) => {
   labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
@@ -64,24 +62,23 @@ watch(language, (newLang) => {
     <a-form :model="model"  :label-col="labelCol" :labelWrap="true">
       <a-row :gutter="[16, 16]" wrap>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.taskLog.taskType')" name="taskType" class="m-0">
-            <a-select v-model:value="model.taskType" :placeholder="$t('page.taskLog.form.taskType')" :options="translateOptions(taskTypeOptions)" allow-clear>
+          <a-form-item :label="$t('page.token.tokenName')" name="tokenName" class="m-0">
+            <a-input v-model:value="model.tokenName" :placeholder="$t('page.token.form.tokenName')" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-form-item :label="$t('page.token.method')" name="method" class="m-0">
+            <a-select v-model:value="model.method" :placeholder="$t('page.token.form.method')" :options="methodOptions" allow-clear>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.taskLog.logLevel')" name="logLevel" class="m-0">
-            <a-select v-model:value="model.logLevel" :placeholder="$t('page.taskLog.form.logLevel')" :options="convertOptions(logLevelOptions)" allow-clear>
-            </a-select>
+          <a-form-item :label="$t('page.token.requestUrl')" name="requestUrl" class="m-0">
+            <a-input v-model:value="model.requestUrl" :placeholder="$t('page.token.form.requestUrl')" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.taskLog.taskName')" name="taskName" class="m-0">
-            <a-input v-model:value="model.taskName" :placeholder="$t('page.taskLog.form.taskName')" />
-          </a-form-item>
-        </a-col>
-        <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.taskLog.createTime')" name="createTime" class="m-0">
+          <a-form-item :label="$t('page.token.createTime')" name="createTime" class="m-0">
             <a-range-picker v-model:value="dateRange" :style="{ width: '100%' }" />
           </a-form-item>
         </a-col>
