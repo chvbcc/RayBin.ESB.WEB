@@ -186,12 +186,20 @@ async function handleSubmit() {
       menuID: permission.menuID,
       permissCode: permission.permissCode,
     }));
-    await PermissionApi.fetchSave({
+    const {error, response} = await PermissionApi.fetchSave({
       roleMenu: roleMenuList,
       rolePermiss: rolePermissList,
     });
-    window.$message?.success?.($t('common.modifySuccess'));
-    closeModal();
+    if (error) { window.$message?.error?.($t('common.modifyFailed')); return; }
+    const result = response.data as { code: string; msg: string; data: boolean };
+    if (result.msg==="success") {
+      window.$message?.error?.($t('common.modifySuccess'));
+      closeModal();
+    } else if (result.msg==="fail") {
+      window.$message?.error(result.data);
+    } else {
+      window.$message?.error($t('common.modifyFailed'));
+    }
   }
 }
 

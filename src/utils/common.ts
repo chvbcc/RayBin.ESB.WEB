@@ -79,3 +79,14 @@ export function convertDateTime(dateTime: string | undefined | null ) {
   const day = dayjs(dateTime);
   return day.format('YYYY-MM-DDTHH:mm:ss');
 }
+
+export function getPromptMessage(query: any, result: string)
+{
+  if (query && (query.hasOwnProperty('id') || query == 'edit')) {
+    const message =  result === "Success" ? 'common.updateSuccess' : 'common.updateFailed';
+    return $t(message as App.I18n.I18nKey)
+  } else {
+    const message =  result === "Success" ? 'common.addSuccess' : 'common.addFailed';
+    return $t(message as App.I18n.I18nKey)
+  }
+}

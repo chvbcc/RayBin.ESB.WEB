@@ -116,10 +116,13 @@ async function handleAdd() {
 }
 
 async function handleDelete(id: number) {
-  const { error } = await fetchDelete(id);
-  if (!error) {
+  const { error, response } = await fetchDelete(id);
+  if (error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = response.data as { code: string; msg: string; data: string };
+  if (result.msg === "success") {
     onDeleted();
-    window.$message?.success($t('common.deleteSuccess'));
+  } else if (result.msg === "fail") {
+    window.$message?.error(result.data);
   } else {
     window.$message?.error($t('common.deleteFailed'));
   }

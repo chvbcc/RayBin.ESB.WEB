@@ -9,8 +9,8 @@
   import { useAntdForm, useFormRules } from '@/hooks/common/form';
   import { fetchGetConnectionOptions } from '@/service/api/connection';
   import RelationDiagram from '@/components/pages/relation-diagram.vue';
-  import { convertOptions, translateOptions, convertDateTime } from '@/utils/common';
   import { fetchCheckName, fetchSave, fetchGetModel } from '@/service/api/task-database';
+  import { convertOptions, translateOptions, convertDateTime, getPromptMessage } from '@/utils/common';
   import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions, dataObjectTypeOptions, taskStatusOptions, programmeLanguageOptions } from '@/constants/task';;
 
   // #region 1. 参数定义
@@ -189,13 +189,17 @@
       };
 
       // 提交保存
-      const { error } = await fetchSave(payload);
-      if (!error) {
-        window.$message?.success($t('common.addSuccess'));
+      const { error, response } = await fetchSave(payload);
+      if (error) { window.$message?.error(getPromptMessage(route.query, "Failed")); return; }
+      const result = response.data as { code: string; msg: string; data: string };
+      if (result.msg === 'success') {
+        window.$message?.success(getPromptMessage(route.query, "Success"));
         appStore.tabStore.removeActiveTab();
         router.push({ name: 'database' });
+      } else if (result.msg === 'fail') {
+        window.$message?.error(result.data);
       } else {
-        window.$message?.error($t('common.addFailed'));
+        window.$message?.error(getPromptMessage(route.query, "Failed"));
       }
     }).catch(() => {
       return;

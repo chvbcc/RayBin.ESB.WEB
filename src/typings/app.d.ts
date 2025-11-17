@@ -313,6 +313,7 @@ declare namespace App {
         lookForward: string;
         modify: string;
         modifySuccess: string;
+        modifyFailed: string;
         noData: string;
         operate: string;
         pleaseCheckValue: string;
@@ -324,6 +325,7 @@ declare namespace App {
         trigger: string;
         update: string;
         updateSuccess: string;
+        updateFailed: string;
         userCenter: string;
         yesOrNo: {
           yes: string;
@@ -497,6 +499,8 @@ declare namespace App {
         };
         connection: {
           title: string;
+          add: string;
+          edit: string;
           connectionName: string;
           databaseType: string;
           hostName: string;
@@ -558,6 +562,8 @@ declare namespace App {
         };
         database: {
           title: string;
+          add: string;
+          edit: string;
           titleBaseInfo: string;
           titleDataMapping: string;
           dataObjectModalTitle: string;
@@ -591,6 +597,8 @@ declare namespace App {
         };
         token : {
           title: string;
+          add: string;
+          edit: string;
           tokenName: string;
           method: string;
           requestUrl: string;

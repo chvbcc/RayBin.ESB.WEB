@@ -60,14 +60,19 @@ export function getTabIdByRoute(route: App.Global.TabRoute) {
  * @param route
  */
 export function getTabByRoute(route: App.Global.TabRoute) {
-  const { name, path, fullPath = path, meta } = route;
+  const { name, path, fullPath = path, meta, query } = route;
   const { title, i18nKey, fixedIndexInTab } = meta;
-
   // Get icon and localIcon from getRouteIcons function
   const { icon, localIcon } = getRouteIcons(route);
-
-  const label = i18nKey ? $t(i18nKey) : title;
-
+  let label = i18nKey ? $t(i18nKey) : title;;
+  if (name && name.toString().indexOf('_action') !== -1) {
+      if (query &&query?.hasOwnProperty('id')) {
+        label = $t('common.edit') + label;
+      } else {
+        label = $t('common.add') + label;
+      }
+  }
+  // 检查是否为编辑模式（存在id参数或mode=edit）
   const tab: App.Global.Tab = {
     id: getTabIdByRoute(route),
     label,
@@ -79,7 +84,6 @@ export function getTabByRoute(route: App.Global.TabRoute) {
     localIcon,
     i18nKey
   };
-
   return tab;
 }
 

@@ -5,13 +5,14 @@ import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '@/store/modules/app';
 import { useAuthStore } from '@/store/modules/auth';
-import { translateOptions } from '@/utils/common';
+import { translateOptions, getPromptMessage } from '@/utils/common';
 import CustomAlert from '@/components/custom/custom-alert.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { databaseTypeOptions, connectionModeOptions } from '@/constants/connection';
 import { fetchTest, fetchCheckName, fetchSave, fetchGetModel } from '@/service/api/connection';
 import { parseConnectionString, parseConnectionModel, getConnectionStringByType } from '@/views/common/connection';
 
+// #region 1. 定义常量
 const route = useRoute();
 const router = useRouter();
 const appStore = useAppStore();
@@ -21,19 +22,19 @@ const connectionMode = ref<string>('0');
 const { formRef } = useAntdForm();
 const { defaultRequiredRule } = useFormRules();
 
-// 0. 控制alert显示/隐藏的状态
+// 控制alert显示/隐藏的状态
 const showAlert = ref(false);
 const type = ref<'error' | 'success' | 'warning' | 'info'>('success');
 const message = ref<string>('');
 const description = ref<string>('');
 
-// 1. 添加计算属性，根据connectionMode控制字段禁用状态
+// 添加计算属性，根据connectionMode控制字段禁用状态
 const isCustomMode = computed(() => connectionMode.value === '0');
 const isConnectionStringMode = computed(() => connectionMode.value === '1');
+//#endregion
 
-// 2. 定义默认模型
+// #region 2. 定义默认模型创建模型默认值
 const model = ref<Api.Connection.ConnectionModel>(createDefaultModel());
-
 function createDefaultModel(): Api.Connection.ConnectionModel {
   return {
     id: 0,
@@ -47,7 +48,9 @@ function createDefaultModel(): Api.Connection.ConnectionModel {
     connectionString: 'Server=127.0.0.1;Database=myDB;Uid=root;Pwd=Pwd@123;Port=3306;'
   };
 }
+//#endregion
 
+// #region 3. 组件加载后，根据id值判断是添加还是编辑
 onMounted(async () => {
   const id = Number(route.query.id ?? 0);
   if (id) {
@@ -57,12 +60,12 @@ onMounted(async () => {
     }
   }
 });
+//#endregion
 
-
-// 3. 定义规则类型
+// #region 4. 定义规则类型
 type RuleKey = Extract<keyof Api.Connection.ConnectionModel, 'connectionName' | 'databaseType' | 'hostName' | 'port' | 'databases' | 'userName' | 'password' | 'connectionString'>;
 
-// 4. 将rules改为计算属性，根据连接模式动态调整必填字段
+// 6. 将rules改为计算属性，根据连接模式动态调整必填字段
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
   const connectionNameRule: App.Global.FormRule = {
     required: true, // 添加 required: true，确保显示星号
@@ -94,15 +97,17 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
     connectionString: defaultRequiredRule
   };
 });
+//#endregion
 
-
-// 5. 添加数据库类型变化的watch监听
-const handleDatabaseTypeChange = (value: string) => {
-  getConnectionStringByType(value, model.value);
+// #region 5. 添加数据库类型变化的watch监听
+const handleDatabaseTypeChange = (value: any) => {
+  const databaseType = typeof value === 'string' ? value : String(value ?? '');
+  getConnectionStringByType(databaseType, model.value);
   parseConnectionString(model.value);
 };
+//#endregion
 
-// 6. 添加连接字符串变化的watch监听
+// #region 6. 添加连接字符串变化的watch监听
 watch(() => [
     model.value.hostName,
     model.value.port,
@@ -119,13 +124,15 @@ watch(() => [
     }
   }
 );
+//#endregion
 
-// 7. 关闭alert的处理函数
+// #region 7. 关闭alert的处理函数
 const handleCloseAlert = () => {
   showAlert.value = false;
 };
+//#endregion
 
-// 8. 测试连接
+// #region 8. 测试连接
 async function handleTestConnection() {
   const { response } = await fetchTest(model.value);
   const data = response.data as { code: string; msg: string; data: string };
@@ -141,38 +148,47 @@ async function handleTestConnection() {
   }
   showAlert.value = true;
 }
+//#endregion
 
-// 9. 保存连接
+// #region 9. 保存连接
 async function handleSave() {
   formRef.value?.validate().then(async () => {
-    const { response } = await fetchTest(model.value);
-    const data = response.data as { code: string; msg: string; data: string };
-    if (data.msg === "fail") {
+    const { error, response } = await fetchTest(model.value);
+    if (error) { window.$message?.error($t('common.fail')); return; }
+    const result = response.data as { code: string; msg: string; data: string };
+    if (result.msg === "fail") {
       message.value =  $t('common.fail')
-      description.value = data.data
+      description.value = result.data
       type.value = 'error';
       showAlert.value = true;
     }
-    else if (data.msg === "success") {
-      const { response } = await fetchSave(model.value);
-      const data = response.data as { code: string; msg: string; data: string};
-      if (data.msg === "fail") {
-        window.$message?.error(data.data);
-      } else if (data.msg === "success") {
-        window.$message?.success($t('common.addSuccess'));
+    else if (result.msg === "success") {
+      const { error, response } = await fetchSave(model.value);
+      if (error) { window.$message?.error($t('common.addFailed')); return; }
+      const result = response.data as { code: string; msg: string; data: string};
+      if (result.msg === "success") {
+        window.$message?.success(getPromptMessage(route.query, "Success"));
         appStore.tabStore.removeActiveTab();
         router.push({ name: 'connection' });
+      }
+      else if (result.msg === "fail") {
+        window.$message?.error(result.data);
+      } else {
+        window.$message?.error(getPromptMessage(route.query, "Failed"));
       }
     }
   }).catch(() => {
     return;
   });
 }
+//#endregion
 
+// #region 10. 返回连接列表
 function handleBack() {
   appStore.tabStore.removeActiveTab();
   router.push({ name: 'connection' });
 }
+//#endregion
 
 </script>
 
@@ -188,7 +204,7 @@ function handleBack() {
             </a-col>
             <a-col :span="18">
               <a-form-item :label="$t('page.connection.databaseType')" name="databaseType" class="m-2">
-                <a-select v-model:value="model.databaseType" :placeholder="$t('page.connection.form.databaseType')" :options="translateOptions(databaseTypeOptions)" allow-clear @change?="handleDatabaseTypeChange" />
+                <a-select v-model:value="model.databaseType" :placeholder="$t('page.connection.form.databaseType')" :options="translateOptions(databaseTypeOptions)" allow-clear @change="handleDatabaseTypeChange" />
               </a-form-item>
             </a-col>
             <a-col :span="18">

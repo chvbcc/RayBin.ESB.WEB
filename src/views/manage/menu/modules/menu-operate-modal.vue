@@ -1,12 +1,12 @@
 <script setup lang="tsx">
 import { $t } from '@/locales';
 import { getLocalIcons } from '@/utils/icon';
-import { RoleApi, MenuApi } from '@/service/api/manage';
-import { translateOptions } from '@/utils/common';
 import { SimpleScrollbar } from '@sa/materials';
 import { computed, nextTick, ref, watch } from 'vue';
 import SvgIcon from '@/components/custom/svg-icon.vue';
+import { RoleApi, MenuApi } from '@/service/api/manage';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
+import { translateOptions, getPromptMessage } from '@/utils/common';
 import { enableStatusOptions, menuTypeOptions, permissionTypeOptions } from '@/constants/manage';
 import { getLayoutAndPage, getPathParamFromRoutePath, getRoutePathByRouteName, getRoutePathWithParam, transformLayoutAndPageToComponent } from './shared';
 
@@ -192,7 +192,6 @@ function removeButton(index: number) {
 
 async function handleInitModel() {
   model.value = createDefaultModel();
-  debugger;
   if (!props.rowData) return;
   await nextTick();
   if (props.operateType === 'addChild') {
@@ -201,7 +200,6 @@ async function handleInitModel() {
   }
 
   if (props.operateType === 'edit') {
-    console.log(props.rowData);
     const { component, ...rest } = props.rowData;
     const { layout, page } = getLayoutAndPage(component);
     const { path, param } = getPathParamFromRoutePath(rest.path);
@@ -254,10 +252,18 @@ function getSubmitData() {
 async function handleSubmit() {
   await validate();
   const submitData = getSubmitData();
-  await MenuApi.fetchSave(submitData);
-  window.$message?.success($t('common.updateSuccess'));
-  closeDrawer();
-  emit('submitted');
+  const { error, response } = await MenuApi.fetchSave(submitData);
+  if (error) { window.$message?.error(getPromptMessage(props.operateType, 'Failed')); return; }
+  const result = response.data as { code: string; msg: string; data: boolean };
+  if (result.msg === 'success') {
+    window.$message?.success(getPromptMessage(props.operateType, 'Success'));
+    closeDrawer();
+    emit('submitted');
+  } else if (result.msg === 'fail') {
+    window.$message?.error(result.data);
+  } else {
+    window.$message?.error(getPromptMessage(props.operateType, 'Failed'));
+  }
 }
 
 watch(visible, () => {

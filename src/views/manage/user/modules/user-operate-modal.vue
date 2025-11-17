@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
 import { computed, ref, watch } from 'vue';
+import { getPromptMessage } from '@/utils/common';
 import { RoleApi, UserApi } from '@/service/api/manage';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { enableStatusOptions, userGenderOptions } from '@/constants/manage';
@@ -147,9 +148,17 @@ function closeModal() {
 async function handleSubmit() {
   await validate();
   const submitData = { ...model.value, userRoles: userRoles.value };
-  await UserApi.fetchSave(submitData);
-  window.$message?.success($t('common.updateSuccess'));
-  closeModal();
+  const { error, response } = await UserApi.fetchSave(submitData);
+  if (error) { window.$message?.error(getPromptMessage(props.operateType, "Failed")); return; }
+  const result = response.data as { code: string; msg: string; data: string };
+  if (result.msg === 'success') {
+    window.$message?.success(getPromptMessage(props.operateType, "Success"));
+    closeModal();
+  } else if (result.msg === 'fail') {
+    window.$message?.error(result.data);
+  } else {
+    window.$message?.error(getPromptMessage(props.operateType, "Failed"));
+  }
   emit('submitted');
 }
 

@@ -115,26 +115,26 @@ const {
 
 async function handleBatchDelete() {
   if (checkedRowKeys.value.length === 0) return;
-  const res = await UserApi.fetchDeletes(checkedRowKeys.value);
-  if (res.error) { window.$message?.error($t('common.deleteFailed')); return; }
-  const result = res.response.data;
+  const { error, response } = await UserApi.fetchDeletes(checkedRowKeys.value);
+  if (error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = response.data as { code: string; msg: string; data: string };
   if (result.msg === 'success') {
     onBatchDeleted();
   } else if (result.msg === 'fail') {
-    window.$message?.error(String(result.data));
+    window.$message?.error(result.data);
   } else {
     window.$message?.error($t('common.deleteFailed'));
   }
 }
 
 async function handleDelete(id: number) {
-  const res = await UserApi.fetchDelete(id);
-  if (res.error) { window.$message?.error($t('common.deleteFailed')); return; }
-  const result = res.response.data;
+  const { error, response } = await UserApi.fetchDelete(id);
+  if (error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = response.data as { code: string; msg: string; data: string };
   if (result.msg === 'success') {
     onDeleted();
   } else if (result.msg === 'fail') {
-    window.$message?.error(String(result.data));
+    window.$message?.error(result.data);
   } else {
     window.$message?.error($t('common.deleteFailed'));
   }

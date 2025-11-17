@@ -1,5 +1,5 @@
 // 将JSON数据转换为Api.SystemManage.MenuTree[]类型
-
+import type { DataNode } from 'ant-design-vue/es/tree';
 export function convertToMenuTree(data: any[]): Api.SystemManage.MenuTree[] {
   return data.map(item => {
     return {

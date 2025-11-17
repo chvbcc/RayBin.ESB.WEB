@@ -2,8 +2,8 @@
 import { $t } from '@/locales';
 import { computed, ref, watch } from 'vue';
 import { RoleApi } from '@/service/api/manage';
-import { convertOptions } from '@/utils/common';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
+import { convertOptions, getPromptMessage } from '@/utils/common';
 import { enableStatusOptions, yesOrNoOptions } from '@/constants/common';
 
 defineOptions({
@@ -73,7 +73,12 @@ const rules =computed<Record<RuleKey, App.Global.FormRule>>(() => ({
 function handleInitModel() {
   model.value = createDefaultModel();
   if (props.operateType === 'edit' && props.rowData) {
-    Object.assign(model.value, props.rowData);
+    // 使用解构赋值避免布尔值类型转换问题
+    const { isSystem, ...restData } = props.rowData;
+    // 确保isSystem保持为数字类型（0或1）
+    Object.assign(model.value, restData, {
+      isSystem: Number(isSystem) // 显式转换为数字，确保与选项value类型匹配
+    });
   }
 }
 
@@ -84,9 +89,19 @@ function closeDrawer() {
 async function handleSubmit() {
   await validate();
   // request
-  window.$message?.success($t('common.updateSuccess'));
-  closeDrawer();
-  emit('submitted');
+  const submitData = { ...model.value};
+  const { error, response } = await RoleApi.fetchSave(submitData);
+  if (error) { window.$message?.error(getPromptMessage(props.operateType, "Failed")); return; }
+  const result = response.data as { code: string; msg: string; data: boolean };
+  if (result.msg==="success") {
+    window.$message?.success(getPromptMessage(props.operateType, "Success"));
+    closeDrawer();
+    emit('submitted');
+  } else if (result.msg==="fail") {
+    window.$message?.error(result.data);
+  } else {
+    window.$message?.error(getPromptMessage(props.operateType, "Failed"));
+  }
 }
 
 watch(visible, () => {
