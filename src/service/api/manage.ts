@@ -234,8 +234,8 @@ export namespace MenuApi {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 export namespace TokenApi {
   /** 分页列表 */
-  export function fetchGetPagingList(params?: Api.SystemManage.TokenSearchParams) {
-    return request<Api.SystemManage.TokenList>({
+  export function fetchGetPagingList(params?: Api.Token.TokenSearchParams) {
+    return request<Api.Token.TokenList>({
       url: '/token/getPagingList',
       method: 'get',
       params

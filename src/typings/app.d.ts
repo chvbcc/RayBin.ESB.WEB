@@ -1,110 +1,104 @@
-/** The global namespace for the app */
+// The global namespace for the app */
 declare namespace App {
-  /** Theme namespace */
+  // Theme namespace */
   namespace Theme {
     type ColorPaletteNumber = import('@sa/color').ColorPaletteNumber;
 
-    /** Theme setting */
+    // Theme setting */
     interface ThemeSetting {
-      /** Theme scheme */
+      // Theme scheme */
       themeScheme: UnionKey.ThemeScheme;
-      /** grayscale mode */
+      // grayscale mode */
       grayscale: boolean;
-      /** colour weakness mode */
+      // colour weakness mode */
       colourWeakness: boolean;
-      /** Whether to recommend color */
+      // Whether to recommend color */
       recommendColor: boolean;
-      /** Theme color */
+      // Theme color */
       themeColor: string;
-      /** Other color */
+      // Other color */
       otherColor: OtherColor;
-      /** Whether info color is followed by the primary color */
+      // Whether info color is followed by the primary color */
       isInfoFollowPrimary: boolean;
-      /** Reset cache strategy */
+      // Reset cache strategy */
       resetCacheStrategy: UnionKey.ResetCacheStrategy;
-      /** Layout */
+      // Layout */
       layout: {
-        /** Layout mode */
+        // Layout mode */
         mode: UnionKey.ThemeLayoutMode;
-        /** Scroll mode */
+        // Scroll mode */
         scrollMode: UnionKey.ThemeScrollMode;
-        /**
-         * Whether to reverse the horizontal mix
-         *
-         * if true, the vertical child level menus in left and horizontal first level menus in top
-         */
+        // Whether to reverse the horizontal mix
+        // if true, the vertical child level menus in left and horizontal first level menus in top
         reverseHorizontalMix: boolean;
       };
-      /** Page */
+      // Page */
       page: {
-        /** Whether to show the page transition */
+        // Whether to show the page transition */
         animate: boolean;
-        /** Page animate mode */
+        // Page animate mode */
         animateMode: UnionKey.ThemePageAnimateMode;
       };
-      /** Header */
+      // Header */
       header: {
-        /** Header height */
+        // Header height */
         height: number;
-        /** Header breadcrumb */
+        // Header breadcrumb */
         breadcrumb: {
-          /** Whether to show the breadcrumb */
+          // Whether to show the breadcrumb */
           visible: boolean;
-          /** Whether to show the breadcrumb icon */
+          // Whether to show the breadcrumb icon */
           showIcon: boolean;
         };
       };
-      /** Tab */
+      // Tab */
       tab: {
-        /** Whether to show the tab */
+        // Whether to show the tab */
         visible: boolean;
-        /**
-         * Whether to cache the tab
-         *
-         * If cache, the tabs will get from the local storage when the page is refreshed
-         */
+        // Whether to cache the tab
+        // If cache, the tabs will get from the local storage when the page is refreshed
         cache: boolean;
-        /** Tab height */
+        // Tab height */
         height: number;
-        /** Tab mode */
+        // Tab mode */
         mode: UnionKey.ThemeTabMode;
       };
-      /** Fixed header and tab */
+      // Fixed header and tab */
       fixedHeaderAndTab: boolean;
-      /** Sider */
+      // Sider */
       sider: {
-        /** Inverted sider */
+        // Inverted sider */
         inverted: boolean;
-        /** Sider width */
+        // Sider width */
         width: number;
-        /** Collapsed sider width */
+        // Collapsed sider width */
         collapsedWidth: number;
-        /** Sider width when the layout is 'vertical-mix' or 'horizontal-mix' */
+        // Sider width when the layout is 'vertical-mix' or 'horizontal-mix' */
         mixWidth: number;
-        /** Collapsed sider width when the layout is 'vertical-mix' or 'horizontal-mix' */
+        // Collapsed sider width when the layout is 'vertical-mix' or 'horizontal-mix' */
         mixCollapsedWidth: number;
-        /** Child menu width when the layout is 'vertical-mix' or 'horizontal-mix' */
+        // Child menu width when the layout is 'vertical-mix' or 'horizontal-mix' */
         mixChildMenuWidth: number;
       };
-      /** Footer */
+      // Footer */
       footer: {
-        /** Whether to show the footer */
+        // Whether to show the footer */
         visible: boolean;
-        /** Whether fixed the footer */
+        // Whether fixed the footer */
         fixed: boolean;
-        /** Footer height */
+        // Footer height */
         height: number;
-        /** Whether float the footer to the right when the layout is 'horizontal-mix' */
+        // Whether float the footer to the right when the layout is 'horizontal-mix' */
         right: boolean;
       };
-      /** Watermark */
+      // Watermark */
       watermark: {
-        /** Whether to show the watermark */
+        // Whether to show the watermark */
         visible: boolean;
-        /** Watermark text */
+        // Watermark text */
         text: string;
       };
-      /** define some theme settings tokens, will transform to css variables */
+      // define some theme settings tokens, will transform to css variables */
       tokens: {
         light: ThemeSettingToken;
         dark?: {
@@ -133,7 +127,7 @@ declare namespace App {
     type BaseToken = Record<string, Record<string, string>>;
 
     interface ThemeSettingTokenColor {
-      /** the progress bar color, if not set, will use the primary color */
+      // the progress bar color, if not set, will use the primary color */
       nprogress?: string;
       container: string;
       layout: string;
@@ -154,14 +148,14 @@ declare namespace App {
 
     type ThemeTokenColor = ThemePaletteColor & ThemeSettingTokenColor;
 
-    /** Theme token CSS variables */
+    // Theme token CSS variables */
     type ThemeTokenCSSVars = {
       colors: ThemeTokenColor & { [key: string]: string };
       boxShadow: ThemeSettingTokenBoxShadow & { [key: string]: string };
     };
   }
 
-  /** Global namespace */
+  // Global namespace */
   namespace Global {
     type VNode = import('vue').VNode;
     type RouteLocationNormalizedLoaded = import('vue-router').RouteLocationNormalizedLoaded;
@@ -170,98 +164,76 @@ declare namespace App {
     type RoutePath = import('@elegant-router/types').RoutePath;
     type LastLevelRouteKey = import('@elegant-router/types').LastLevelRouteKey;
 
-    /** The global header props */
+    // The global header props */
     interface HeaderProps {
-      /** Whether to show the logo */
+      // Whether to show the logo */
       showLogo?: boolean;
-      /** Whether to show the menu toggler */
+      // Whether to show the menu toggler */
       showMenuToggler?: boolean;
-      /** Whether to show the menu */
+      // Whether to show the menu */
       showMenu?: boolean;
     }
 
-    /** The global menu */
+    // The global menu */
     type Menu = {
-      /**
-       * The menu key
-       *
-       * Equal to the route key
-       */
+      //The menu key Equal to the route key */
       key: string;
-      /** The menu label */
+      // The menu label */
       label: string;
-      /** The menu i18n key */
+      // The menu i18n key */
       i18nKey?: I18n.I18nKey | null;
-      /** The route key */
+      // The route key */
       routeKey: RouteKey;
-      /** The route path */
+      // The route path */
       routePath: RoutePath;
-      /** The menu icon */
+      // The menu icon */
       icon?: () => VNode;
-      /** The tooltip title */
+      // The tooltip title */
       title?: string;
-      /** The menu children */
+      // The menu children */
       children?: Menu[];
     };
 
-    /** Tab route */
+    // Tab route */
     type TabRoute = Pick<RouteLocationNormalizedLoaded, 'name' | 'path' | 'meta'> &
       Partial<Pick<RouteLocationNormalizedLoaded, 'fullPath' | 'query' | 'matched'>>;
 
-    /** The global tab */
+    // The global tab */
     type Tab = {
-      /** The tab id */
+      // The tab id */
       id: string;
-      /** The tab label */
+      // The tab label */
       label: string;
-      /**
-       * The new tab label
-       *
-       * If set, the tab label will be replaced by this value
-       */
+      // The new tab label
+      // If set, the tab label will be replaced by this value
       newLabel?: string;
-      /**
-       * The old tab label
-       *
-       * when reset the tab label, the tab label will be replaced by this value
-       */
+      // The old tab label
+      // when reset the tab label, the tab label will be replaced by this value
       oldLabel?: string;
-      /** The tab route key */
+      // The tab route key */
       routeKey: LastLevelRouteKey;
-      /** The tab route path */
+      // The tab route path */
       routePath: RouteMap[LastLevelRouteKey];
-      /** The tab route full path */
+      // The tab route full path */
       fullPath: string;
-      /** The tab fixed index */
+      // The tab fixed index */
       fixedIndex?: number | null;
-      /**
-       * Tab icon
-       *
-       * Iconify icon
-       */
+      // Tab icon Iconify icon */
       icon?: string;
-      /**
-       * Tab local icon
-       *
-       * Local icon
-       */
+      // Tab local icon Local icon */
       localIcon?: string;
-      /** I18n key */
+      // I18n key */
       i18nKey?: I18n.I18nKey | null;
     };
 
-    /** Form rule */
+    // Form rule */
     type FormRule = import('ant-design-vue/es/form/interface.d.ts').Rule;
 
-    /** The global dropdown key */
+    // The global dropdown key
     type DropdownKey = 'closeCurrent' | 'closeOther' | 'closeLeft' | 'closeRight' | 'closeAll';
   }
 
-  /**
-   * I18n namespace
-   *
-   * Locales type
-   */
+  // I18n namespace Locales type
   namespace I18n {
     type RouteKey = import('@elegant-router/types').RouteKey;
 
@@ -595,8 +567,24 @@ declare namespace App {
               taskName: string;
           }
         };
+        httpRequest:
+        {
+          paramName: string;
+          paramType: string;
+          paramValue: string;
+          description: string;
+          form: {
+            paramName: string;
+            paramType: string;
+            paramValue: string;
+            description: string;
+          };
+        };
         token : {
           title: string;
+          titleBaseInfo: string;
+          titleRequest: string;
+          titleResponse: string;
           add: string;
           edit: string;
           tokenName: string;
@@ -615,14 +603,25 @@ declare namespace App {
           description: string;
           createUserID: string;
           createTime: string;
+          headers: string;
+          parameters: string;
+          body: string;
+          authorization: string;
           form: {
             tokenName: string;
             method: string;
             requestUrl: string;
             timeOut: string;
+            queryParameters: string;
+            bodyType: string;
+            bodyContent: string;
+            header: string;
+            authType: string;
+            authContent: string;
             programmeLanguage: string;
             checkCallResult: string;
             tokenField: string;
+            description: string;
           };
         }
         manage: {
@@ -845,15 +844,15 @@ declare namespace App {
     }
   }
 
-  /** Service namespace */
+  // Service namespace */
   namespace Service {
-    /** Other baseURL key */
+    // Other baseURL key */
     type OtherBaseURLKey = 'demo';
 
     interface ServiceConfigItem {
-      /** The backend service base url */
+      // The backend service base url */
       baseURL: string;
-      /** The proxy pattern of the backend service base url */
+      // The proxy pattern of the backend service base url */
       proxyPattern: string;
     }
 
@@ -861,9 +860,9 @@ declare namespace App {
       key: OtherBaseURLKey;
     }
 
-    /** The backend service config */
+    // The backend service config */
     interface ServiceConfig extends ServiceConfigItem {
-      /** Other backend service config */
+      // Other backend service config */
       other: OtherServiceConfigItem[];
     }
 
@@ -871,23 +870,23 @@ declare namespace App {
       other: Record<OtherBaseURLKey, string>;
     }
 
-    /** The backend service response data */
+    // The backend service response data */
     type Response<T = unknown> = {
-      /** The backend service response code */
+      // The backend service response code */
       code: string;
-      /** The backend service response message */
+      // The backend service response message */
       msg: string;
-      /** The backend service response data */
+      // The backend service response data */
       data: T;
     };
 
-    /** The demo backend service response data */
+    // The demo backend service response data */
     type DemoResponse<T = unknown> = {
-      /** The backend service response code */
+      // The backend service response code */
       status: string;
-      /** The backend service response message */
+      // The backend service response message */
       message: string;
-      /** The backend service response data */
+      // The backend service response data */
       result: T;
     };
   }

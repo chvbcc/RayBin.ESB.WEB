@@ -18,7 +18,7 @@ type RangeValue = [Dayjs, Dayjs];
 
 const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.SystemManage.TokenSearchParams>('model', { required: true });
+const model = defineModel<Api.Token.TokenSearchParams>('model', { required: true });
 
 const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
 

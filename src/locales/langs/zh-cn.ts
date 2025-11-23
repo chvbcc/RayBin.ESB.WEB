@@ -369,6 +369,19 @@ const local: App.I18n.Schema = {
         dataMapping: '请输入数据映射',
       }
     },
+    httpRequest:
+    {
+        paramName: '参数名',
+        paramType: '参数类型',
+        paramValue: '参数值',
+        description: '描述',
+        form: {
+            paramName: '请输入参数名',
+            paramType: '请选择参数类型',
+            paramValue: '请输入参数值',
+            description: '请输入参数描述'
+        }
+    },
     taskLog: {
       title: '任务日志',
       taskID: '任务编号',
@@ -386,6 +399,9 @@ const local: App.I18n.Schema = {
     },
     token: {
       title: '授权管理',
+      titleBaseInfo: '基本信息',
+      titleRequest: '请求设置',
+      titleResponse: '响应设置',
       add: '新增授权',
       edit: '编辑授权',
       tokenName: '授权名称',
@@ -404,14 +420,25 @@ const local: App.I18n.Schema = {
       description: '描述',
       createUserID: '创建用户',
       createTime: '创建时间',
+      headers: '请求头',
+      parameters: '查询参数',
+      body: '请求体',
+      authorization: '认证',
       form: {
         tokenName: '请输入令牌名称',
         method: '请选择请求方法',
         requestUrl: '请输入请求URL',
         timeOut: '请输入超时时间',
+        queryParameters: '请输入查询参数',
+        bodyType: '请选择请求体类型',
+        bodyContent: '请输入请求体内容',
+        header: '请输入请求头',
+        authType: '请选择认证类型',
+        authContent: '请输入认证内容',
         programmeLanguage: '请选择编程语言',
         checkCallResult: '请输入检查调用结果的表达式',
         tokenField: '请输入返回的令牌字段',
+        description: '请输入描述',
       }
     },
     manage: {

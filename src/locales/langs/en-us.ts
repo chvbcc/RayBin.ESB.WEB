@@ -369,6 +369,19 @@ const local: App.I18n.Schema = {
         dataMapping: 'Please enter data mapping',
       }
     },
+    httpRequest:
+    {
+        paramName: 'Name',
+        paramType: 'Type',
+        paramValue: 'Value',
+        description: 'Description',
+        form: {
+            paramName: 'Please enter parameter name',
+            paramType: 'Please select parameter type',
+            paramValue: 'Please enter parameter value',
+            description: 'Please enter parameter description'
+        }
+    },
     taskLog: {
       title: 'Task Log',
       taskID: 'Task No.',
@@ -386,6 +399,9 @@ const local: App.I18n.Schema = {
     },
     token: {
       title: 'Token Management',
+      titleBaseInfo: 'Basic Info',
+      titleRequest: 'Request Settings',
+      titleResponse: 'Response Settings',
       add: 'Add Token',
       edit: 'Edit Token',
       tokenName: 'Token Name',
@@ -404,14 +420,25 @@ const local: App.I18n.Schema = {
       description: 'Description',
       createUserID: 'Create User ID',
       createTime: 'Create Time',
+      headers: 'Headers',
+      body: 'Body',
+      parameters: 'Parameters',
+      authorization: 'Authorization',
       form: {
         tokenName: 'Please enter token name',
         method: 'Please select request method',
         requestUrl: 'Please enter request URL',
         timeOut: 'Please enter timeout (seconds)',
+        queryParameters: 'Please enter query parameters',
+        bodyType: 'Please select body type',
+        bodyContent: 'Please enter body content',
+        header: 'Please enter header',
+        authType: 'Please select auth type',
+        authContent: 'Please enter auth content',
         programmeLanguage: 'Please select program language',
         checkCallResult: 'Please enter expression to call result',
         tokenField: 'Please enter return token field',
+        description: 'Please enter description',
       }
     },
     manage: {
