@@ -3,7 +3,7 @@ import { $t } from '@/locales';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@/store/modules/app';
 import { fetchGetPagingList, fetchDelete } from '@/service/api/connection';
-import { databaseTypeRecord } from '@/constants/connection';
+import { databaseTypeRecord } from '@/constants/options';
 import ConnectionSearch from './modules/connection-search.vue';
 import { useTable, useTableOperate } from '@/hooks/common/table';
 

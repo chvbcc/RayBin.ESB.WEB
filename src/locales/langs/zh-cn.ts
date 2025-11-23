@@ -374,11 +374,16 @@ const local: App.I18n.Schema = {
         paramName: '参数名',
         paramType: '参数类型',
         paramValue: '参数值',
+        contentType: '内容类型',
+        uploadFile: '上传文件',
+        noBodyData: '无请求主体',
         description: '描述',
         form: {
             paramName: '请输入参数名',
             paramType: '请选择参数类型',
             paramValue: '请输入参数值',
+            contentType: '请选择或输入内容类型',
+            uploadFile: '点击上传文件',
             description: '请输入参数描述'
         }
     },

@@ -31,8 +31,8 @@ VITE_SERVICE_SUCCESS_CODE=0000
 07、 动态路由修改 .env 下  static ｜ dynamic
 VITE_AUTH_ROUTE_MODE=dynamic
 
-08、在 src\typings 声明type 强类型  
-09、在 src\typings 下的 app.d.ts 中定义页面语言的类型 
+08、在 src\typings 声明type 强类型
+09、在 src\typings 下的 app.d.ts 中定义页面语言的类型
 
 10、解决顽固的换行问题
 export default defineConfig(

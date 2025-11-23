@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue';
 import { RoleApi } from '@/service/api/manage';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { convertOptions, getPromptMessage } from '@/utils/common';
-import { enableStatusOptions, yesOrNoOptions } from '@/constants/common';
+import { enableStatusOptions, yesOrNoOptions } from '@/constants/options';
 
 defineOptions({
   name: 'RoleOperateDrawer'

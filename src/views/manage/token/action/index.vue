@@ -1,31 +1,51 @@
 <script setup lang="ts">
   import { $t, language } from '@/locales';
-  import Headers from './modules/headers.vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useAppStore } from '@/store/modules/app';
-  import QueryParameters from './modules/parameters.vue';
-  import { onMounted, computed, ref, watch } from 'vue';
-  import { useAntdForm, useFormRules } from '@/hooks/common/form';
-  import { fetchGetConnectionOptions } from '@/service/api/connection';
-  import { translateOptions } from '@/utils/common';
-  import { methodOptions } from '@/constants/token';
+  import Headers from '@/components/webapi/headers.vue';
+  import RequestBody from '@/components/webapi/request-body.vue';
+  import QueryParameters from '@/components/webapi/parameters.vue';
+  import { onMounted, ref, watch } from 'vue';
+  import { useAntdForm } from '@/hooks/common/form';
+  import { methodOptions } from '@/constants/options';
 
   // #region 1. 参数定义
   const route = useRoute();
   const router = useRouter();
+  const activeKey = ref('1');
   const appStore = useAppStore();
   const { formRef: formRefTask } = useAntdForm();
+  // 创建默认参数
+  const createEmptyParam = (): Api.Task.Param => ({
+    name: '',
+    value: '',
+    valueType: 0,
+    description: ''
+  });
 
-  const dataObjectModalVisible = ref(false);
+  const createEmptyFormData = (): Api.Task.FormData => ({
+      name: '',
+      value: '',
+      isFile: false,
+      filePath: '',
+      contentType: ''
+  });
 
-  const dataSource = ref<any[]>([]);
-  const selectedDataObjectNames = ref<string[]>([]);
+   const createEmptyBodyConfig = (): Api.Task.BodyConfig => ({
+    type: 0,
+    raw: '',
+    formDatas: [createEmptyFormData()],
+    urlEncodeds: [createEmptyParam()],
+    binaryFilePath: ''
+  });
 
+  const queryParams = ref<Api.Task.Param[]>([createEmptyParam()]);
+  const headerParams = ref<Api.Task.Param[]>([createEmptyParam()]);
+  const bodyParams = ref<Api.Task.BodyConfig>(createEmptyBodyConfig());
 
-  const queryParams = ref<Api.Token.Param[]>([]);
-  const headerParams = ref<Api.Token.Param[]>([]);
   const parametersRef = ref<InstanceType<typeof QueryParameters>>();
   const headersRef = ref<InstanceType<typeof Headers>>();
+  const requestBodyRef = ref<InstanceType<typeof RequestBody>>();
 
   // 根据语言动态设置 labelCol 宽度
   const labelCol = language() === 'en-US' ?  { style: { width: '141px' } } :  { style: { width: '100px' } };
@@ -56,50 +76,26 @@
   }
   //#endregion
 
-
   // #region 3. 初始化时
   onMounted(async () => {
     // 从路由参数中获取ID （加载编辑数据）
     const id = Number(route.query.id ?? 0);
     if (id) {
-      // const { error, data } = await fetchGetModel(id);
-      // if (!error && data) {
-      //   model.value = {
-      //     task: { ...createDefaultModel().task, ...data.task },
-      //     taskDatabase: { ...createDefaultModel().taskDatabase, ...data.taskDatabase }
-      //   };
-      //   relationDiagramRef.value?.setData(JSON.parse(data.taskDatabase.diagramData));
-      // }
+
     }
   });
   // #endregion
 
-
   // #region 5. 保存数据对象
   async function handleSave() {
-    formRefTask.value?.validate().then(async () => {
-      // model.value.taskDatabase.diagramData = JSON.stringify(relationDiagramRef.value?.getData());
-      // const payload: Api.Task.TaskDatabaseModel = {
-      //   task: { ...model.value.task },
-      //   taskDatabase: { ...model.value.taskDatabase }
-      // };
+    console.log(queryParams.value);
+    console.log(headerParams.value);
+    console.log(bodyParams.value);
+    // formRefTask.value?.validate().then(async () => {
 
-      // // 提交保存
-      // const { error, response } = await fetchSave(payload);
-      // if (error) { window.$message?.error(getPromptMessage(route.query, "Failed")); return; }
-      // const result = response.data as { code: string; msg: string; data: string };
-      // if (result.msg === 'success') {
-      //   window.$message?.success(getPromptMessage(route.query, "Success"));
-      //   appStore.tabStore.removeActiveTab();
-      //   router.push({ name: 'database' });
-      // } else if (result.msg === 'fail') {
-      //   window.$message?.error(result.data);
-      // } else {
-      //   window.$message?.error(getPromptMessage(route.query, "Failed"));
-      // }
-    }).catch(() => {
-      return;
-    });
+    // }).catch(() => {
+    //   return;
+    // });
   }
   // #endregion
 
@@ -115,8 +111,6 @@
     labelCol.style.width = newLang === 'en-US' ? '130px' : '100px';
   });
   // #endregion
-
-  const activeKey = ref('1');
 </script>
 
 <template>
@@ -137,7 +131,7 @@
 
             <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.token.method')" name="method" class="m-0">
-                <a-select v-model:value="model.method" :placeholder="$t('page.token.form.method')" :options="translateOptions(methodOptions)" allow-clear  />
+                <a-select v-model:value="model.method" :placeholder="$t('page.token.form.method')" :options="methodOptions" allow-clear  />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
@@ -172,13 +166,13 @@
         <div class="request">
           <a-tabs v-model:activeKey="activeKey">
             <a-tab-pane key="1" :tab="$t('page.token.queryParameters')">
-              <QueryParameters ref="parametersRef" v-model="queryParams" />
+              <QueryParameters ref="parametersRef" v-model:model="queryParams" />
             </a-tab-pane>
             <a-tab-pane key="2" :tab="$t('page.token.header')">
-              <Headers ref="headersRef" v-model="headerParams" />
+              <Headers ref="headersRef" v-model:model="headerParams" />
             </a-tab-pane>
             <a-tab-pane key="3" :tab="$t('page.token.body')">
-              {{ $t('page.token.body') }}
+              <RequestBody ref="requestBodyRef" v-model:model="bodyParams" />
             </a-tab-pane>
             <a-tab-pane key="4" :tab="$t('page.token.authorization')">
               {{ $t('page.token.authorization') }}
@@ -201,7 +195,6 @@
         </div>
       </a-card>
     </a-form>
-    <DataObjectModal v-model:visible="dataObjectModalVisible" :selected-data-object-names="selectedDataObjectNames" />
   </div>
 </template>
 <style scoped>

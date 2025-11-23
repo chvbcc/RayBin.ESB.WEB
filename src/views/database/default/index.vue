@@ -3,7 +3,7 @@ import { $t } from '@/locales';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@/store/modules/app';
 import { fetchGetPagingList, fetchDelete } from '@/service/api/task';
-import { dataHandleRecord, runModeRecord, taskStatusRecord } from '@/constants/task';
+import { dataHandleRecord, runModeRecord, taskStatusRecord } from '@/constants/options';
 import TaskSearch from '@/components/pages/task-search.vue';
 import { useTable, useTableOperate } from '@/hooks/common/table';
 

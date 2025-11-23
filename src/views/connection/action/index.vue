@@ -8,7 +8,7 @@ import { useAuthStore } from '@/store/modules/auth';
 import { translateOptions, getPromptMessage } from '@/utils/common';
 import CustomAlert from '@/components/custom/custom-alert.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { databaseTypeOptions, connectionModeOptions } from '@/constants/connection';
+import { databaseTypeOptions, connectionModeOptions } from '@/constants/options';
 import { fetchTest, fetchCheckName, fetchSave, fetchGetModel } from '@/service/api/connection';
 import { parseConnectionString, parseConnectionModel, getConnectionStringByType } from '@/views/common/connection';
 

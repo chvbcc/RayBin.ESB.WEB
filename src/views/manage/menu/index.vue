@@ -9,7 +9,7 @@ import SvgIcon from '@/components/custom/svg-icon.vue';
 import { Button, Popconfirm, Tag } from 'ant-design-vue';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 import MenuOperateModal, { type OperateType } from './modules/menu-operate-modal.vue';
-import { enableStatusRecord, menuTypeRecord } from '@/constants/manage';
+import { enableStatusRecord, menuTypeRecord } from '@/constants/options';
 
 const { bool: visible, setTrue: openModal } = useBoolean();
 const { tableWrapperRef, scrollConfig } = useTableScroll();

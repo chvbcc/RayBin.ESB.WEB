@@ -4,7 +4,7 @@ import { Button, Tag } from 'ant-design-vue';
 import  { UserApi }  from '@/service/api/manage';
 import UserSearch from './modules/user-search.vue';
 import UserOperateModal from './modules/user-operate-modal.vue';
-import { enableStatusRecord, userGenderRecord } from '@/constants/manage';
+import { enableStatusRecord, userGenderRecord } from '@/constants/options';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
 const { tableWrapperRef, scrollConfig } = useTableScroll();

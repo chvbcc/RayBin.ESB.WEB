@@ -3,7 +3,7 @@ import { Dayjs } from 'dayjs';
 import { $t, language } from '@/locales';
 import { watch, computed } from 'vue';
 import { translateOptions, convertOptions } from '@/utils/common';
-import { taskTypeOptions, logLevelOptions } from '@/constants/log';
+import { taskTypeOptions, logLevelOptions } from '@/constants/options';
 import dayjs from 'dayjs';
 
 defineOptions({

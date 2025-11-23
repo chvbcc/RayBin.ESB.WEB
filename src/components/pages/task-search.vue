@@ -2,7 +2,7 @@
 import { watch } from 'vue';
 import { $t, language } from '@/locales';
 import { translateOptions, convertOptions } from '@/utils/common';
-import { runModeOptions, taskStatusOptions } from '@/constants/task';
+import { runModeOptions, taskStatusOptions } from '@/constants/options';
 
 defineOptions({
   name: 'TaskSearch'

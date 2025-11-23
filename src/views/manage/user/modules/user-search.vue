@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
 import { convertOptions } from '@/utils/common';
-import { enableStatusOptions } from '@/constants/task';
+import { enableStatusOptions } from '@/constants/options';
 
 defineOptions({
   name: 'UserSearch'

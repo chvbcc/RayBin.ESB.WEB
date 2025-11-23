@@ -7,7 +7,7 @@ import SvgIcon from '@/components/custom/svg-icon.vue';
 import { RoleApi, MenuApi } from '@/service/api/manage';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import { translateOptions, getPromptMessage } from '@/utils/common';
-import { enableStatusOptions, menuTypeOptions, permissionTypeOptions } from '@/constants/manage';
+import { enableStatusOptions, menuTypeOptions, permissionTypeOptions } from '@/constants/options';
 import { getLayoutAndPage, getPathParamFromRoutePath, getRoutePathByRouteName, getRoutePathWithParam, transformLayoutAndPageToComponent } from './shared';
 
 defineOptions({

@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { Dayjs } from 'dayjs';
 import { watch, computed } from 'vue';
 import { $t, language } from '@/locales';
-import { methodOptions } from '@/constants/token';
+import { methodOptions } from '@/constants/options';
 
 defineOptions({
   name: 'TokenSearch'

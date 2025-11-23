@@ -572,11 +572,16 @@ declare namespace App {
           paramName: string;
           paramType: string;
           paramValue: string;
+          contentType: string;
+          uploadFile: string;
+          noBodyData: string;
           description: string;
           form: {
             paramName: string;
             paramType: string;
             paramValue: string;
+            contentType: string;
+            uploadFile: string;
             description: string;
           };
         };

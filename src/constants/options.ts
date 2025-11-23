@@ -1,0 +1,251 @@
+import { transformRecordToOption, convertRecordToOption } from '@/utils/common';
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// common
+/** yes or no **/
+export const yesOrNoRecord: Record<Api.Common.YesOrNo, App.I18n.I18nKey> = {
+  0: 'common.yesOrNo.no',
+  1: 'common.yesOrNo.yes'
+};
+export const yesOrNoOptions = convertRecordToOption(yesOrNoRecord);
+
+export const enableStatusRecord: Record<Api.Common.EnableStatus, App.I18n.I18nKey> = {
+  0: 'common.status.enable',
+  1: 'common.status.disable'
+};
+export const enableStatusOptions = convertRecordToOption(enableStatusRecord);
+
+/** boolean yes or no **/
+/** yes or no **/
+export const booleanYesOrNoRecord: Record<Api.Common.BooleanYesOrNo, App.I18n.I18nKey> = {
+  'false': 'common.yesOrNo.no',
+  'true': 'common.yesOrNo.yes'
+};
+export const booleanYesOrNoOptions = transformRecordToOption(booleanYesOrNoRecord);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// database
+export const databaseTypeRecord: Record<Api.Connection.DatabaseType, App.I18n.I18nKey> = {
+  '0': 'dropdownList.databaseType.hana',
+  '1': 'dropdownList.databaseType.mySql',
+  '2': 'dropdownList.databaseType.oracle',
+  '3': 'dropdownList.databaseType.sqlServer',
+  '4': 'dropdownList.databaseType.postgreSQL',
+  '5': 'dropdownList.databaseType.oceanBase',
+  '6': 'dropdownList.databaseType.polarDB',
+  '7': 'dropdownList.databaseType.goldenDB',
+  '8': 'dropdownList.databaseType.openGauss'
+};
+export const databaseTypeOptions = transformRecordToOption(databaseTypeRecord);
+
+// connection
+export const connectionModeRecord: Record<Api.Connection.ConnectionMode, App.I18n.I18nKey> = {
+  '0': 'page.connection.mode.custom',
+  '1': 'page.connection.mode.connectionString'
+};
+export const connectionModeOptions = transformRecordToOption(connectionModeRecord);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// task
+// tasktype
+export const taskTypeRecord: Record<Api.Task.TaskType, App.I18n.I18nKey> = {
+  '5000': 'dropdownList.taskType.database',
+  '5001': 'dropdownList.taskType.webApi',
+  '5002': 'dropdownList.taskType.industry'
+};
+export const taskTypeOptions = transformRecordToOption(taskTypeRecord);
+
+/** runMode */
+export const runModeRecord: Record<Api.Task.RunMode, App.I18n.I18nKey> = {
+  '6000': 'dropdownList.runMode.manualOperation',
+  '6001': 'dropdownList.runMode.everyDay',
+  '6002': 'dropdownList.runMode.monthly',
+  '6003': 'dropdownList.runMode.annually',
+  '6004': 'dropdownList.runMode.timeInterval'
+};
+export const runModeOptions = transformRecordToOption(runModeRecord);
+
+// task status
+export const taskStatusRecord: Record<Api.Task.TaskStatus, App.I18n.I18nKey> = {
+  0: 'page.task.taskStatus.normal',
+  1: 'page.task.taskStatus.draft',
+  2: 'page.task.taskStatus.paused',
+};
+export const taskStatusOptions = convertRecordToOption(taskStatusRecord);
+
+// data handle script yes or no
+export const dataHandleRecord: Record<Api.Common.YesOrNo, App.I18n.I18nKey> = {
+  0: 'common.yesOrNo.no',
+  1: 'common.yesOrNo.yes'
+};
+export const dataHandleOptions = convertRecordToOption(dataHandleRecord);
+
+// data object type
+export const dataObjectTypeRecord: Record<Api.Task.DataObjectType, App.I18n.I18nKey> = {
+  'table': 'dropdownList.dataObjectType.table',
+  'view': 'dropdownList.dataObjectType.view',
+  'storedProcedure': 'dropdownList.dataObjectType.storedProcedure'
+};
+export const dataObjectTypeOptions = transformRecordToOption(dataObjectTypeRecord);
+export const programmeLanguageOptions = [{ label: 'C#', value: '7000' }, { label: 'Python', value: '7001' }];
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// log
+// log level
+export const logLevelRecord: Record<Api.Log.LogLevel, App.I18n.I18nKey> = {
+  0: 'dropdownList.logLevel.info',
+  1: 'dropdownList.logLevel.warning',
+  2: 'dropdownList.logLevel.error',
+  3: 'dropdownList.logLevel.debug'
+};
+export const logLevelOptions = convertRecordToOption(logLevelRecord);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// manage
+// user
+export const userGenderRecord: Record<Api.SystemManage.Gender, App.I18n.I18nKey> = {
+  '1': 'page.manage.user.gendertype.male',
+  '0': 'page.manage.user.gendertype.female'
+};
+export const userGenderOptions = transformRecordToOption(userGenderRecord);
+
+// menu
+export const menuTypeRecord: Record<Api.SystemManage.MenuType, App.I18n.I18nKey> = {
+  '0': 'page.manage.menu.type.directory',
+  '1': 'page.manage.menu.type.menu'
+};
+export const menuTypeOptions = transformRecordToOption(menuTypeRecord);
+
+// permission
+export const permissionTypeRecord: Record<Api.SystemManage.PermissionType, App.I18n.I18nKey> = {
+  '0': 'page.manage.permission.permissionType.button',
+  '1': 'page.manage.permission.permissionType.column',
+  '2': 'page.manage.permission.permissionType.option'
+};
+export const permissionTypeOptions = transformRecordToOption(permissionTypeRecord);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// token
+export const requestTypeRecord: Record<Api.Task.RequestType, App.I18n.I18nKey> = {
+  '8000': 'dropdownList.requestType.call',
+  '8001': 'dropdownList.requestType.pull',
+  '8002': 'dropdownList.requestType.push'
+};
+export const requestTypeOptions = transformRecordToOption(requestTypeRecord);
+
+export const methodOptions = [
+  { label: 'GET', value: 'GET' },
+  { label: 'POST', value: 'POST' },
+  { label: 'PUT', value: 'PUT' },
+  { label: 'DELETE', value: 'DELETE' }
+];
+
+export const paramTypeOptions = [
+  { label: 'String', value: 0 },
+  { label: 'Integer', value: 1 },
+  { label: 'Boolean', value: 2 },
+  { label: 'Number', value: 3 },
+  { label: 'Object', value: 4 },
+  { label: 'Array', value: 5 },
+  { label: 'Any', value: 6 }
+];
+
+export const bodyTypeOptions = [
+  { label: 'None', value: 0 },
+  { label: 'Json', value: 1 },
+  { label: 'Xml', value: 2 },
+  { label: 'Html', value: 3 },
+  { label: 'Text', value: 4 },
+  { label: 'FormData', value: 5 },
+  { label: 'x-www-form-urlencoded', value: 6 },
+  { label: 'Binary', value: 7 }
+];
+
+export const authTypeOptions = [
+  { label: 'None', value: 'None' },
+  { label: 'ApiKey', value: 'ApiKey' },
+  { label: 'Basic', value: 'Basic' },
+  { label: 'Bearer', value: 'Bearer' },
+  { label: 'OAuth2', value: 'OAuth2' },
+  { label: 'JwtBearer', value: 'JwtBearer' },
+  { label: 'Ntlm', value: 'Ntlm' }
+]
+
+export const paramNameOptions = [
+  { value: 'Accept' },
+  { value: 'Accept-Charset' },
+  { value: 'Accept-Encoding' },
+  { value: 'Accept-Language' },
+  { value: 'Access-Control-Request-Headers' },
+  { value: 'Access-Control-Request-Method' },
+  { value: 'Authorization' },
+  { value: 'Cache-Control' },
+  { value: 'Content-MD5' },
+  { value: 'Content-Length' },
+  { value: 'Content-Transfer-Encoding' },
+  { value: 'Cookie' },
+  { value: 'Date' },
+  { value: 'Expect' },
+  { value: 'From' },
+  { value: 'Host' },
+  { value: 'If-Match' },
+  { value: 'If-Modified-Since' },
+  { value: 'If-Range' },
+  { value: 'If-Unmodified-Since' },
+  { value: 'Keep-Alive' },
+  { value: 'Max-Forwards' },
+  { value: 'Origin' },
+  { value: 'Pragma' },
+  { value: 'Proxy-Authenticate' },
+  { value: 'Range' },
+  { value: 'Referer' },
+  { value: 'TE' },
+  { value: 'Trailer' },
+  { value: 'Transfer-Encoding' },
+  { value: 'Upgrade' },
+  { value: 'User-Agent' },
+  { value: 'Via' },
+  { value: 'Warning' },
+  { value: 'X-Requested-With' },
+  { value: 'X-Do-Not-Track' },
+  { value: 'DNT' },
+  { value: 'x-api-key' },
+  { value: 'Connection' },
+];
+
+export const contentTypeOptions = [
+  { value: 'application/json' },
+  { value: 'application/xml' },
+  { value: 'application/x-www-form-urlencoded' },
+  { value: 'multipart/form-data' },
+  { value: 'text/plain' },
+  { value: 'text/html' },
+  { value: 'text/css' },
+  { value: 'text/javascript' },
+  { value: 'application/javascript' },
+  { value: 'application/pdf' },
+  { value: 'application/zip' },
+  { value: 'image/jpeg' },
+  { value: 'image/png' },
+  { value: 'image/gif' },
+  { value: 'audio/mpeg' },
+  { value: 'video/mp4' },
+  { value: 'application/octet-stream' },
+  { value: 'application/wps-office.wps' },           // WPS 文字文件
+  { value: 'application/wps-office.wpt' },           // WPS 文字模板
+  { value: 'application/wps-office.et' },            // WPS 表格文件
+  { value: 'application/wps-office.ett' },           // WPS 表格模板
+  { value: 'application/wps-office.dps' },           // WPS 演示文件
+  { value: 'application/wps-office.dpt' },           // WPS 演示模板
+  { value: 'application/vnd.ms-works' },             // MS Works
+  { value: 'application/msword' },
+  { value: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+  { value: 'application/vnd.ms-excel' },
+  { value: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+  { value: 'application/vnd.ms-powerpoint' },
+  { value: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' },
+  { value: 'text/csv' },
+  { value: 'image/svg+xml' },
+  { value: 'application/x-tar' },
+  { value: 'application/gzip' }
+];

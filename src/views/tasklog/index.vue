@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import { $t } from '@/locales';
 import { computed } from 'vue';
 import TaskLogSearch from './modules/tasklog-search.vue';
-import { taskTypeRecord, logLevelRecord } from '@/constants/log';
 import { useTable, useTableOperate } from '@/hooks/common/table';
 import { fetchGetPagingList, fetchDelete } from '@/service/api/log';
+import { taskTypeRecord, logLevelRecord } from '@/constants/options';
 
 const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
   apiFn: fetchGetPagingList,

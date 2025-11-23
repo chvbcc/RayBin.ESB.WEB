@@ -11,7 +11,7 @@
   import RelationDiagram from '@/components/pages/relation-diagram.vue';
   import { fetchCheckName, fetchSave, fetchGetModel } from '@/service/api/task-database';
   import { convertOptions, translateOptions, convertDateTime, getPromptMessage } from '@/utils/common';
-  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions, dataObjectTypeOptions, taskStatusOptions, programmeLanguageOptions } from '@/constants/task';;
+  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions, dataObjectTypeOptions, taskStatusOptions, programmeLanguageOptions } from '@/constants/options';
 
   // #region 1. 参数定义
   const route = useRoute();

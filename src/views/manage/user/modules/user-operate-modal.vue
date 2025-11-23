@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue';
 import { getPromptMessage } from '@/utils/common';
 import { RoleApi, UserApi } from '@/service/api/manage';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { enableStatusOptions, userGenderOptions } from '@/constants/manage';
+import { enableStatusOptions, userGenderOptions } from '@/constants/options';
 
 defineOptions({
   name: 'UserOperate  Modal'

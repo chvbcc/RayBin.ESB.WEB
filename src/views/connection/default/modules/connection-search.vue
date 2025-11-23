@@ -2,7 +2,7 @@
 import { watch } from 'vue';
 import { $t, language } from '@/locales';
 import { translateOptions } from '@/utils/common';
-import { databaseTypeOptions } from '@/constants/connection';
+import { databaseTypeOptions } from '@/constants/options';
 
 defineOptions({
   name: 'ConnectionSearch'

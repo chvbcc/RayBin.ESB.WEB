@@ -17,7 +17,7 @@ declare namespace Api {
         bodyContent: string;
         authType: string;
         authContent: string;
-        programmeLanguage: string;
+        programmeLanguage: string;  // 脚本语言
         checkCallResult: string;
         tokenField: string;
         description: string;
@@ -29,13 +29,5 @@ declare namespace Api {
       /* Token model */
       type TokenModel = Pick<Token, | 'id' | 'tokenName' | 'method' | 'requestUrl' | 'timeOut' | 'headers' | 'queryParameters' | 'bodyType' | 'bodyContent' | 'authType' | 'authContent' | 'programmeLanguage' | 'checkCallResult' | 'tokenField' | 'description' | 'startCreateTime' | 'endCreateTime'>;
 
-
-      type ParamType = 'String' | 'Integer' | 'Boolean' | 'Number' | 'Object' | 'Array' | 'Any';
-      type Param = {
-        name: string;
-        value: string;
-        valueType: ParamType;
-        description?: string;
-      }
     }
   }

@@ -374,11 +374,16 @@ const local: App.I18n.Schema = {
         paramName: 'Name',
         paramType: 'Type',
         paramValue: 'Value',
+        contentType: 'Content Type',
+        uploadFile: 'Upload File',
+        noBodyData: 'No Request Body',
         description: 'Description',
         form: {
             paramName: 'Please enter parameter name',
             paramType: 'Please select parameter type',
             paramValue: 'Please enter parameter value',
+            contentType: 'Please select or enter content type',
+            uploadFile: 'Click upload file',
             description: 'Please enter parameter description'
         }
     },

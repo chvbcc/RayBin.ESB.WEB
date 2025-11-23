@@ -1,23 +1,27 @@
 declare namespace Api {
   namespace Task {
-    /* Task search params */
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Task Common
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //#region Task Common
+    // Task search params
     type TaskSearchParams = Partial<Pick<Task, 'taskName' | 'runMode' | 'description' | 'status'> & Common.CommonSearchParams >;
 
-    /* Task 5000 Database, 5001 WebApi, 5002 Industry PLC */
+    // Task 5000 Database, 5001 WebApi, 5002 Industry PLC
     type TaskType = '5000' | '5001' | '5002';
 
-    /* Run mode 6000 Manual Operation, 6001 Every Day, 6002 Monthly, 6003 Annually, 6004 Time Interval */
+    // Run mode 6000 Manual Operation, 6001 Every Day, 6002 Monthly, 6003 Annually, 6004 Time Interval
     type RunMode = '6000' | '6001' | '6002' | '6003' | '6004';
 
-    /* Data handle 0 No, 1 Yes */
+    // Data handle 0 No, 1 Yes
     type DataHandle = 0 | 1;
 
-    /* Task status 0 Normal, 1 Draft 2 Disable */
+    // Task status 0 Normal, 1 Draft 2 Disable
     type TaskStatus = 0 | 1 | 2;
 
     type DataObjectType = 'table' | 'view' | 'storedProcedure';
 
-    /* Task list */
+    // Task list
     type TaskList = Common.PaginatingQueryRecord<Task>;
 
     type Task = Common.CommonRecord<{
@@ -36,14 +40,17 @@ declare namespace Api {
     }>;
     type TaskModel = Pick<Task, | 'id' | 'taskType' | 'taskName' | 'runMode' | 'runTime' | 'runFrequency' | 'dataHandle' | 'programmeLanguage' | 'dataHandleScript' | 'isDebug' | 'status' | 'description'>;
 
-
-    /* Mapping Dialog */
+    // Mapping Dialog
     type DialogModal = {
       connectionID: number | undefined;
       dataObjectType: DataObjectType;
     };
+    //#endregion
 
-    /* Task database */
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Database Task
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //#region Database Task
     type TaskDatabase = {
       id: number;
       taskID: number;
@@ -69,8 +76,12 @@ declare namespace Api {
     }
 
     type TaskDatabaseModel = { task: TaskModel; taskDatabase: TaskDatabase;};
+    //#endregion
 
-    /* Task WebApi */
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // WebApi Task
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //#region WebApi Task
     // 8000  Call,  8001 Pull, 8002 Push
     type RequestType = '8000' | '8001' | '8002';
 
@@ -94,6 +105,67 @@ declare namespace Api {
       dataMapping: string;
       diagramData: string;
     }>;
+    //#endregion
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // HTTP request
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //#region Http request
+    enum ParamType {
+      String = 0,
+      Integer = 1,
+      Boolean = 2,
+      Number = 3,
+      Object = 4,
+      Array = 5,
+      Any = 6
+    }
+
+    enum BodyType {
+      None = 0,
+      Json = 1,
+      Xml = 2,
+      Html = 3,
+      Text = 4,
+      FormData = 5,
+      UrlEncoded = 6,
+      Binary = 7
+    }
+
+    type Param = {
+      name: string;
+      value: string;
+      valueType: ParamType;
+      description?: string;
+    };
+
+    type FormData = {
+      name: string;
+      value?: string;
+      isFile: boolean;
+      filePath?: string;
+      contentType?: string;
+    };
+
+    type BodyConfig = {
+      type: BodyType;
+      raw?: string;
+      formDatas?: FormData[];
+      urlEncodeds?: Param[];
+      binaryFilePath?: string;
+    };
+
+    type RequestConfig = {
+        requestUrl: string;
+        method: string;
+        queryParameters: Param[];
+        headers: Param[];
+        body: BodyConfig;
+        //authorization: AuthConfig;
+        timeout: number;
+    }
+    //#endregion
+
     /* Task industry plc */
   }
 }
