@@ -60,7 +60,8 @@ const local: App.I18n.Schema = {
       enable: 'Enable',
       disable: 'Disable'
     },
-    fetchingDataError: 'Failed to fetch data, please try again later!'
+    fetchingDataError: 'Failed to fetch data, please try again later!',
+    invalidUrl: 'The URL format is incorrect, please check and re-enter!'
   },
   request: {
     logout: 'Logout user after request failed',
@@ -194,9 +195,9 @@ const local: App.I18n.Schema = {
     manage_user: 'User Manage',
     'manage_user-detail': 'User Detail',
     manage_role: 'Role Manage',
-    manage_token: 'Token Manage',
-    manage_token_default: 'Token Manage',
-    manage_token_action: 'Token',
+    manage_authorize: 'Authorize Manage',
+    manage_authorize_default: 'Authorize Manage',
+    manage_authorize_action: 'Authorize',
     manage_menu: 'Menu Manage',
   },
   page: {
@@ -402,47 +403,117 @@ const local: App.I18n.Schema = {
         taskName: 'Please enter task name',
       },
     },
-    token: {
-      title: 'Token Management',
+    authorize: {
+      title: 'Authorize Management',
       titleBaseInfo: 'Basic Info',
-      titleRequest: 'Request Settings',
-      titleResponse: 'Response Settings',
-      add: 'Add Token',
-      edit: 'Edit Token',
-      tokenName: 'Token Name',
+      titleAuthorize: 'Authorize Settings',
+      titleResponse: 'Response Body',
+      add: 'Add Authorize',
+      edit: 'Edit Authorize',
+      name: 'Authorize Name',
       method: 'Request Method',
       requestUrl: 'Request URL',
       timeOut: 'Timeout (seconds)',
-      queryParameters: 'Query Parameters',
-      bodyType: 'Body Type',
-      bodyContent: 'Body Content',
-      header: 'Header',
-      authType: 'Auth Type',
-      authContent: 'Auth Content',
+      type: 'Authorize Type',
+      custom: {
+        name: 'Parameter Name',
+        value: 'Parameter Value',
+        valueType: 'Value Type',
+        description: 'Description',
+        form: {
+          name: 'Please enter parameter name',
+          value: 'Please enter parameter value',
+          valueType: 'Please select value type',
+          description: 'Please enter parameter description'
+        }
+      },
+      apiKey: {
+        key: 'Key Name',
+        value: 'Key Value',
+        form: {
+          key: 'Please enter key name',
+          value: 'Please enter key value'
+        }
+      },
+      basicAuth: {
+        username: 'Username',
+        password: 'Password',
+        form: {
+          username: 'Please enter username',
+          password: 'Please enter password'
+        }
+      },
+      client: {
+        clientID: 'Client ID',
+        clientSecret: 'Client Secret',
+        scopes: 'Scopes',
+        clientAuthentication: 'Client Authentication Type',
+        form: {
+          clientID: 'Please enter client ID',
+          clientSecret: 'Please enter client secret',
+          scopes: 'Please enter scopes',
+          clientAuthentication: 'Please select client authentication type'
+        }
+      },
+      password: {
+        clientID: 'Client ID',
+        clientSecret: 'Client Secret',
+        username: 'Username',
+        password: 'Password',
+        scopes: 'Scopes',
+        form: {
+          clientID: 'Please enter client ID',
+          clientSecret: 'Please enter client secret',
+          username: 'Please enter username',
+          password: 'Please enter password',
+          scopes: 'Please enter scopes',
+        }
+      },
+      jwt: {
+        algorithm: 'Algorithm',
+        secret: 'Secret',
+        isSecretBase: 'Secret Base64',
+        payload: 'Payload',
+        form: {
+          algorithm: 'Please select algorithm',
+          secret: 'Please enter secret',
+          isSecretBase: 'Please select secret base64',
+          payload: 'Please enter payload',
+        }
+      },
+      ntlm: {
+        username: 'Username',
+        password: 'Password',
+        domain: 'Domain',
+        form: {
+          username: 'Please enter username',
+          password: 'Please enter password',
+          domain: 'Please enter domain',
+        }
+      },
+      tokenRetrievalType: 'Token Retrieval Type',
+      tokenPath: 'Token Path',
+      getToken: 'Get Token',
       programmeLanguage: 'Program Language',
-      checkCallResult: 'Call Result',
-      tokenField: 'Token Field',
+      tokenCode: 'Token Code',
+      tokenPassBy: 'Token PassBy',
+      tokenPrefix: 'Token Prefix',
       description: 'Description',
       createUserID: 'Create User ID',
       createTime: 'Create Time',
-      headers: 'Headers',
-      body: 'Body',
-      parameters: 'Parameters',
       authorization: 'Authorization',
       form: {
-        tokenName: 'Please enter token name',
+        name: 'Please enter token name',
         method: 'Please select request method',
         requestUrl: 'Please enter request URL',
         timeOut: 'Please enter timeout (seconds)',
-        queryParameters: 'Please enter query parameters',
-        bodyType: 'Please select body type',
-        bodyContent: 'Please enter body content',
-        header: 'Please enter header',
-        authType: 'Please select auth type',
-        authContent: 'Please enter auth content',
+        type: 'Please select authorize type',
+        tokenRetrievalType: 'Please select token retrieval type',
+        tokenPath: 'Please enter token path',
         programmeLanguage: 'Please select program language',
-        checkCallResult: 'Please enter expression to call result',
-        tokenField: 'Please enter return token field',
+        tokenCode: 'Please enter token code',
+        tokenPassBy: 'Please select token pass by',
+        tokenPrefix: 'Please enter token prefix',
         description: 'Please enter description',
       }
     },

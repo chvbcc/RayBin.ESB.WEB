@@ -94,7 +94,7 @@ watch(
 </script>
 
 <template>
-  <AModal v-model:open="visible" title="Code Editor" style="width: 90%; max-height: 60vh">
+  <a-modal v-model:open="visible" title="Code Editor" style="width: 90%; max-height: 60vh">
     <VueMonacoEditor
       v-model:value="code"
       theme="vs-dark"
@@ -104,12 +104,12 @@ watch(
       @mount="handleEditorMount"
     />
     <template #footer>
-      <ASpace :size="13">
-        <AButton @click="handleCancel">{{ $t('common.cancel') }}</AButton>
-        <AButton type="primary" @click="handleConfirm">{{ $t('common.confirm') }}</AButton>
-      </ASpace>
+      <a-space :size="13">
+        <a-button @click="handleCancel">{{ $t('common.cancel') }}</a-button>
+        <a-button type="primary" @click="handleConfirm">{{ $t('common.confirm') }}</a-button>
+      </a-space>
     </template>
-  </AModal>
+  </a-modal>
 </template>
 
 <style scoped></style>

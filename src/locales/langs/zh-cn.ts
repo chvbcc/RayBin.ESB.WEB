@@ -60,7 +60,8 @@ const local: App.I18n.Schema = {
       enable: '启用',
       disable: '禁用'
     },
-    fetchingDataError: '获取数据失败，请稍后重试!'
+    fetchingDataError: '获取数据失败，请稍后重试!',
+    invalidUrl: 'URL 格式不正确，请检查后重新输入！',
   },
   request: {
     logout: '请求失败后登出用户',
@@ -509,9 +510,9 @@ const local: App.I18n.Schema = {
         type: '请选择授权类型',
         tokenRetrievalType: '请选择令牌检索方式',
         tokenPath: '请输入令牌路径',
-        tokenCode: '请选择请求体类型',
-        tokenPassBy: '请选择令牌传递位置',
         programmeLanguage: '请选择编程语言',
+        tokenCode: '请输入令牌代码',
+        tokenPassBy: '请选择令牌传递位置',
         tokenPrefix: '请输入令牌前缀',
         description: '请输入描述',
       }

@@ -125,40 +125,59 @@ const model = ref(createDefaultModel());
 
 // #endregion
 
-// #region 4. 定义规则类型
-type RuleKey = Extract<keyof Api.Authorize.AuthorizeModel, | 'name' | 'method' | 'requestUrl' | 'type' | 'tokenRetrievalType' | 'tokenPath' | 'programmeLanguage' | 'tokenCode' | 'tokenPassBy' | 'tokenPrefix'>;
+// #region 2. 定义规则类型
+type RuleKey = Extract<keyof Api.Authorize.AuthorizeModel, 'name' | 'method' | 'requestUrl' | 'type' | 'tokenRetrievalType' | 'programmeLanguage' | 'tokenCode' | 'tokenPassBy' | 'tokenPrefix'>;
 
 // 6. 将rules改为计算属性，根据连接模式动态调整必填字段
 const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
-  // const nameRule: App.Global.FormRule => {
-  //   {
-  //     required: true,
-  //     validateTrigger: 'blur',
-  //     validator: async (_rule: any, value: string) => {
-  //       const name = (value ?? '').trim();
-  //       if (!name) {
-  //         return Promise.reject(new Error($t('page.authorize.form.name') as string));
-  //       }
-  //       const { response } = await AuthorizeApi.fetchCheckName(name, model.value.id);
-  //       const data = response.data as { code: string; msg: string; data: boolean };
-  //       if (data.msg === 'success' && data.data) {
-  //         return Promise.reject(new Error($t('common.exists')));
-  //       }
-  //       return Promise.resolve();
-  //     }
-  //   }
-  // };
+  const nameRule: App.Global.FormRule = {
+    required: true,
+    validateTrigger: 'blur',
+    validator: async (_rule: any, value: string) => {
+      const name = (value ?? '').trim();
+      if (!name) {
+        return Promise.reject(new Error($t('page.authorize.form.name') as string));
+      }
+      const { response } = await AuthorizeApi.fetchCheckName(name, model.value.id);
+      const data = response.data as { code: string; msg: string; data: boolean };
+      if (data.msg === 'success' && data.data) {
+        return Promise.reject(new Error($t('common.exists')));
+      }
+      return Promise.resolve();
+    }
+  };
+
+  // URL验证规则
+  const requestUrlRule: App.Global.FormRule = {
+    required: true,
+    validateTrigger: 'blur',
+    validator: async (_rule: any, value: string) => {
+      const url = (value ?? '').trim();
+      if (!url) {
+        return Promise.reject(new Error($t('page.authorize.form.requestUrl') as string));
+      }
+
+      // 验证URL格式
+      try {
+        new URL(url);
+        return Promise.resolve();
+      } catch {
+        return Promise.reject(new Error($t('common.invalidUrl') as string));
+      }
+    }
+  };
 
   // 根据type和tokenRetrievalType动态判断必填规则
-  const tokenRetrievalTypeRule = model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? [defaultRequiredRule] : [{ required: false }];
-  const tokenPathRule = (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 0 ? [defaultRequiredRule] : [{ required: false }];
-  const programmeLanguageRule = (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 1 ? [defaultRequiredRule] : [{ required: false }];
-  const tokenPassByRule = model.value.type === 0 || model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? [defaultRequiredRule] : [{ required: false }];
-  const tokenPrefixRule = model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? [defaultRequiredRule] : [{ required: false }];
+  const tokenRetrievalTypeRule: App.Global.FormRule = { required: model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
+  const tokenPathRule: App.Global.FormRule = { required: (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 0 ? true : false };
+  const programmeLanguageRule: App.Global.FormRule = { required: (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 1 ? true : false };
+  const tokenPassByRule: App.Global.FormRule = { required: model.value.type === 0 || model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
+  const tokenPrefixRule: App.Global.FormRule = { required: model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
   return {
-    method: [defaultRequiredRule],
-    requestUrl: [defaultRequiredRule],
-    type: [defaultRequiredRule],
+    name: nameRule,
+    method: defaultRequiredRule,
+    requestUrl: requestUrlRule,
+    type: defaultRequiredRule,
     tokenRetrievalType: tokenRetrievalTypeRule,
     tokenPath: tokenPathRule,
     programmeLanguage: programmeLanguageRule,
@@ -169,7 +188,7 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
 });
 // #endregion
 
-// #region 2. 初始化时
+// #region 3. 初始化时
 onMounted(async () => {
   // 从路由参数中获取ID （加载编辑数据）
   const id = Number(route.query.id ?? 0);
@@ -178,19 +197,36 @@ onMounted(async () => {
 });
 // #endregion
 
-// #region 3. 获取Token
+// #region 4. 获取Token
 function getToken() {
-  tokenModalVisible.value = true;
+  // formRef.value?.validate().then(async () => {
+  //   const { error, response } = await fetchTest(model.value);
+  //   if (error) { window.$message?.error($t('common.fail')); return; }
+  //   const result = response.data as { code: string; msg: string; data: string };
+  //   if (result.msg === "fail") {
+  //     message.value =  $t('common.fail')
+  //     description.value = result.data
+  //     type.value = 'error';
+  //     showAlert.value = true;
+  //   }
+  //   else if (result.msg === "success") {
+
+  //       window.$message?.success(getPromptMessage(route.query, "Success"));
+
+  //   }
+  // }).catch(() => {
+  //   return;
+  // });
 }
 
-// #region 3. 处理DataHandleModal返回的内容
+// #region 5. 处理DataHandleModal返回的内容
 function handleConfirm(content: string) {
   model.value.tokenCode = content;
   tokenModalVisible.value = false;
 }
 // #endregion
 
-// #region 4. 保存数据对象
+// #region 6. 保存数据对象
 async function handleSave() {
   await validate();
   console.log(customConfig.value);
@@ -203,14 +239,14 @@ async function handleSave() {
 }
 // #endregion
 
-// #region 5. 返回数据库列表
+// #region 7. 返回数据库列表
 function handleBack() {
   appStore.tabStore.removeActiveTab();
   router.push({ name: 'database' });
 }
 // #endregion
 
-// #region 6. 监听语言变化，动态更新 labelCol 的宽度
+// #region 8. 监听语言变化，动态更新 labelCol 的宽度
 watch(language, newLang => {
   labelCol.style.width = newLang === 'en-US' ? '130px' : '100px';
 });

@@ -314,6 +314,7 @@ declare namespace App {
           disable: string;
         };
         fetchingDataError: string;
+        invalidUrl: string;
       };
       request: {
         logout: string;
@@ -689,15 +690,13 @@ declare namespace App {
             method: string;
             requestUrl: string;
             timeOut: string;
-            queryParameters: string;
-            bodyType: string;
-            bodyContent: string;
-            header: string;
-            authType: string;
-            authContent: string;
+            type: string;
+            tokenRetrievalType: string;
+            tokenPath: string;
+            tokenCode: string;
+            tokenPassBy: string;
             programmeLanguage: string;
-            checkCallResult: string;
-            tokenField: string;
+            tokenPrefix: string;
             description: string;
           };
         }

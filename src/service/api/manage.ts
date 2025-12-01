@@ -236,14 +236,23 @@ export namespace AuthorizeApi {
   /** 分页列表 */
   export function fetchGetPagingList(params?: Api.Authorize.AuthorizeSearchParams) {
     return request<Api.Authorize.AuthorizeList>({
-      url: '/Authorize/getPagingList',
+      url: '/authorize/getPagingList',
       method: 'get',
       params
     });
   }
 
+    /** 检查名称 */
+  export function fetchCheckName(name: string, id?: number) {
+    return request({
+      url: '/authorize/checkName',
+      method: 'get',
+      params: { name, id }
+    });
+  }
+
   export function fetchDelete(id: number) {
-    let url = '/Authorize/delete';
+    let url = '/authorize/delete';
     return request({
       url: url,
       method: 'delete',
@@ -252,7 +261,7 @@ export namespace AuthorizeApi {
   }
 
   export function fetchDeletes(ids: number[]) {
-    let url = '/Authorize/deletes';
+    let url = '/authorize/deletes';
     return request({
       headers: { 'Content-Type': 'application/json' },
       url: url,
