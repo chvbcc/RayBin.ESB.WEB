@@ -175,6 +175,34 @@ export const generatedRoutes: GeneratedRoute[] = [
     },
     children: [
       {
+        name: 'manage_authorize',
+        path: '/manage/authorize',
+        meta: {
+          title: 'manage_authorize',
+          i18nKey: 'route.manage_authorize'
+        },
+        children: [
+          {
+            name: 'manage_authorize_action',
+            path: '/manage/authorize/action',
+            component: 'view.manage_authorize_action',
+            meta: {
+              title: 'manage_authorize_action',
+              i18nKey: 'route.manage_authorize_action'
+            }
+          },
+          {
+            name: 'manage_authorize_default',
+            path: '/manage/authorize/default',
+            component: 'view.manage_authorize_default',
+            meta: {
+              title: 'manage_authorize_default',
+              i18nKey: 'route.manage_authorize_default'
+            }
+          }
+        ]
+      },
+      {
         name: 'manage_menu',
         path: '/manage/menu',
         component: 'view.manage_menu',
@@ -198,35 +226,6 @@ export const generatedRoutes: GeneratedRoute[] = [
           order: 2,
           roles: ['R_SUPER']
         }
-      },
-      {
-        name: 'manage_token',
-        path: '/manage/token',
-        component: 'view.manage_token',
-        meta: {
-          title: 'manage_token',
-          i18nKey: 'route.manage_token'
-        },
-        children: [
-          {
-            name: 'manage_token_action',
-            path: '/manage/token/action',
-            component: 'view.manage_token_action',
-            meta: {
-              title: 'manage_token_action',
-              i18nKey: 'route.manage_token_action'
-            }
-          },
-          {
-            name: 'manage_token_default',
-            path: '/manage/token/default',
-            component: 'view.manage_token_default',
-            meta: {
-              title: 'manage_token_default',
-              i18nKey: 'route.manage_token_default'
-            }
-          }
-        ]
       },
       {
         name: 'manage_user',

@@ -1,25 +1,35 @@
 <script setup lang="tsx">
 import dayjs from 'dayjs';
-import { $t } from '@/locales';
 import { useRouter } from 'vue-router';
 import { Button } from 'ant-design-vue';
+import { $t } from '@/locales';
 import { useAppStore } from '@/store/modules/app';
-import TokenSearch from './modules/token-search.vue';
-import  { TokenApi }  from '@/service/api/manage';
+import { AuthorizeApi } from '@/service/api/manage';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
+import AuthorizeSearch from './modules/authorize-search.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
 const { tableWrapperRef, scrollConfig } = useTableScroll();
 
-const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
-  apiFn: TokenApi.fetchGetPagingList,
+const {
+  columns,
+  columnChecks,
+  data,
+  loading,
+  getData,
+  getDataByPage,
+  mobilePagination,
+  searchParams,
+  resetSearchParams
+} = useTable({
+  apiFn: AuthorizeApi.fetchGetPagingList,
   apiParams: {
     current: 1,
     size: 10,
-    tokenName: undefined,
+    name: undefined,
     method: undefined,
-    requestUrl: undefined,
+    requestUrl: undefined
   },
   columns: () => [
     {
@@ -30,30 +40,30 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
       width: 64
     },
     {
-      key: 'tokenName',
-      dataIndex: 'tokenName',
-      title: $t('page.token.tokenName'),
+      key: 'name',
+      dataIndex: 'name',
+      title: $t('page.authorize.name'),
       align: 'center',
       minWidth: 120
     },
     {
       key: 'method',
       dataIndex: 'method',
-      title: $t('page.token.method'),
+      title: $t('page.authorize.method'),
       align: 'center',
-      width: 130,
+      width: 130
     },
     {
       key: 'requestUrl',
       dataIndex: 'requestUrl',
-      title: $t('page.token.requestUrl'),
+      title: $t('page.authorize.requestUrl'),
       align: 'center',
       minWidth: 180
     },
     {
       key: 'createTime',
       dataIndex: 'createTime',
-      title: $t('page.taskLog.createTime'),
+      title: $t('page.authorize.createTime'),
       align: 'center',
       width: 150,
       customRender: ({ record }) => {
@@ -81,19 +91,15 @@ const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagi
   ]
 });
 
-
-const {
-  handleEdit,
-  checkedRowKeys,
-  rowSelection,
-  onBatchDeleted,
-  onDeleted
-} = useTableOperate(data, getData);
+const { handleEdit, checkedRowKeys, rowSelection, onBatchDeleted, onDeleted } = useTableOperate(data, getData);
 
 async function handleBatchDelete() {
   if (checkedRowKeys.value.length === 0) return;
-  const { error, response } = await TokenApi.fetchDeletes(checkedRowKeys.value);
-  if (error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const { error, response } = await AuthorizeApi.fetchDeletes(checkedRowKeys.value);
+  if (error) {
+    window.$message?.error($t('common.deleteFailed'));
+    return;
+  }
   const result = response.data as { code: string; msg: string; data: boolean };
   if (result.msg === 'success') {
     onBatchDeleted();
@@ -105,8 +111,11 @@ async function handleBatchDelete() {
 }
 
 async function handleDelete(id: number) {
-  const { error, response } = await TokenApi.fetchDelete(id);
-  if (error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const { error, response } = await AuthorizeApi.fetchDelete(id);
+  if (error) {
+    window.$message?.error($t('common.deleteFailed'));
+    return;
+  }
   const result = response.data as { code: string; msg: string; data: boolean };
   if (result.msg === 'success') {
     onDeleted();
@@ -123,19 +132,19 @@ function edit(id: number) {
 
 function handleAdd() {
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'manage_token_action' });
+  router.push({ name: 'manage_authorize_action' });
 }
-
 </script>
+
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-    <TokenSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
-    <a-card :title="$t('page.token.title')" :bordered="false" class="card-wrapper sm:flex-1-hidden">
+    <AuthorizeSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
+    <a-card :title="$t('page.authorize.title')" :bordered="false" class="sm:flex-1-hidden card-wrapper">
       <template #extra>
         <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
-      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small"
-        :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination"  class="h-full" bordered />
+      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small" :scroll="scrollConfig"
+        :loading="loading" row-key="id" :pagination="mobilePagination" class="h-full min-h-500px" bordered />
     </a-card>
   </div>
 </template>

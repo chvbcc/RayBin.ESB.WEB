@@ -194,9 +194,9 @@ const local: App.I18n.Schema = {
     manage_user: '用户管理',
     'manage_user-detail': '用户详情',
     manage_role: '角色管理',
-    manage_token: '令牌管理',
-    manage_token_default: '令牌管理',
-    manage_token_action: '令牌',
+    manage_authorize: '授权管理',
+    manage_authorize_default: '授权管理',
+    manage_authorize_action: '授权',
     manage_menu: '菜单管理',
   },
   page: {
@@ -402,18 +402,20 @@ const local: App.I18n.Schema = {
         taskName: '请输入任务名称',
       },
     },
-    token: {
+    authorize: {
       title: '授权管理',
       titleBaseInfo: '基本信息',
       titleRequest: '请求设置',
       titleResponse: '响应设置',
       add: '新增授权',
       edit: '编辑授权',
-      tokenName: '授权名称',
+      name: '授权名称',
       method: '请求方法',
       requestUrl: '请求URL',
       timeOut: '超时时间 (秒)',
-      queryParameters: '查询参数',
+      type: '授权类型',
+
+
       bodyType: '请求体类型',
       bodyContent: '请求体内容',
       header: '请求头',

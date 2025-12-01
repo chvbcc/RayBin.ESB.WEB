@@ -33,11 +33,11 @@ declare module "@elegant-router/types" {
     "industria_default": "/industria/default";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
     "manage": "/manage";
+    "manage_authorize": "/manage/authorize";
+    "manage_authorize_action": "/manage/authorize/action";
+    "manage_authorize_default": "/manage/authorize/default";
     "manage_menu": "/manage/menu";
     "manage_role": "/manage/role";
-    "manage_token": "/manage/token";
-    "manage_token_action": "/manage/token/action";
-    "manage_token_default": "/manage/token/default";
     "manage_user": "/manage/user";
     "manage_user-detail": "/manage/user-detail/:id";
     "message": "/message";
@@ -123,10 +123,10 @@ declare module "@elegant-router/types" {
     | "home"
     | "industria_action"
     | "industria_default"
+    | "manage_authorize_action"
+    | "manage_authorize_default"
     | "manage_menu"
     | "manage_role"
-    | "manage_token_action"
-    | "manage_token_default"
     | "manage_user-detail"
     | "manage_user"
     | "message"

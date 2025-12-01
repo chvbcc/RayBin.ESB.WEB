@@ -585,19 +585,27 @@ declare namespace App {
             description: string;
           };
         };
-        token : {
+        authorize : {
           title: string;
           titleBaseInfo: string;
           titleRequest: string;
           titleResponse: string;
           add: string;
           edit: string;
-          tokenName: string;
+          name: string;
           method: string;
           requestUrl: string;
           timeOut: string;
-          queryParameters: string;
-          bodyType: string;
+          type: string;
+          customConfig: {
+            name: string;
+            value: string;
+            valueType: string;
+            description: string;
+          }
+
+
+
           bodyContent: string;
           header: string;
           authType: string;

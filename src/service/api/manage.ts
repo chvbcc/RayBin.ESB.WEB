@@ -232,18 +232,18 @@ export namespace MenuApi {
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-export namespace TokenApi {
+export namespace AuthorizeApi {
   /** 分页列表 */
-  export function fetchGetPagingList(params?: Api.Token.TokenSearchParams) {
-    return request<Api.Token.TokenList>({
-      url: '/token/getPagingList',
+  export function fetchGetPagingList(params?: Api.Authorize.AuthorizeSearchParams) {
+    return request<Api.Authorize.AuthorizeList>({
+      url: '/Authorize/getPagingList',
       method: 'get',
       params
     });
   }
 
   export function fetchDelete(id: number) {
-    let url = '/token/delete';
+    let url = '/Authorize/delete';
     return request({
       url: url,
       method: 'delete',
@@ -252,7 +252,7 @@ export namespace TokenApi {
   }
 
   export function fetchDeletes(ids: number[]) {
-    let url = '/token/deletes';
+    let url = '/Authorize/deletes';
     return request({
       headers: { 'Content-Type': 'application/json' },
       url: url,
