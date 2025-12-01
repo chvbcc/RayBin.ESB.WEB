@@ -1,5 +1,3 @@
-import { getToken } from '@/store/modules/auth/shared';
-
 // The global namespace for the app */
 declare namespace App {
   // Theme namespace */
