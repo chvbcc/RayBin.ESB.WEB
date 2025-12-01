@@ -114,8 +114,8 @@ declare namespace Api {
       ntlmConfig: NtlmConfig; // NTLM
       tokenRetrievalType: TokenRetrievalType; // 令牌检索方式 分为路径，和代码
       tokenPath: string; // 令牌路径
-      tokenCode: string; // 令牌代码
       programmeLanguage: string; // 程序语言
+      tokenCode: string; // 令牌代码
       tokenPassBy: Location; // 令牌传递位置
       tokenPrefix: string; // 令牌前缀（Query：access_token Header：Bearer）
       description: string;

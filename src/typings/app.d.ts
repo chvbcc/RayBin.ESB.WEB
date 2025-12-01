@@ -1,3 +1,5 @@
+import { getToken } from '@/store/modules/auth/shared';
+
 // The global namespace for the app */
 declare namespace App {
   // Theme namespace */
@@ -588,7 +590,7 @@ declare namespace App {
         authorize : {
           title: string;
           titleBaseInfo: string;
-          titleRequest: string;
+          titleAuthorize: string;
           titleResponse: string;
           add: string;
           edit: string;
@@ -597,31 +599,95 @@ declare namespace App {
           requestUrl: string;
           timeOut: string;
           type: string;
-          customConfig: {
+          custom: {
             name: string;
             value: string;
             valueType: string;
             description: string;
-          }
-
-
-
-          bodyContent: string;
-          header: string;
-          authType: string;
-          authContent: string;
+            form: {
+              name: string;
+              value: string;
+              valueType: string;
+              description: string;
+            }
+          },
+          apiKey: {
+            key: string;
+            value: string;
+            form: {
+              key: string;
+              value: string;
+            }
+          },
+          basicAuth: {
+            username: string;
+            password: string;
+            form: {
+              username: string;
+              password: string;
+            }
+          },
+          client: {
+            clientID: string;
+            clientSecret: string;
+            scopes: string;
+            clientAuthentication: string;
+            form: {
+              clientID: string;
+              clientSecret: string;
+              scopes: string;
+              clientAuthentication: string;
+            }
+          },
+          password: {
+            clientID: string;
+            clientSecret: string;
+            username: string;
+            password: string;
+            scopes: string;
+            form: {
+              clientID: string;
+              clientSecret: string;
+              username: string;
+              password: string;
+              scopes: string;
+            }
+          },
+          jwt: {
+            algorithm: string;
+            secret: string;
+            isSecretBase: string;
+            payload: string;
+            form: {
+              algorithm: string;
+              secret: string;
+              isSecretBase: string;
+              payload: string;
+            }
+          },
+          ntlm: {
+            username: string;
+            password: string;
+            domain: string;
+            form: {
+              username: string;
+              password: string;
+              domain: string;
+            }
+          },
+          tokenRetrievalType: string;
+          tokenPath: string;
+          getToken: string;
           programmeLanguage: string;
-          checkCallResult: string;
-          tokenField: string;
+          tokenCode: string;
+          tokenPassBy: string;
+          tokenPrefix: string;
           description: string;
           createUserID: string;
           createTime: string;
-          headers: string;
-          parameters: string;
-          body: string;
           authorization: string;
           form: {
-            tokenName: string;
+            name: string;
             method: string;
             requestUrl: string;
             timeOut: string;

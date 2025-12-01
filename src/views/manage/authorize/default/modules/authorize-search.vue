@@ -58,55 +58,50 @@ watch(language, newLang => {
 </script>
 
 <template>
-  <ACard :title="$t('common.search')" :bordered="false" class="card-wrapper">
-    <AForm :model="model" :label-col="labelCol" :label-wrap="true">
-      <ARow :gutter="[16, 16]" wrap>
-        <ACol :span="24" :md="12" :lg="12">
-          <AFormItem :label="$t('page.authorize.name')" name="name" class="m-0">
-            <AInput v-model:value="model.name" :placeholder="$t('page.authorize.form.name')" />
-          </AFormItem>
-        </ACol>
-        <ACol :span="24" :md="12" :lg="12">
-          <AFormItem :label="$t('page.authorize.method')" name="method" class="m-0">
-            <ASelect
-              v-model:value="model.method"
-              :placeholder="$t('page.authorize.form.method')"
-              :options="methodOptions"
-              allow-clear
-            ></ASelect>
-          </AFormItem>
-        </ACol>
-        <ACol :span="24" :md="12" :lg="12">
-          <AFormItem :label="$t('page.authorize.requestUrl')" name="requestUrl" class="m-0">
-            <AInput v-model:value="model.requestUrl" :placeholder="$t('page.authorize.form.requestUrl')" />
-          </AFormItem>
-        </ACol>
-        <ACol :span="24" :md="12" :lg="12">
-          <AFormItem :label="$t('page.authorize.createTime')" name="createTime" class="m-0">
-            <ARangePicker v-model:value="dateRange" :style="{ width: '100%' }" />
-          </AFormItem>
-        </ACol>
-        <ACol :span="24" :md="12" :lg="12">
-          <AFormItem label="&nbsp;" :colon="false" class="m-0">
+  <a-card :title="$t('common.search')" :bordered="false" class="card-wrapper">
+    <a-form :model="model" :label-col="labelCol" :label-wrap="true">
+      <a-row :gutter="[16, 16]" wrap>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-formItem :label="$t('page.authorize.name')" name="name" class="m-0">
+            <a-input v-model:value="model.name" :placeholder="$t('page.authorize.form.name')" />
+          </a-formItem>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-formItem :label="$t('page.authorize.method')" name="method" class="m-0">
+            <a-select v-model:value="model.method" :placeholder="$t('page.authorize.form.method')" :options="methodOptions" allow-clear />
+          </a-formItem>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-formItem :label="$t('page.authorize.requestUrl')" name="requestUrl" class="m-0">
+            <a-input v-model:value="model.requestUrl" :placeholder="$t('page.authorize.form.requestUrl')" />
+          </a-formItem>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-formItem :label="$t('page.authorize.createTime')" name="createTime" class="m-0">
+            <a-range-picker v-model:value="dateRange" :style="{ width: '100%' }" />
+          </a-formItem>
+        </a-col>
+        <a-col :span="24" :md="12" :lg="12">
+          <a-formItem label="&nbsp;" :colon="false" class="m-0">
             <div class="w-full flex-y-center justify-start gap-12px">
-              <AButton type="primary" ghost @click="reset">
+              <a-button type="primary" ghost @click="reset">
                 <template #icon>
                   <icon-ic-round-refresh class="align-sub text-icon" />
                 </template>
                 <span class="ml-8px">{{ $t('common.reset') }}</span>
-              </AButton>
-              <AButton type="primary" ghost @click="search">
+              </a-button>
+              <a-button type="primary" ghost @click="search">
                 <template #icon>
                   <icon-ic-round-search class="align-sub text-icon" />
                 </template>
                 <span class="ml-8px">{{ $t('common.search') }}</span>
-              </AButton>
+              </a-button>
             </div>
-          </AFormItem>
-        </ACol>
-      </ARow>
-    </AForm>
-  </ACard>
+          </a-formItem>
+        </a-col>
+      </a-row>
+    </a-form>
+  </a-card>
 </template>
 
 <style scoped></style>

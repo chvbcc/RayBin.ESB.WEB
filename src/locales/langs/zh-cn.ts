@@ -405,8 +405,8 @@ const local: App.I18n.Schema = {
     authorize: {
       title: '授权管理',
       titleBaseInfo: '基本信息',
-      titleRequest: '请求设置',
-      titleResponse: '响应设置',
+      titleAuthorize: '授权设置',
+      titleResponse: '响应内容',
       add: '新增授权',
       edit: '编辑授权',
       name: '授权名称',
@@ -414,25 +414,95 @@ const local: App.I18n.Schema = {
       requestUrl: '请求URL',
       timeOut: '超时时间 (秒)',
       type: '授权类型',
-
-
-      bodyType: '请求体类型',
-      bodyContent: '请求体内容',
-      header: '请求头',
-      authType: '认证类型',
-      authContent: '认证内容',
+      custom: {
+        name: '参数名',
+        value: '参数值',
+        valueType: '参数类型',
+        description: '描述',
+        form: {
+          name: '请输入参数名',
+          value: '请输入参数值',
+          valueType: '请选择参数类型',
+          description: '请输入参数描述'
+        }
+      },
+      apiKey: {
+        key: '键名',
+        value: '键值',
+        form: {
+          key: '请输入键名',
+          value: '请输入键值'
+        }
+      },
+      basicAuth: {
+        username: '用户名',
+        password: '密码',
+        form: {
+          username: '请输入用户名',
+          password: '请输入密码'
+        }
+      },
+      client: {
+        clientID: '客户端 ID',
+        clientSecret: '客户端密钥',
+        scopes: '作用域',
+        clientAuthentication: '认证方式',
+        form: {
+          clientID: '请输入客户端 ID',
+          clientSecret: '请输入客户端密钥',
+          scopes: '请输入作用域，多个用逗号分隔',
+          clientAuthentication: '请选择认证方式'
+        }
+      },
+      password: {
+        clientID: '客户端 ID',
+        clientSecret: '客户端密钥',
+        username: '用户名',
+        password: '密码',
+        scopes: '作用域',
+        form: {
+          clientID: '请输入客户端 ID',
+          clientSecret: '请输入客户端密钥',
+          username: '请输入用户名',
+          password: '请输入密码',
+          scopes: '请输入作用域，多个用逗号分隔'
+        }
+      },
+      jwt: {
+        algorithm: '签名算法',
+        secret: '签名密钥',
+        isSecretBase: '密钥编码',
+        payload: '负载内容',
+        form: {
+          algorithm: '请选择签名算法',
+          secret: '请输入签名密钥',
+          isSecretBase: '请选择密钥是否Base64编码',
+          payload: '请输入负载内容'
+        }
+      },
+      ntlm: {
+        username: '用户名',
+        password: '密码',
+        domain: '域',
+        form: {
+          username: '请输入用户名',
+          password: '请输入密码',
+          domain: '请输入域',
+        }
+      },
+      tokenRetrievalType: '检索方式',
+      tokenPath: '令牌路径',
+      getToken: '获取令牌',
       programmeLanguage: '编程语言',
-      checkCallResult: '调用结果',
-      tokenField: '令牌字段',
+      tokenCode: '令牌代码',
+      tokenPassBy: '传递位置',
+      tokenPrefix: '令牌前缀',
       description: '描述',
       createUserID: '创建用户',
       createTime: '创建时间',
-      headers: '请求头',
-      parameters: '查询参数',
-      body: '请求体',
       authorization: '认证',
       form: {
-        tokenName: '请输入令牌名称',
+        name: '请输入授权名称',
         method: '请选择请求方法',
         requestUrl: '请输入请求URL',
         timeOut: '请输入超时时间',

@@ -161,15 +161,53 @@ export const bodyTypeOptions = [
   { label: 'Binary', value: 7 }
 ];
 
+export const customItemTypeOptions = [
+  { label: 'String', value: 0 },
+  { label: 'Integer', value: 1 },
+  { label: 'Boolean', value: 2 },
+  { label: 'Number', value: 3 },
+];
+
+export const sendTypeOptions = [
+  { label: 'Send Credentials in Body', value: 0 },
+  { label: 'Send Credentials as Basic Auth', value: 1 }
+];
+
+export const algorithmOptions = [
+  { value: 'HS256' },
+  { value: 'HS384' },
+  { value: 'HS512' },
+  { value: 'RS256' },
+  { value: 'RS384' },
+  { value: 'RS512' },
+  { value: 'ES256' },
+  { value: 'ES384' },
+  { value: 'ES512' },
+  { value: 'PS256' },
+  { value: 'PS384' },
+  { value: 'PS512' }
+];
+
+export const locationOptions = [
+  { label: 'Header', value: 0 },
+  { label: 'Query', value: 1 },
+];
+
+export const tokenRetrievalTypeOptions = [
+  { label: 'TokenPath', value: 0 },
+  { label: 'TokenCode', value: 1 },
+];
+
 export const authTypeOptions = [
-  { label: 'None', value: 'None' },
-  { label: 'ApiKey', value: 'ApiKey' },
-  { label: 'Basic', value: 'Basic' },
-  { label: 'Bearer', value: 'Bearer' },
-  { label: 'OAuth2', value: 'OAuth2' },
-  { label: 'JwtBearer', value: 'JwtBearer' },
-  { label: 'Ntlm', value: 'Ntlm' }
+  { label: 'Custom', value: 0},
+  { label: 'API Key', value: 1 },
+  { label: 'Basic Auth', value: 2 },
+  { label: 'Client Credentials (OAuth2)', value: 3 },
+  { label: 'Password Credentials (OAuth2)', value: 4 },
+  { label: 'JwtBearer', value: 5 },
+  { label: 'Ntlm', value: 6 }
 ]
+
 
 export const paramNameOptions = [
   { value: 'Accept' },
