@@ -46,21 +46,6 @@ const createEmptyCustomItem = (): Api.Authorize.CustomItem => ({
   description: ''
 });
 
-// 自定义配置默认参数
-const customConfig = ref<Api.Authorize.CustomItem[]>([createEmptyCustomItem()]);
-// API密钥配置默认参数
-const apiKeyConfig = ref<Api.Authorize.ApiKeyConfig>({ key: '', value: '' });
-// 客户端配置默认参数
-const basicAuthConfig = ref<Api.Authorize.BasicAuthConfig>({ username: '', password: '' });
-// 客户端配置默认参数
-const clientConfig = ref<Api.Authorize.ClientConfig>({ clientID: '', clientSecret: '', scopes: [], clientAuthentication: 0 });
-// 密码配置默认参数
-const passwordConfig = ref<Api.Authorize.PasswordConfig>({ clientID: '', clientSecret: '', username: '', password: '', scopes: [] });
-// JWT 默认参数
-const jwtConfig = ref<Api.Authorize.JwtConfig>({ algorithm: '', secret: '', isSecretBase: 0, payload: '' });
-// NTLM 默认参数
-const ntlmConfig = ref<Api.Authorize.NtlmConfig>({ username: '', password: '', domain: '' });
-
 const customRef = ref<InstanceType<typeof Custom>>();
 const apiKeyRef = ref<InstanceType<typeof ApiKey>>();
 const basicAuthRef = ref<InstanceType<typeof BasicAuth>>();
@@ -196,6 +181,7 @@ onMounted(async () => {
     const { error, data } = await AuthorizeApi.fetchGetModel(id);
     if (!error && data) {
       model.value = { ...createDefaultModel(), ...data };
+      console.log('model', model.value);
     }
   }
 });
@@ -233,7 +219,6 @@ function handleConfirm(content: string) {
 // #region 6. 保存数据对象
 async function handleSave() {
   formRef.value?.validate().then(async () => {
-    console.log('model', model.value);
     const { error, response } = await AuthorizeApi.fetchSave(model.value);
     if (error) { window.$message?.error(getPromptMessage(route.query, "Failed")); return; }
     const result = response.data as { code: string; msg: string; data: string };
@@ -340,25 +325,25 @@ watch(language, newLang => {
           </a-col>
         </a-row>
         <div v-if="model.type == 0">
-          <Custom ref="customRef" v-model:model="customConfig" />
+          <Custom ref="customRef" v-model:model="model.customConfig" />
         </div>
         <div v-if="model.type == 1" class="mt-4">
-          <ApiKey ref="apiKeyRef" v-model:model="apiKeyConfig" />
+          <ApiKey ref="apiKeyRef" v-model:model="model.apiKeyConfig" />
         </div>
         <div v-if="model.type == 2" class="mt-4">
-          <BasicAuth ref="basicAuthRef" v-model:model="basicAuthConfig" />
+          <BasicAuth ref="basicAuthRef" v-model:model="model.basicAuthConfig" />
         </div>
         <div v-if="model.type == 3" class="mt-4">
-          <Client ref="clientRef" v-model:model="clientConfig" />
+          <Client ref="clientRef" v-model:model="model.clientConfig" />
         </div>
         <div v-if="model.type == 4" class="mt-4">
-          <Password ref="passwordRef" v-model:model="passwordConfig" />
+          <Password ref="passwordRef" v-model:model="model.passwordConfig" />
         </div>
         <div v-if="model.type == 5" class="mt-4">
-          <Jwt ref="jwtRef" v-model:model="jwtConfig" />
+          <Jwt ref="jwtRef" v-model:model="model.jwtConfig" />
         </div>
         <div v-if="model.type == 6" class="mt-4">
-          <Ntlm ref="ntlmRef" v-model:model="ntlmConfig" />
+          <Ntlm ref="ntlmRef" v-model:model="model.ntlmConfig" />
         </div>
       </a-card>
       <a-card :title="$t('page.authorize.titleResponse')" :bordered="false" class="flex flex-col flex-1">

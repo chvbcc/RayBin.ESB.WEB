@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { $t, language } from '@/locales';
-import { useAntdForm, useFormRules } from '@/hooks/common/form';
+  import { computed } from 'vue';
+  import { $t, language } from '@/locales';
+  import { useAntdForm, useFormRules } from '@/hooks/common/form';
 
-const { formRef } = useAntdForm();
-const { defaultRequiredRule } = useFormRules();
+  // 1. 定义默认模型
+  const { formRef, validate, resetFields } = useAntdForm();
+  const model = defineModel<Api.Authorize.NtlmConfig>('model', { default: () => ({}) });
 
-// 2. 定义默认模型
-const model = defineModel<Api.Authorize.NtlmConfig>('model', { default: () => ({}) });
+  // 2. 定义验证规则
+  const { defaultRequiredRule } = useFormRules();
+  type RuleKey = Extract<keyof Api.Authorize.NtlmConfig, 'userame' | 'password'>;
 
-// #region 4. 定义规则类型
-type RuleKey = Extract<keyof Api.Authorize.NtlmConfig, 'userame' | 'password'>;
+  const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
+    return {
+      username: defaultRequiredRule,
+      password: defaultRequiredRule
+    };
+  });
 
-// 根据语言动态设置 labelCol 宽度
-const labelCol = language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } };
+  // 3. 根据语言动态设置 labelCol 宽度
+  const labelCol = language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } };
 
-const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
-  return {
-    username: defaultRequiredRule,
-    password: defaultRequiredRule
-  };
-});
-
-defineExpose({
-  validate: () => formRef.value?.validate(),
-  reset: () => formRef.value?.resetFields()
-});
+  // 4. 暴露给父组件的方法
+  defineExpose({
+    validate,
+    reset: resetFields
+  });
 </script>
 
 <template>

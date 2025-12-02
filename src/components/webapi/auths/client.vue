@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { $t, language } from '@/locales';
 import { sendTypeOptions } from '@/constants/options';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
@@ -8,7 +8,7 @@ import { useAntdForm, useFormRules } from '@/hooks/common/form';
 const { defaultRequiredRule } = useFormRules();
 
 // 2. 定义默认模型
-const formClientRef = useAntdForm();
+const { formRef, validate, resetFields } = useAntdForm();
 const model = defineModel<Api.Authorize.ClientConfig>('model', { default: () => ({}) });
 
 // #region 4. 定义规则类型
@@ -36,13 +36,13 @@ const scopesProxy = computed({
 });
 
 defineExpose({
-  validate: () => formClientRef.validate(),
-  reset: () => formClientRef.resetFields()
+  validate,
+  reset: resetFields
 });
 </script>
 
 <template>
-  <a-form ref="formClientRef" :model="model" :rules="rules" :label-col="labelCol">
+  <a-form ref="formRef" :model="model" :rules="rules" :label-col="labelCol">
     <a-row :gutter="[16, 16]">
       <a-col :span="24" :md="12" :lg="12">
         <a-form-item :label="$t('page.authorize.client.clientID')" name="clientID" class="m-0">

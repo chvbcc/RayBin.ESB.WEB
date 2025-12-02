@@ -1,44 +1,45 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { $t, language } from '@/locales';
-import { useAntdForm, useFormRules } from '@/hooks/common/form';
+  import { computed } from 'vue';
+  import { $t, language } from '@/locales';
+  import { useAntdForm, useFormRules } from '@/hooks/common/form';
 
-const { formRef } = useAntdForm();
-const { defaultRequiredRule } = useFormRules();
+  // 1. 定义默认模型
+  const { formRef, validate, resetFields } = useAntdForm();
+  const model = defineModel<Api.Authorize.PasswordConfig>('model', { default: () => ({}) });
 
-// 2. 定义默认模型
-const model = defineModel<Api.Authorize.PasswordConfig>('model', { default: () => ({}) });
+  // 2. 定义验证规则
+  const { defaultRequiredRule } = useFormRules();
+  type RuleKey = Extract<keyof Api.Authorize.PasswordConfig, 'username' | 'password' | 'clientID'>;
 
-// #region 4. 定义规则类型
-type RuleKey = Extract<keyof Api.Authorize.PasswordConfig, 'username' | 'password' | 'clientID'>;
+  const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
+    return {
+      username: defaultRequiredRule,
+      password: defaultRequiredRule,
+      clientID: defaultRequiredRule
+    };
+  });
 
-// 根据语言动态设置 labelCol 宽度
-const labelCol = language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } };
+  // 3. 根据语言动态设置 labelCol 宽度
+  const labelCol = language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } };
 
-const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
-  return {
-    username: defaultRequiredRule,
-    password: defaultRequiredRule,
-    clientID: defaultRequiredRule
-  };
-});
+  // 4. 处理 scopes 输入
+  const scopesProxy = computed({
+    get: () => (model.value.scopes ?? []).join(', '),
+    set: value => {
+      model.value.scopes = value
+        ? value
+            .split(',')
+            .map(item => item.trim())
+            .filter(Boolean)
+        : [];
+    }
+  });
 
-const scopesProxy = computed({
-  get: () => (model.value.scopes ?? []).join(', '),
-  set: value => {
-    model.value.scopes = value
-      ? value
-          .split(',')
-          .map(item => item.trim())
-          .filter(Boolean)
-      : [];
-  }
-});
-
-defineExpose({
-  validate: () => formRef.value?.validate(),
-  reset: () => formRef.value?.resetFields()
-});
+  // 5. 暴露给父组件
+  defineExpose({
+    validate,
+    reset: resetFields
+  });
 </script>
 
 <template>
