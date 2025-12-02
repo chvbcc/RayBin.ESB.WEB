@@ -251,6 +251,30 @@ export namespace AuthorizeApi {
     });
   }
 
+  export function fetchGetModel(id: number) {
+    return request<Api.Authorize.AuthorizeModel>({
+      url: '/authorize/getModel',
+      method: 'get',
+      params: { id }
+    });
+  }
+
+  export function fetchSave(data: Api.Authorize.AuthorizeModel) {
+    const submitData = {
+      ...data,
+      jwtConfig: {
+        ...data.jwtConfig,
+        isSecretBase: Boolean(data.jwtConfig.isSecretBase)
+      }
+    };
+    let url = data.id === 0 ? '/authorize/add' : '/authorize/update';
+    return request({
+      url: url,
+      method: 'post',
+      data: submitData
+    });
+  }
+
   export function fetchDelete(id: number) {
     let url = '/authorize/delete';
     return request({

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { $t } from '@/locales';
 import { h, nextTick, ref } from 'vue';
 import type { FormInstance } from 'ant-design-vue';
-import { $t } from '@/locales';
 import { customItemTypeOptions } from '@/constants/options';
 
 // 创建带星号的标题

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { $t, language } from '@/locales';
 import { useRoute, useRouter } from 'vue-router';
+import { getPromptMessage } from '@/utils/common';
 import { useAppStore } from '@/store/modules/app';
 import TokenModal from './modules/token-modal.vue';
 import { AuthorizeApi } from '@/service/api/manage';
@@ -23,7 +24,7 @@ const editor = shallowRef();
 const appStore = useAppStore();
 const bodyLanguage = ref('json');
 const tokenModalVisible = ref(false);
-const { formRef, validate } = useAntdForm();
+const { formRef } = useAntdForm();
 const { defaultRequiredRule } = useFormRules();
 
 // 编辑器选项
@@ -190,9 +191,12 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
 
 // #region 3. 初始化时
 onMounted(async () => {
-  // 从路由参数中获取ID （加载编辑数据）
   const id = Number(route.query.id ?? 0);
   if (id) {
+    const { error, data } = await AuthorizeApi.fetchGetModel(id);
+    if (!error && data) {
+      model.value = { ...createDefaultModel(), ...data };
+    }
   }
 });
 // #endregion
@@ -228,21 +232,30 @@ function handleConfirm(content: string) {
 
 // #region 6. 保存数据对象
 async function handleSave() {
-  await validate();
-  console.log(customConfig.value);
-  console.log(apiKeyConfig.value);
-  console.log(basicAuthConfig.value);
-  console.log(clientConfig.value);
-  console.log(passwordConfig.value);
-  console.log(jwtConfig.value);
-  console.log(bodyLanguage.value);
+  formRef.value?.validate().then(async () => {
+    console.log('model', model.value);
+    const { error, response } = await AuthorizeApi.fetchSave(model.value);
+    if (error) { window.$message?.error(getPromptMessage(route.query, "Failed")); return; }
+    const result = response.data as { code: string; msg: string; data: string };
+    if (result.msg === 'success') {
+      window.$message?.success(getPromptMessage(route.query, "Success"));
+      appStore.tabStore.removeActiveTab();
+      router.push({ name: 'manage_authorize_default' });
+    } else if (result.msg === 'fail') {
+      window.$message?.error(result.data);
+    } else {
+      window.$message?.error(getPromptMessage(route.query, "Failed"));
+    }
+  }).catch(() => {
+    return;
+  });
 }
 // #endregion
 
 // #region 7. 返回数据库列表
 function handleBack() {
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'database' });
+  router.push({ name: 'manage_authorize_default' });
 }
 // #endregion
 
