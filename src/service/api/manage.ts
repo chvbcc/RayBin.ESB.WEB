@@ -233,7 +233,7 @@ export namespace MenuApi {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 export namespace AuthorizeApi {
-  /** 分页列表 */
+  // 分页列表
   export function fetchGetPagingList(params?: Api.Authorize.AuthorizeSearchParams) {
     return request<Api.Authorize.AuthorizeList>({
       url: '/authorize/getPagingList',
@@ -242,7 +242,7 @@ export namespace AuthorizeApi {
     });
   }
 
-    /** 检查名称 */
+  // 检查名称
   export function fetchCheckName(name: string, id?: number) {
     return request({
       url: '/authorize/checkName',
@@ -251,6 +251,7 @@ export namespace AuthorizeApi {
     });
   }
 
+  // 获取模型
   export function fetchGetModel(id: number) {
     return request<Api.Authorize.AuthorizeModel>({
       url: '/authorize/getModel',
@@ -259,6 +260,7 @@ export namespace AuthorizeApi {
     });
   }
 
+  // 保存/更新
   export function fetchSave(data: Api.Authorize.AuthorizeModel) {
     const submitData = {
       ...data,
@@ -275,6 +277,7 @@ export namespace AuthorizeApi {
     });
   }
 
+  // 删除
   export function fetchDelete(id: number) {
     let url = '/authorize/delete';
     return request({
@@ -284,6 +287,7 @@ export namespace AuthorizeApi {
     });
   }
 
+  // 批量删除
   export function fetchDeletes(ids: number[]) {
     let url = '/authorize/deletes';
     return request({
@@ -291,6 +295,22 @@ export namespace AuthorizeApi {
       url: url,
       method: 'delete',
       data: ids
+    });
+  }
+
+  // 授权测试
+  export function fetchTest(data: Api.Authorize.AuthorizeModel) {
+    const submitData = {
+      ...data,
+      jwtConfig: {
+        ...data.jwtConfig,
+        isSecretBase: Boolean(data.jwtConfig.isSecretBase)
+      }
+    };
+    return request({
+      url: '/authorize/authorizeTest',
+      method: 'post',
+      data: submitData
     });
   }
 }

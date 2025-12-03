@@ -27,6 +27,12 @@ const tokenModalVisible = ref(false);
 const { formRef } = useAntdForm();
 const { defaultRequiredRule } = useFormRules();
 
+// 弹出式提示
+const showAlert = ref(false);
+const type = ref<'error' | 'success' | 'warning' | 'info'>('success');
+const message = ref<string>('');
+const description = ref<string>('');
+
 // 编辑器选项
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
@@ -135,15 +141,15 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
 
   // URL验证规则
   const requestUrlRule: App.Global.FormRule = {
-    required: true,
+    required: model.value.type === 3 || model.value.type === 4,
     validateTrigger: 'blur',
     validator: async (_rule: any, value: string) => {
       const url = (value ?? '').trim();
+      const needUrl = model.value.type === 3 || model.value.type === 4;
       if (!url) {
-        return Promise.reject(new Error($t('page.authorize.form.requestUrl') as string));
+        return needUrl ? Promise.reject(new Error($t('page.authorize.form.requestUrl') as string)) : Promise.resolve();
       }
-
-      // 验证URL格式
+      // 验证URL格式（非必填场景下仅在用户输入时校验）
       try {
         new URL(url);
         return Promise.resolve();
@@ -181,11 +187,35 @@ onMounted(async () => {
     const { error, data } = await AuthorizeApi.fetchGetModel(id);
     if (!error && data) {
       model.value = { ...createDefaultModel(), ...data };
-      console.log('model', model.value);
     }
   }
 });
 // #endregion
+// #region 4. 授权测试
+function authorizeTest() {
+  formRef.value?.validate().then(async () => {
+    const url = (model.value.requestUrl ?? '').trim();
+    if (!url) {
+      message.value = $t('common.tip')
+      description.value = $t('page.authorize.form.requestUrl')
+      type.value = 'warning';
+      showAlert.value = true;
+      return;
+    }
+    const { error, data } = await AuthorizeApi.fetchTest(model.value);
+    if (error) { window.$message?.error($t('common.fail')); return; }
+    editor.value.setValue(data ?? '');
+    // const result = response.data as { code: string; msg: string; data: string };
+    // if (result.msg === "fail") {
+    //   message.value =  $t('common.fail')
+    //   description.value = result.data
+    //   type.value = 'error';
+    //   showAlert.value = true;
+    // }
+  }).catch(() => {
+    return;
+  });
+}
 
 // #region 4. 获取Token
 function getToken() {
@@ -208,6 +238,12 @@ function getToken() {
   //   return;
   // });
 }
+
+// #region 7. 关闭alert的处理函数
+const handleCloseAlert = () => {
+  showAlert.value = false;
+};
+//#endregion
 
 // #region 5. 处理DataHandleModal返回的内容
 function handleConfirm(content: string) {
@@ -280,7 +316,7 @@ watch(language, newLang => {
             <a-form-item :label="$t('page.authorize.requestUrl')" name="requestUrl" class="m-0">
               <div style="display: flex; align-items: center; gap: 10px">
                 <a-input v-model:value="model.requestUrl" :placeholder="$t('page.authorize.form.requestUrl')"  class="flex-1" />
-                <a-button type="primary" class="orange-btn ml-3">{{ $t('page.authorize.getToken') }}</a-button>
+                <a-button type="primary" class="orange-btn ml-3" @click="authorizeTest">{{ $t('page.authorize.authorizeTest') }}</a-button>
               </div>
             </a-form-item>
           </a-col>
@@ -371,6 +407,7 @@ watch(language, newLang => {
       </a-card>
     </a-form>
     <TokenModal v-model:visible="tokenModalVisible" :programme-language="model.programmeLanguage" @confirm="handleConfirm" />
+    <CustomAlert v-if="showAlert"  :message="message" :type="type" :description="description" show-icon closable @close="handleCloseAlert" />
   </div>
 </template>
 

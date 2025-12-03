@@ -412,7 +412,7 @@ const local: App.I18n.Schema = {
       edit: '编辑授权',
       name: '授权名称',
       method: '请求方法',
-      requestUrl: '请求URL',
+      requestUrl: '请求地址',
       timeOut: '超时时间 (秒)',
       type: '授权类型',
       custom: {
@@ -502,10 +502,11 @@ const local: App.I18n.Schema = {
       createUserID: '创建用户',
       createTime: '创建时间',
       authorization: '认证',
+      authorizeTest: '授权测试',
       form: {
         name: '请输入授权名称',
         method: '请选择请求方法',
-        requestUrl: '请输入请求URL',
+        requestUrl: '请输入请求地址，注意：测试授权时请求地址为必填项。',
         timeOut: '请输入超时时间',
         type: '请选择授权类型',
         tokenRetrievalType: '请选择令牌检索方式',

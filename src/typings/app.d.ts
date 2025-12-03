@@ -685,6 +685,7 @@ declare namespace App {
           createUserID: string;
           createTime: string;
           authorization: string;
+          authorizeTest: string;
           form: {
             name: string;
             method: string;

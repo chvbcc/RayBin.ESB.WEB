@@ -502,10 +502,11 @@ const local: App.I18n.Schema = {
       createUserID: 'Create User ID',
       createTime: 'Create Time',
       authorization: 'Authorization',
+      authorizeTest: 'Authorize Test',
       form: {
         name: 'Please enter token name',
         method: 'Please select request method',
-        requestUrl: 'Please enter request URL',
+        requestUrl: 'Please enter request URL, Note: request URL is required when testing authorization.',
         timeOut: 'Please enter timeout (seconds)',
         type: 'Please select authorize type',
         tokenRetrievalType: 'Please select token retrieval type',
