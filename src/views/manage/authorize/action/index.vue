@@ -205,13 +205,6 @@ function authorizeTest() {
     const { error, data } = await AuthorizeApi.fetchTest(model.value);
     if (error) { window.$message?.error($t('common.fail')); return; }
     editor.value.setValue(data ?? '');
-    // const result = response.data as { code: string; msg: string; data: string };
-    // if (result.msg === "fail") {
-    //   message.value =  $t('common.fail')
-    //   description.value = result.data
-    //   type.value = 'error';
-    //   showAlert.value = true;
-    // }
   }).catch(() => {
     return;
   });
@@ -219,24 +212,7 @@ function authorizeTest() {
 
 // #region 4. 获取Token
 function getToken() {
-  // formRef.value?.validate().then(async () => {
-  //   const { error, response } = await fetchTest(model.value);
-  //   if (error) { window.$message?.error($t('common.fail')); return; }
-  //   const result = response.data as { code: string; msg: string; data: string };
-  //   if (result.msg === "fail") {
-  //     message.value =  $t('common.fail')
-  //     description.value = result.data
-  //     type.value = 'error';
-  //     showAlert.value = true;
-  //   }
-  //   else if (result.msg === "success") {
 
-  //       window.$message?.success(getPromptMessage(route.query, "Success"));
-
-  //   }
-  // }).catch(() => {
-  //   return;
-  // });
 }
 
 // #region 7. 关闭alert的处理函数

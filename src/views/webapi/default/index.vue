@@ -25,7 +25,7 @@ const toggleBaseInfo = () => {
               <!-- 基本信息内容 -->
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <!-- 基本信息内容 -->
+
             </a-col>
           </a-row>
         </a-card>
