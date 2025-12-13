@@ -3,13 +3,13 @@
   import { useRoute, useRouter } from 'vue-router';
   import { useAppStore } from '@/store/modules/app';
   import { useAuthStore } from '@/store/modules/auth';
+  import { TaskDatabaseApi } from '@/service/api/task';
   import { onMounted, computed, ref, watch } from 'vue';
   import DataObjectModal from './modules/data-object-modal.vue';
   import DataHandleModal from './modules/data-handle-modal.vue';
   import { useAntdForm, useFormRules } from '@/hooks/common/form';
   import { fetchGetConnectionOptions } from '@/service/api/connection';
-  import RelationDiagram from '@/components/pages/relation-diagram.vue';
-  import { fetchCheckName, fetchSave, fetchGetModel } from '@/service/api/task-database';
+  import RelationDiagram from '@/components/database/relation-diagram.vue';
   import { convertOptions, translateOptions, convertDateTime, getPromptMessage } from '@/utils/common';
   import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions, dataObjectTypeOptions, taskStatusOptions, programmeLanguageOptions } from '@/constants/options';
 
@@ -57,7 +57,7 @@
         runFrequency: 0, // 应为数字类型
         runTime: undefined,
         dataHandle: 0, // 新增（根据 DataHandle 类型应为 0 或 1）
-        programmeLanguage: '',
+        programmeLanguage: '7000',
         dataHandleScript: '',
         isDebug: false,
         status: 0,
@@ -86,7 +86,7 @@
           return Promise.reject(new Error(($t('page.connection.form.connectionName') as string)));
         }
         const createUserId = parseInt(authStore.userInfo.userId) ?? 0;
-        const { error, data } = await fetchCheckName(name, createUserId, model.value.task.id);
+        const { error, data } = await TaskDatabaseApi.fetchCheckName(name, createUserId, model.value.task.id);
         if (error && data) {
           return Promise.reject(new Error($t('common.exists')));
         }
@@ -152,7 +152,7 @@
     // 从路由参数中获取ID （加载编辑数据）
     const id = Number(route.query.id ?? 0);
     if (id) {
-      const { error, data } = await fetchGetModel(id);
+      const { error, data } = await TaskDatabaseApi.fetchGetModel(id);
       if (!error && data) {
         model.value = {
           task: { ...createDefaultModel().task, ...data.task },
@@ -189,7 +189,7 @@
       };
 
       // 提交保存
-      const { error, response } = await fetchSave(payload);
+      const { error, response } = await TaskDatabaseApi.fetchSave(payload);
       if (error) { window.$message?.error(getPromptMessage(route.query, "Failed")); return; }
       const result = response.data as { code: string; msg: string; data: string };
       if (result.msg === 'success') {
@@ -222,7 +222,6 @@
 
   // #region 9. 添加数据对象
   function handleAdd(dataObjectNodes: Api.Task.DataObjectNode[]) {
-    console.log(dataObjectNodes);
     relationDiagramRef.value?.addDataObjects(dataObjectNodes);
   }
   // #endregion

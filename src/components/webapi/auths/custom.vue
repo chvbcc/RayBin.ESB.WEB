@@ -27,7 +27,7 @@ const columns = [
     width: '25%'
   },
   {
-    title: $t('page.httpRequest.description'),
+    title: $t('page.authorize.description'),
     dataIndex: 'description',
     width: '25%'
   },

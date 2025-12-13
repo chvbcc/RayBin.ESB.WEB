@@ -16,6 +16,7 @@ const local: App.I18n.Schema = {
     cancel: 'Cancel',
     close: 'Close',
     check: 'Check',
+    selection: 'Selection',
     columnSetting: 'Column Setting',
     config: 'Config',
     confirm: 'Confirm',
@@ -331,6 +332,14 @@ const local: App.I18n.Schema = {
       description: 'Task Description',
       createUserID: 'Create User ID',
       createTime: 'Create Time',
+      run: 'Run',
+      pause: 'Pause',
+      resume: 'Resume',
+      taskStatus: {
+        normal: 'Normal',
+        draft: 'Draft',
+        paused: 'Paused'
+      },
       form: {
         taskType: 'Please select task type',
         taskName: 'Please enter task name',
@@ -344,11 +353,6 @@ const local: App.I18n.Schema = {
         description: 'Please enter task description',
         status: 'Please select task status'
       },
-      taskStatus: {
-        normal: 'Normal',
-        draft: 'Draft',
-        paused: 'Paused'
-      }
     },
     database: {
       title: 'Database Task',
@@ -370,23 +374,24 @@ const local: App.I18n.Schema = {
         dataMapping: 'Please enter data mapping',
       }
     },
-    httpRequest:
+    webApi:
     {
-        paramName: 'Name',
-        paramType: 'Type',
-        paramValue: 'Value',
-        contentType: 'Content Type',
-        uploadFile: 'Upload File',
-        noBodyData: 'No Request Body',
-        description: 'Description',
-        form: {
-            paramName: 'Please enter parameter name',
-            paramType: 'Please select parameter type',
-            paramValue: 'Please enter parameter value',
-            contentType: 'Please select or enter content type',
-            uploadFile: 'Click upload file',
-            description: 'Please enter parameter description'
-        }
+      title: 'Web API Task',
+      paramName: 'Name',
+      paramType: 'Type',
+      paramValue: 'Value',
+      contentType: 'Content Type',
+      uploadFile: 'Upload File',
+      noBodyData: 'No Request Body',
+      description: 'Description',
+      form: {
+          paramName: 'Please enter parameter name',
+          paramType: 'Please select parameter type',
+          paramValue: 'Please enter parameter value',
+          contentType: 'Please select or enter content type',
+          uploadFile: 'Click upload file',
+          description: 'Please enter parameter description'
+      }
     },
     taskLog: {
       title: 'Task Log',

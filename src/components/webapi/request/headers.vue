@@ -12,22 +12,22 @@
 
   const columns = [
     {
-      title: createRequiredTitle($t('page.httpRequest.paramName')),
+      title: createRequiredTitle($t('page.webApi.paramName')),
       dataIndex: 'name',
       width: '25%'
     },
     {
-      title: $t('page.httpRequest.paramType'),
+      title: $t('page.webApi.paramType'),
       dataIndex: 'valueType',
       width: 90
     },
     {
-      title: createRequiredTitle($t('page.httpRequest.paramValue')),
+      title: createRequiredTitle($t('page.webApi.paramValue')),
       dataIndex: 'value',
       width: '25%'
     },
     {
-      title: $t('page.httpRequest.description'),
+      title: $t('page.webApi.description'),
       dataIndex: 'description',
       width: '25%'
     },
@@ -72,22 +72,22 @@
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">
           <a-form-item :name="[index, 'name']" no-style :rules="[{ required: true }]" :validate-trigger="['change', 'blur']">
-            <a-auto-complete v-model:value="record.name" :options="paramNameOptions" :placeholder="$t('page.httpRequest.form.paramName')" :filter-option="true" class="w-full" />
+            <a-auto-complete v-model:value="record.name" :options="paramNameOptions" :placeholder="$t('page.webApi.form.paramName')" :filter-option="true" class="w-full" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'valueType'">
           <a-form-item :name="[index, 'valueType']" no-style :rules="[{ required: true }]" :validate-trigger="['change']">
-            <a-select v-model:value="record.valueType" :options="paramTypeOptions" :placeholder="$t('page.httpRequest.form.paramType')" class="w-full" />
+            <a-select v-model:value="record.valueType" :options="paramTypeOptions" :placeholder="$t('page.webApi.form.paramType')" class="w-full" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'value'">
           <a-form-item :name="[index, 'value']" no-style :rules="[{ required: true }]" :validate-trigger="['change', 'blur']">
-            <a-input v-model:value="record.value" :placeholder="$t('page.httpRequest.form.paramValue')" />
+            <a-input v-model:value="record.value" :placeholder="$t('page.webApi.form.paramValue')" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'description'">
           <a-form-item :name="[index, 'description']">
-            <a-input v-model:value="record.description" :placeholder="$t('page.httpRequest.form.description')" />
+            <a-input v-model:value="record.description" :placeholder="$t('page.webApi.form.description')" />
           </a-form-item>
         </template>
         <template v-else-if="column.key === 'operation'">

@@ -5,7 +5,7 @@ declare namespace Api {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //#region Task Common
     // Task search params
-    type TaskSearchParams = Partial<Pick<Task, 'taskName' | 'runMode' | 'description' | 'status'> & Common.CommonSearchParams >;
+    type TaskSearchParams = Partial<Pick<Task, 'taskName' | 'taskType' | 'runMode' | 'description' | 'status'> & Common.CommonSearchParams >;
 
     // Task 5000 Database, 5001 WebApi, 5002 Industry PLC
     type TaskType = '5000' | '5001' | '5002';
@@ -16,7 +16,7 @@ declare namespace Api {
     // Data handle 0 No, 1 Yes
     type DataHandle = 0 | 1;
 
-    // Task status 0 Normal, 1 Draft 2 Disable
+    // Task status 0 Normal, 1 Draft 2 Paused
     type TaskStatus = 0 | 1 | 2;
 
     type DataObjectType = 'table' | 'view' | 'storedProcedure';

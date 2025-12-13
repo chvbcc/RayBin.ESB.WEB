@@ -141,20 +141,15 @@
 
           if (exists) { return false; }
 
-          // // 规则3：一个 target 只能被同一个 source 节点连接 禁止多对一
-          // // 获取所有以 targetNodeId 为 target 的边
-          // const incomingEdges = graphInstance.getEdges().filter(edge => { return edge.getTargetCellId() === targetNodeId;});
+          // 新规则：要么 source 连 target，要么 target 连 source；target 不可再向其它节点发起连接
+          const sourceWasTarget = graphInstance.getEdges().some(edge => edge.getTargetCellId() === sourceNodeId);
+          if (sourceWasTarget) { return false; }
 
-          // // 如果已经有入边
-          // if (incomingEdges.length > 0) {
-          //   // 检查是否来自同一个源节点
-          //   const existingSourceId = incomingEdges[0].getSourceCellId();
-          //   if (existingSourceId !== sourceNodeId) { return false; }
-          // }
           return true;
         },
       }
     };
+
 
     const mergedConfig = { ...defaultConfig, ...props.config };
 

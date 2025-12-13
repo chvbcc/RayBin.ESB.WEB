@@ -269,6 +269,7 @@ declare namespace App {
         cancel: string;
         close: string;
         check: string;
+        selection: string;
         columnSetting: string;
         config: string;
         confirm: string;
@@ -514,6 +515,14 @@ declare namespace App {
           description: string;
           createUserID: string;
           createTime: string;
+          run: string;
+          pause: string;
+          resume: string;
+          taskStatus: {
+            normal: string;
+            draft: string;
+            paused: string;
+          },
           form: {
             taskType: string;
             taskName: string;
@@ -526,11 +535,6 @@ declare namespace App {
             isDebug: string;
             status: string;
             description: string;
-          };
-          taskStatus: {
-            normal: string;
-            draft: string;
-            paused: string;
           };
         };
         database: {
@@ -568,8 +572,9 @@ declare namespace App {
               taskName: string;
           }
         };
-        httpRequest:
+        webApi:
         {
+          title: string;
           paramName: string;
           paramType: string;
           paramValue: string;

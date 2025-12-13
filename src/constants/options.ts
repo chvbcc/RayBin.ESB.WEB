@@ -22,7 +22,6 @@ export const booleanYesOrNoRecord: Record<Api.Common.BooleanYesOrNo, App.I18n.I1
   'true': 'common.yesOrNo.yes'
 };
 export const booleanYesOrNoOptions = transformRecordToOption(booleanYesOrNoRecord);
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // database
 export const databaseTypeRecord: Record<Api.Connection.DatabaseType, App.I18n.I18nKey> = {

@@ -82,3 +82,9 @@ OceanBase   使用  Oracle
 PolarDB     使用  MySql
 GoldenDB    使用  MySql
 OpenGauss   使用  PostgreSQL
+
+19、数据库任务
+  支持多个一对一与多个一对多关系
+
+20、网络接口任务
+  支持一个一对一与多对多关系

@@ -16,6 +16,7 @@ const local: App.I18n.Schema = {
     cancel: '取消',
     close: '关闭',
     check: '勾选',
+    selection: '选择',
     columnSetting: '列设置',
     config: '配置',
     confirm: '确认',
@@ -331,6 +332,14 @@ const local: App.I18n.Schema = {
       description: '任务描述',
       createUserID: '创建用户',
       createTime: '创建时间',
+      run: '运行',
+      pause: '暂停',
+      resume: '恢复',
+      taskStatus: {
+        normal: '正常',
+        draft: '草稿',
+        paused: '已暂停'
+      },
       form: {
         taskType: '请选择任务类型',
         taskName: '请输入任务名称',
@@ -344,11 +353,6 @@ const local: App.I18n.Schema = {
         status: '请选择任务状态',
         description: '请输入任务描述',
       },
-      taskStatus: {
-        normal: '正常',
-        draft: '草稿',
-        paused: '暂停'
-      }
     },
     database: {
       title: '数据库任务',
@@ -370,23 +374,24 @@ const local: App.I18n.Schema = {
         dataMapping: '请输入数据映射',
       }
     },
-    httpRequest:
+    webApi:
     {
-        paramName: '参数名',
-        paramType: '参数类型',
-        paramValue: '参数值',
-        contentType: '内容类型',
-        uploadFile: '上传文件',
-        noBodyData: '无请求主体',
-        description: '描述',
-        form: {
-            paramName: '请输入参数名',
-            paramType: '请选择参数类型',
-            paramValue: '请输入参数值',
-            contentType: '请选择或输入内容类型',
-            uploadFile: '点击上传文件',
-            description: '请输入参数描述'
-        }
+      title: '网络接口任务',
+      paramName: '参数名',
+      paramType: '参数类型',
+      paramValue: '参数值',
+      contentType: '内容类型',
+      uploadFile: '上传文件',
+      noBodyData: '无请求主体',
+      description: '描述',
+      form: {
+          paramName: '请输入参数名',
+          paramType: '请选择参数类型',
+          paramValue: '请输入参数值',
+          contentType: '请选择或输入内容类型',
+          uploadFile: '点击上传文件',
+          description: '请输入参数描述'
+      }
     },
     taskLog: {
       title: '任务日志',

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
 import { computed, ref, watch } from 'vue';
-import { fetchGetDataObjectList, fetchGetDataObjects } from '@/service/api/database';
+import { DatabaseSchemaApi } from '@/service/api/task';
 
 // 定义组件名称
 defineOptions({
@@ -30,7 +30,7 @@ const emit = defineEmits<{
 // 获取数据
 async function getDataObjectList() {
   if (!props.connectionId) { dataSource.value = []; return;}
-  const { error, data  } = await fetchGetDataObjectList(props.connectionId, props.dataObjectType);
+  const { error, data  } = await DatabaseSchemaApi.fetchGetDataObjectList(props.connectionId, props.dataObjectType);
   if (!error) {
     dataSource.value = data.map((item: string) => ({key: item, title: item }));
   }
@@ -49,7 +49,7 @@ async function handleConfirm() {
   }
   const addItems = targetKeys.value.filter(name => !props.selectedDataObjectNames.includes(name));
   if (addItems.length > 0) {
-    const { error, data } = await fetchGetDataObjects(props.connectionId!, props.dataObjectType, addItems);
+    const { error, data } = await DatabaseSchemaApi.fetchGetDataObjects(props.connectionId!, props.dataObjectType, addItems);
     if (!error && data.result) {
       emit('add', data.result as Api.Task.DataObjectNode[]);
     }

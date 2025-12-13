@@ -1,6 +1,6 @@
 <script setup lang="tsx">
-import { $t } from '@/locales';
 import { useRouter } from 'vue-router';
+import { $t, language } from '@/locales';
 import { useAppStore } from '@/store/modules/app';
 import { fetchGetPagingList, fetchDelete } from '@/service/api/connection';
 import { databaseTypeRecord } from '@/constants/options';
@@ -69,12 +69,14 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       width: 130,
       customRender:  ({ record })  => (
         <div class="flex-center gap-8px">
-          <a-button type="default" class="table-edit-btn" onClick={() => handleEdit(record.id)}>
-            {$t('common.edit')}
+          <a-button type="default" class={`orange-btn row-btn ${language() === 'en-US' ? 'en-edit' : ''}`} onClick={() => handleEdit(record.id)}>
+            <icon-mdi-square-edit-outline class="align-sub text-16px" />
+            <span>{$t('common.edit')}</span>
           </a-button>
           <a-popconfirm title={$t('common.confirmDelete')} onConfirm={() => handleDelete(record.id)}>
-            <a-button type="default" class="table-delete-btn">
-              {$t('common.delete')}
+            <a-button type="default" class="red-btn row-btn">
+              <icon-mdi-trash-can-outline class="align-sub text-16px" />
+              <span>{$t('common.delete')}</span>
             </a-button>
           </a-popconfirm>
         </div>

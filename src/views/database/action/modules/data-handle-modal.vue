@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, shallowRef , defineProps, defineEmits,  } from 'vue'
+import { ref, shallowRef, watch } from 'vue'
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor'
 
 const editor = shallowRef()
@@ -22,29 +22,33 @@ const visible = defineModel<boolean>('visible', { default: false });
 const lang = ref<'csharp' | 'python'>('python')
 
 // 监听programmeLanguage变化，更新语言和代码
-import { watch } from 'vue';
-
 const defaultCsharpCode = `
   // This C# Code Example
   // Task starts before execution
-  void BeforeStarts() {
-
+  private List<dynamic> BeforeStarts(List<dynamic> dynamics, DatabaseAccessor dataHelper)
+  {
+      // 用户代码
+      return dynamics;
   }
+  return BeforeStarts(Dynamics, DataHelper);
 
   // Task ends after execution
-  void AfterEnds() {
-
+  private void AfterEnds(DatabaseAccessor sourceDataHelper, DatabaseAccessor targetDataHelper) {
+    // 用户代码
   }
 `
 const defaultPythonCode = `
-  # This Python Code Example
   # Task starts before execution
-  def BeforeStarts():
-      pass
+  def before_starts(dynamics, data_helper, message):
+      # 用户代码（可修改 dynamics 并返回新的 List[dynamic]）
+      return dynamics
+
+  result = before_starts(dynamics, data_helper, message)
 
   # Task ends after execution
-  def AfterEnds():
-      pass
+  def after_ends(source_data_helper, target_data_helper, message):
+    # 用户代码
+    pass
 `
 // 编辑器内容
 const code = ref<string>(props.programmeLanguage === '7001' ? defaultPythonCode : defaultCsharpCode);

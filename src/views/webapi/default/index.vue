@@ -1,52 +1,169 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { $t } from '@/locales';
-import { ref } from 'vue';
-import { UpOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { useRouter } from 'vue-router';
+import { TaskWebApi } from '@/service/api/task';
+import { useAppStore } from '@/store/modules/app';
+import TaskSearch from '@/components/task/task-search.vue';
+import { useTable, useTableOperate } from '@/hooks/common/table';
+import { dataHandleRecord, runModeRecord, taskStatusRecord } from '@/constants/options';
 
-const formRef = ref();
-const baseInfoCollapsed = ref(false);
-const activeKeys = ref(['1', '2']);
+const router = useRouter();
+const appStore = useAppStore();
 
-const toggleBaseInfo = () => {
-  baseInfoCollapsed.value = !baseInfoCollapsed.value;
-};
+const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
+  apiFn: TaskWebApi.fetchGetPagingList,
+  apiParams: {
+    current: 1,
+    size: 10,
+    taskName: undefined,
+    description: undefined,
+    runMode: undefined,
+    status: undefined
+  },
+  columns: () => [
+    {
+      key: 'id',
+      dataIndex: 'id',
+      title: $t('page.task.id'),
+      width: 88,
+      align: 'center'
+    },
+    {
+      key: 'taskName',
+      dataIndex: 'taskName',
+      title: $t('page.task.taskName'),
+      align: 'center',
+      minWidth: 120
+    },
+    {
+      key: 'dataHandle',
+      dataIndex: 'dataHandle',
+      title: $t('page.task.dataHandle'),
+      align: 'center',
+      minWidth: 88,
+      customRender: ({ record } )=> {
+        if (record.dataHandle === null) {
+          return null;
+        }
+        const label = $t(dataHandleRecord[record.dataHandle]);
+        return label;
+      }
+
+    },
+    {
+      key: 'runMode',
+      dataIndex: 'runMode',
+      title: $t('page.task.runMode'),
+      minWidth: 120,
+      customRender: ({ record } )=> {
+        if (record.runMode === null) {
+          return null;
+        }
+        const label = $t(runModeRecord[record.runMode]);
+        return label;
+      }
+    },
+    {
+      key: 'runTime',
+      dataIndex: 'runTime',
+      title: $t('page.task.runTime'),
+      align: 'center',
+      minWidth: 120,
+      customRender: ({ record }) => {
+        return record.runTime == '0001-01-01T00:00:00' ? '' : record.runTime;
+      }
+    },
+    {
+      key: 'status',
+      dataIndex: 'status',
+      title: $t('page.task.status'),
+      align: 'center',
+      minWidth: 120,
+      customRender: ({ record })=> {
+        if (record.status === null) {
+          return null;
+        }
+        const label = $t(taskStatusRecord[record.status]);
+        return label;
+      }
+    },
+    {
+      key: 'operate',
+      title: $t('common.operate'),
+      align: 'center',
+      width: 130,
+      customRender:  ({ record })=> (
+        <div class="flex-center gap-8px">
+          <a-button type="default" class="table-edit-btn" onClick={() => handleEdit(record.id)}>
+            {$t('common.edit')}
+          </a-button>
+          <a-popconfirm title={$t('common.confirmDelete')} onConfirm={() => handleDelete(record.id)}>
+            <a-button type="default" class="table-delete-btn">
+              {$t('common.delete')}
+            </a-button>
+          </a-popconfirm>
+        </div>
+      )
+    }
+  ]
+});
+
+const { onDeleted } = useTableOperate(data, getData);
+
+async function handleAdd() {
+  appStore.tabStore.removeActiveTab();
+  router.push({ name: 'webapi_action' });
+}
+
+async function handleDelete(id: number) {
+  const { error, response } = await TaskWebApi.fetchDelete(id);
+  if (error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = response.data as { code: string; msg: string; data: string };
+  if (result.msg === "success") {
+    onDeleted();
+  } else if (result.msg === "fail") {
+    window.$message?.error(result.data);
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
+  }
+}
+
+function handleEdit(id: number) {
+  appStore.tabStore.removeActiveTab();
+  router.push({ name: 'webapi_action', query: { id: String(id) } });
+}
+
+function refresh() {
+  getData();
+}
 </script>
-
 <template>
-    <div class="min-h-500px flex flex-col h-full lt-sm:overflow-auto pr-3">
-      <a-form ref="formRef" class="flex flex-col flex-1">
-        <a-card :title="$t('page.database.titleBaseInfo')" :bordered="false" class="mb-4">
-          <template #extra>
-            <UpOutlined v-if="!baseInfoCollapsed" @click="toggleBaseInfo" class="cursor-pointer" />
-            <DownOutlined v-else @click="toggleBaseInfo" class="cursor-pointer" />
-          </template>
-          <a-row v-show="!baseInfoCollapsed" :gutter="[16, 16]">
-            <a-col :span="24" :md="12" :lg="12">
-              <!-- 基本信息内容 -->
-            </a-col>
-            <a-col :span="24" :md="12" :lg="12">
-
-            </a-col>
-          </a-row>
-        </a-card>
-        <a-card :title="$t('page.database.titleDataMapping')" :bordered="false" class="flex flex-col flex-1">
-          <div class="flex flex-col h-full flex-1">
-            <a-row class="mb-4">
-              <a-col :span="24" :md="12" :lg="12"> </a-col>
-              <a-col :span="24" :md="12" :lg="12"> </a-col>
-            </a-row>
-            <div id="div1" class="flex-grow min-h-0">
-            </div>
-
-            <a-row id="rowa2" class="mt-4">
-              <a-col :span="24" :md="24" :lg="24">
-
-              </a-col>
-            </a-row>
-          </div>
-        </a-card>
-      </a-form>
-    </div>
+  <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
+    <TaskSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
+    <a-card :title="$t('page.webApi.title')" :bordered="false" class="card-wrapper sm:flex-1-hidden">
+      <template #extra>
+          <div class="flex flex-wrap justify-end gap-x-12px gap-y-8px lt-sm:(w-200px py-12px)">
+          <slot name="prefix"></slot>
+          <slot name="default">
+            <a-button type="primary" ghost @click="handleAdd">
+              <template #icon>
+                <icon-ic-round-plus class="align-sub text-icon" />
+              </template>
+              <span class="ml-5px">{{ $t('common.add') }}</span>
+            </a-button>
+          </slot>
+          <a-button type="primary" ghost @click="refresh">
+            <template #icon>
+              <icon-mdi-refresh class="align-sub text-icon" :class="{ 'animate-spin': loading }" />
+            </template>
+            <span class="ml-0px">{{ $t('common.refresh') }}</span>
+          </a-button>
+        </div>
+      </template>
+      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" size="small" :loading="loading" row-key="id" :pagination="mobilePagination" bordered />
+    </a-card>
+  </div>
 </template>
 
-<style scoped />
+<style scoped></style>
+
