@@ -4,9 +4,17 @@ import { request } from '../request';
 // task api
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export namespace TaskApi {
-  export function fetchGetPagingList(params?: Api.Task.TaskSearchParams) {
+  export function fetchGetPendingList(params?: Api.Task.TaskSearchParams) {
     return request<Api.Task.TaskList>({
       url: '/task/getPendingList',
+      method: 'get',
+      params
+    });
+  }
+
+  export function fetchGetSuspendedList(params?: Api.Task.TaskSearchParams) {
+    return request<Api.Task.TaskList>({
+      url: '/task/getSuspendedList',
       method: 'get',
       params
     });

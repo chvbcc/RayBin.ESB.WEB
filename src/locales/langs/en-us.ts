@@ -335,6 +335,7 @@ const local: App.I18n.Schema = {
       run: 'Run',
       pause: 'Pause',
       resume: 'Resume',
+      needDataMapping: 'Non-draft status must include data mapping.',
       taskStatus: {
         normal: 'Normal',
         draft: 'Draft',

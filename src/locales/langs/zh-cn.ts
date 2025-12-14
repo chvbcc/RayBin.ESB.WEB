@@ -335,6 +335,7 @@ const local: App.I18n.Schema = {
       run: '运行',
       pause: '暂停',
       resume: '恢复',
+      needDataMapping: '非草稿状态，必须包含数据映射。',
       taskStatus: {
         normal: '正常',
         draft: '草稿',

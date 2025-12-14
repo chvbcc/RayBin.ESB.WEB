@@ -181,6 +181,10 @@
 
   // #region 5. 保存数据对象
   async function handleSave() {
+    if (model.value.task.status == 0 && relationDiagramRef.value?.validateUnusedNodes()) {
+      window.$message?.error($t('page.task.needDataMapping'));
+      return;
+    }
     formRefTask.value?.validate().then(async () => {
       model.value.taskDatabase.diagramData = JSON.stringify(relationDiagramRef.value?.getData());
       const payload: Api.Task.TaskDatabaseModel = {
@@ -349,9 +353,7 @@
 <style scoped>
   .flex-1 {flex: 1 !important; }
   /* 添加一个Monaco Editor按钮的样式 */
-  .monaco-editor-btn {
-    margin-bottom: 16px;
-  }
+  .monaco-editor-btn { margin-bottom: 16px; }
   .diagram-container { background-color: #fCfCfC; border: #ECF0F1 1px solid; position: relative; }
   ::v-deep .ant-card .ant-card-body { height: 100%; flex: 1; box-sizing: border-box; overflow: hidden; }
 </style>

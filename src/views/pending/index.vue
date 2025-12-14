@@ -1,12 +1,16 @@
 <script setup lang="tsx">
+import { reactive } from 'vue';
 import { $t, language } from '@/locales';
 import TaskSearch from './task-search.vue';
 import { TaskApi } from '@/service/api/task';
 import { useTable } from '@/hooks/common/table';
 import { dataHandleRecord, taskTypeRecord, runModeRecord, taskStatusRecord, yesOrNoRecord } from '@/constants/options';
 
+// 添加响应式加载映射，追踪每个任务加载状态
+const taskLoadingMap = reactive<Record<number, boolean>>({});
+
 const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
-  apiFn: TaskApi.fetchGetPagingList,
+  apiFn: TaskApi.fetchGetPendingList,
   apiParams: {
     current: 1,
     size: 10,
@@ -119,14 +123,14 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       align: 'center',
       minWidth: 120
     },
-        {
+    {
       key: 'operate',
       title: $t('common.operate'),
       align: 'center',
       width: 130,
       customRender:  ({ record })=> (
         <div class="flex-center gap-8px">
-          <a-button type="default" class={`green-btn row-btn ${language() === 'en-US' ? 'en-edit' : ''}`} onClick={() => runTask(record.id)}>
+          <a-button type="default" class={`green-btn row-btn ${language() === 'en-US' ? 'en-edit' : ''}`} loading={taskLoadingMap[record.id]} onClick={() => runTask(record.id)} >
             <icon-ic-outline-play-circle class="align-sub text-icon" />
              <span>{$t('page.task.run')}</span>
           </a-button>
@@ -140,8 +144,13 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
   ]
 });
 
-function runTask(id: number) {
-  TaskApi.fetchRunTask(id);
+async function runTask(id: number) {
+  taskLoadingMap[id] = true;
+  try {
+    await TaskApi.fetchRunTask(id);
+  } finally {
+    taskLoadingMap[id] = false;
+  }
 }
 
 async function pauseTask(id: number) {
@@ -158,9 +167,6 @@ async function pauseTask(id: number) {
   }
 }
 
-function refresh() {
-  getData();
-}
 </script>
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">

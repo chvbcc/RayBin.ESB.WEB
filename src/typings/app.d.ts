@@ -518,6 +518,7 @@ declare namespace App {
           run: string;
           pause: string;
           resume: string;
+          needDataMapping: string;
           taskStatus: {
             normal: string;
             draft: string;

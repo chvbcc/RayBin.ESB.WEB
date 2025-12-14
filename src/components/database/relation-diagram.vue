@@ -11,7 +11,7 @@
 <script setup lang="ts">
   import { Graph, Cell, Shape, Node } from '@antv/x6'
   import { autoLayoutGraph } from '@/utils/dagreLayout';
-  import { onMounted, onBeforeUnmount, ref, defineProps, defineEmits, watch, nextTick } from 'vue'
+  import { onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
 
   // #region 1. 参数定义
   // 图实例
@@ -149,7 +149,6 @@
         },
       }
     };
-
 
     const mergedConfig = { ...defaultConfig, ...props.config };
 
@@ -394,6 +393,18 @@
   }
   // #endregion
 
+  //#region 验证是否存在未使用的节点
+  function validateUnusedNodes() {
+    if (!graph.value) return true;
+    const nodes = graph.value.getNodes();
+    const edges = graph.value.getEdges();
+    if (nodes.length === 0 || edges.length === 0) {
+      return true;
+    }
+    return false;
+  }
+  //#endregion
+
   // #region 暴露公共方法给父组件
   const exposeMethods = {
     getData,
@@ -401,6 +412,7 @@
     setData,
     addDataObjects,
     deleteDataObjects,
+    validateUnusedNodes
   };
 
   // 暴露方法
