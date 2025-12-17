@@ -1,7 +1,6 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useEventListener } from '@vueuse/core';
-import type { RouteKey } from '@elegant-router/types';
 import { router } from '@/router';
 import { SetupStoreId } from '@/enum';
 import { useRouterPush } from '@/hooks/common/router';
@@ -126,7 +125,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
    *
    * @param routeName route name
    */
-  async function removeTabByRouteName(routeName: RouteKey) {
+  async function removeTabByRouteName(routeName: App.Global.RouteKey) {
     const tab = findTabByRouteName(routeName, tabs.value);
     if (!tab) return;
 
