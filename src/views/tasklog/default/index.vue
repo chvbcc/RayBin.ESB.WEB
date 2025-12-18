@@ -2,10 +2,13 @@
 import dayjs from 'dayjs';
 import { $t } from '@/locales';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import TaskLogSearch from './modules/tasklog-search.vue';
 import { useTable, useTableOperate } from '@/hooks/common/table';
 import { fetchGetPagingList, fetchDelete } from '@/service/api/log';
 import { taskTypeRecord, logLevelRecord } from '@/constants/options';
+
+const router = useRouter();
 
 const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
   apiFn: fetchGetPagingList,
@@ -21,7 +24,6 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
     {
       key: 'taskID',
       dataIndex: 'taskID',
-
       title: $t('page.taskLog.taskID'),
       width: 120,
       align: 'center'
@@ -31,7 +33,14 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       dataIndex: 'taskName',
       title: $t('page.taskLog.taskName'),
       align: 'center',
-      minWidth: 120
+      minWidth: 120,
+      customRender: ({ record }) => {
+        return (
+          <a-button type="link" onClick={() => router.push(`/tasklog/details/${record.id}`)}>
+            <span style="font-size:14px">{record.taskName}</span>
+          </a-button>
+        );
+      }
     },
     {
       key: 'taskType',
@@ -58,7 +67,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
           return null;
         }
         const label = $t(logLevelRecord[record.logLevel]);
-        return label;
+        return <a-tag color={`${getColor(record.logLevel)}`}>{label}</a-tag>;
       }
     },
     {
@@ -104,6 +113,21 @@ async function handleDelete() {
     window.$message?.success($t('common.deleteSuccess'));
   } else {
     window.$message?.error($t('common.deleteFailed'));
+  }
+}
+
+function getColor(level: number) {
+  switch (level) {
+    case 1:
+      return '#07af61';
+    case 2:
+      return '#f39c12';
+    case 3:
+      return '#f66060';
+    case 4:
+      return '#531dab';
+    default:
+      return '#2db7f5';
   }
 }
 

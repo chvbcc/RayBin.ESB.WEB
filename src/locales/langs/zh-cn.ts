@@ -183,13 +183,15 @@ const local: App.I18n.Schema = {
     database_action: '数据库任务',
     webapi: '网络接口任务',
     webapi_default: '网络接口任务',
-    webapi_action: '网络接口',
+    webapi_action: '网络接口任务',
     industria: '工业接口任务',
     industria_default: '工业接口任务',
-    industria_action: '工业接口',
+    industria_action: '工业接口任务',
     pending: '待运行任务',
     suspended: '已暂停任务',
     tasklog: '任务日志',
+    tasklog_default: '任务日志',
+    tasklog_details: '日志明细',
     message: '通知消息',
     'user-center': '个人中心',
     manage: '系统管理',
@@ -396,6 +398,7 @@ const local: App.I18n.Schema = {
     },
     taskLog: {
       title: '任务日志',
+      viewLogDetail: '查看日志明细',
       taskID: '任务编号',
       taskType: '任务类型',
       taskName: '任务名称',
@@ -739,8 +742,9 @@ const local: App.I18n.Schema = {
     },
     logLevel: {
       info: '信息',
+      success: '成功',
       warning: '警告',
-      error: '错误',
+      failure: '失败',
       debug: '调试'
     },
     requestType: {

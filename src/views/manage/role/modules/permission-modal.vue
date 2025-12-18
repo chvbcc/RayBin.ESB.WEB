@@ -24,7 +24,7 @@ const menuChecks = shallowRef<number[]>([]);
 ////////////////////////////////////////////////////////////////////////
 const selectedRowKeys = ref<number[]>([]);
 const dataSource = ref<Api.SystemManage.Permission[]>([]);
-const { tableWrapperRef, scrollConfig } = useTableScroll();
+const { scrollConfig } = useTableScroll();
 const visible = defineModel<boolean>('visible', { default: false });
 
 //#region 列配置

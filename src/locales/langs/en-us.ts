@@ -183,13 +183,15 @@ const local: App.I18n.Schema = {
     database_action: 'Database Task',
     webapi: 'Web API Task',
     webapi_default: 'Web API Task',
-    webapi_action: 'Web API',
+    webapi_action: 'Web API Task',
     industria: 'Industrial Interface Task',
-    industria_default: 'Industrial Interface',
-    industria_action: 'Industrial Interface',
+    industria_default: 'Industrial Interface Task',
+    industria_action: 'Industrial Interface Task',
     pending: 'Pending Task',
     suspended: 'Suspended Task',
     tasklog: 'Task Log',
+    tasklog_default: 'Task Log',
+    tasklog_details: 'Log Details',
     message: 'Notification Message',
     'user-center': 'User Center',
     manage: 'System Manage',
@@ -396,6 +398,7 @@ const local: App.I18n.Schema = {
     },
     taskLog: {
       title: 'Task Log',
+      viewLogDetail: 'View Log Detail',
       taskID: 'Task No.',
       taskType: 'Task Type',
       taskName: 'Task Name',
@@ -739,8 +742,9 @@ const local: App.I18n.Schema = {
     },
     logLevel: {
       info: 'Info',
+      success: 'Success',
       warning: 'Warning',
-      error: 'Error',
+      failure: 'Failure',
       debug: 'Debug'
     },
     requestType: {

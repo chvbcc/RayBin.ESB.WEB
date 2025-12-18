@@ -11,7 +11,7 @@ export function fetchGetPagingList(params?: Api.Log.TaskLogSearchParams) {
 
 export function fetchGetModel(id: number) {
   return request({
-    url: '/connection/getModel',
+    url: '/tasklog/getModel',
     method: 'get',
     params: { id }
   });

@@ -93,9 +93,10 @@ export const programmeLanguageOptions = [{ label: 'C#', value: '7000' }, { label
 // log level
 export const logLevelRecord: Record<Api.Log.LogLevel, App.I18n.I18nKey> = {
   0: 'dropdownList.logLevel.info',
-  1: 'dropdownList.logLevel.warning',
-  2: 'dropdownList.logLevel.error',
-  3: 'dropdownList.logLevel.debug'
+  1: 'dropdownList.logLevel.success',
+  2: 'dropdownList.logLevel.warning',
+  3: 'dropdownList.logLevel.failure',
+  4: 'dropdownList.logLevel.debug'
 };
 export const logLevelOptions = convertRecordToOption(logLevelRecord);
 

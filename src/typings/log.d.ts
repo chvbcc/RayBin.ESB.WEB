@@ -7,8 +7,8 @@ declare namespace Api {
     type TaskLogList = Common.PaginatingQueryRecord<TaskLog>;
 
 
-    /* Log levels  0 info  1 warning  2 error  3 debug */
-    type LogLevel = 0 | 1 | 2 | 3;
+    /* Log levels  0 info  1 Successc 2 warning  2 Failure  3 debug */
+    type LogLevel = 0 | 1 | 2 | 3 | 4;
 
     /* TaskLog */
     type TaskLog = Common.CommonRecord<{

@@ -44,6 +44,8 @@ declare module "@elegant-router/types" {
     "pending": "/pending";
     "suspended": "/suspended";
     "tasklog": "/tasklog";
+    "tasklog_default": "/tasklog/default";
+    "tasklog_details": "/tasklog/details/:id";
     "user-center": "/user-center";
     "webapi": "/webapi";
     "webapi_action": "/webapi/action";
@@ -132,7 +134,8 @@ declare module "@elegant-router/types" {
     | "message"
     | "pending"
     | "suspended"
-    | "tasklog"
+    | "tasklog_default"
+    | "tasklog_details"
     | "user-center"
     | "webapi_action"
     | "webapi_default"

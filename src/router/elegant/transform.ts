@@ -190,6 +190,8 @@ const routeMap: RouteMap = {
   "pending": "/pending",
   "suspended": "/suspended",
   "tasklog": "/tasklog",
+  "tasklog_default": "/tasklog/default",
+  "tasklog_details": "/tasklog/details/:id",
   "user-center": "/user-center",
   "webapi": "/webapi",
   "webapi_action": "/webapi/action",

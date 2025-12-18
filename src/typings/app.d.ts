@@ -560,6 +560,7 @@ declare namespace App {
         };
         taskLog: {
           title: string;
+          viewLogDetail: string;
           taskID: string;
           taskType: string;
           taskName: string;
@@ -898,8 +899,9 @@ declare namespace App {
         };
         logLevel: {
           info: string,
+          success: string,
           warning: string,
-          error: string,
+          failure: string,
           debug: string
         },
         requestType: {

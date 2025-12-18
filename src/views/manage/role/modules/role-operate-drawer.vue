@@ -24,7 +24,7 @@ interface Emits {
 const emit = defineEmits<Emits>();
 
 const visible = defineModel<boolean>('visible', { default: false });
-const { formRef, validate, resetFields } = useAntdForm();
+const { validate, resetFields } = useAntdForm();
 const { defaultRequiredRule } = useFormRules();
 
 const title = computed(() => {

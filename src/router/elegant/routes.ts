@@ -284,11 +284,32 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'tasklog',
     path: '/tasklog',
-    component: 'layout.base$view.tasklog',
+    component: 'layout.base',
     meta: {
       title: 'tasklog',
       i18nKey: 'route.tasklog'
-    }
+    },
+    props: true,
+    children: [
+      {
+        name: 'tasklog_default',
+        path: '/tasklog/default',
+        component: 'view.tasklog_default',
+        meta: {
+          title: 'tasklog_default',
+          i18nKey: 'route.tasklog_default'
+        }
+      },
+      {
+        name: 'tasklog_details',
+        path: '/tasklog/details/:id',
+        component: 'view.tasklog_details',
+        meta: {
+          title: 'tasklog_details',
+          i18nKey: 'route.tasklog_details'
+        }
+      }
+    ]
   },
   {
     name: 'user-center',
