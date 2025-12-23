@@ -52,14 +52,6 @@ const createEmptyCustomItem = (): Api.Authorize.CustomItem => ({
   description: ''
 });
 
-const customRef = ref<InstanceType<typeof Custom>>();
-const apiKeyRef = ref<InstanceType<typeof ApiKey>>();
-const basicAuthRef = ref<InstanceType<typeof BasicAuth>>();
-const clientRef = ref<InstanceType<typeof Client>>();
-const passwordRef = ref<InstanceType<typeof Password>>();
-const jwtRef = ref<InstanceType<typeof Jwt>>();
-const ntlmRef = ref<InstanceType<typeof Ntlm>>();
-
 const createDefaultModel = (): Api.Authorize.AuthorizeModel => ({
   id: 0,
   name: '',

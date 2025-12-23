@@ -133,6 +133,14 @@ export namespace TaskWebApi {
     });
   }
 
+  export function fetchGetList(taskId: number) {
+    return request({
+      url: '/taskwebapi/getList',
+      method: 'get',
+      params: { taskId }
+    });
+  }
+
   export function fetchDelete(id: number) {
     return request({
       url: '/taskwebapi/delete',

@@ -13,6 +13,7 @@
   import { autoLayoutGraph } from '@/utils/dagreLayout';
   import { onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
 
+
   // #region 1. 参数定义
   // 图实例
   const graph = ref<Graph>();
@@ -72,7 +73,7 @@
             ],
             attrs: {
               portBody: { strokeWidth: 1, stroke: '#7F8C8D', fill: '#ECF0F1', magnet: true },
-              portNameLabel: { ref: 'portBody', refX: 6,  refY: 10, fontSize: 11, fill: '#333333', magnet: true },
+              portNameLabel: { ref: 'portBody', refX: 8,  refY: 10, fontSize: 11, fill: '#333333', magnet: true },
               portTypeLabel: { ref: 'portBody', refY: 10, fontSize: 11, fill: '#333333', magnet: true },
             },
             position: 'erPortPosition',

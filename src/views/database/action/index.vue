@@ -31,7 +31,6 @@
 
 
   const dialogModel = ref<Api.Task.DialogModal>({connectionID: undefined, dataObjectType: 'table'});
-  const dataSource = ref<any[]>([]);
   const selectedDataObjectNames = ref<string[]>([]);
 
   // 根据语言动态设置 labelCol 宽度
@@ -226,6 +225,7 @@
 
   // #region 9. 添加数据对象
   function handleAdd(dataObjectNodes: Api.Task.DataObjectNode[]) {
+    console.log('添加数据对象:', dataObjectNodes);
     relationDiagramRef.value?.addDataObjects(dataObjectNodes);
   }
   // #endregion
@@ -331,7 +331,7 @@
             </a-col>
           </a-row>
           <div class="flex-grow min-h-0 diagram-container">
-            <RelationDiagram ref="relationDiagramRef" :data-source="dataSource" />
+            <RelationDiagram ref="relationDiagramRef" />
           </div>
           <a-row :gutter="[16, 16]" class="mt-4 text-align-center">
               <a-col :span="24" :md="24" :lg="24">

@@ -10,7 +10,7 @@
 
   const router = useRouter();
   const appStore = useAppStore();
-  const { tableWrapperRef, scrollConfig } = useTableScroll();
+  const { scrollConfig } = useTableScroll();
 
   const {
     columns,

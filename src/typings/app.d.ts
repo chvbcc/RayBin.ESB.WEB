@@ -558,6 +558,65 @@ declare namespace App {
             dataMapping: string;
           };
         };
+        webApi:
+        {
+          title: string;
+          paramName: string;
+          paramType: string;
+          paramValue: string;
+          contentType: string;
+          uploadFile: string;
+          noBodyData: string;
+          description: string;
+          interfaceType: string;
+          authorizeID: string;
+          method: string;
+          requestUrl: string;
+          timeOut: string;
+          queryParameter: string;
+          requestBodyType: string;
+          requestBodyContent: string;
+          header: string;
+          tokenPassBy: string;
+          tokenPrefix: string;
+          responseBodyType: string;
+          responseBodyContent: string;
+          judgeMode: string;
+          judgeCondition: string;
+          handleCallResult: string;
+          dataMapping: string;
+          diagramData: string;
+          shareVariables: string;
+          createUserID: string;
+          createTime: string;
+          form: {
+            paramName: string;
+            paramType: string;
+            paramValue: string;
+            contentType: string;
+            uploadFile: string;
+            description: string;
+            interfaceType: string;
+            authorizeID: string;
+            method: string;
+            requestUrl: string;
+            timeOut: string;
+            queryParameter: string;
+            requestBodyType: string;
+            requestBodyContent: string;
+            header: string;
+            tokenPassBy: string;
+            tokenPrefix: string;
+            responseBodyType: string;
+            responseBodyContent: string;
+            judgeMode: string;
+            judgeCondition: string;
+            handleCallResult: string;
+            dataMapping: string;
+            diagramData: string;
+            shareVariables: string;
+          };
+        };
         taskLog: {
           title: string;
           viewLogDetail: string;
@@ -573,25 +632,6 @@ declare namespace App {
               logLevel: string;
               taskName: string;
           }
-        };
-        webApi:
-        {
-          title: string;
-          paramName: string;
-          paramType: string;
-          paramValue: string;
-          contentType: string;
-          uploadFile: string;
-          noBodyData: string;
-          description: string;
-          form: {
-            paramName: string;
-            paramType: string;
-            paramValue: string;
-            contentType: string;
-            uploadFile: string;
-            description: string;
-          };
         };
         authorize : {
           title: string;
@@ -633,6 +673,7 @@ declare namespace App {
               password: string;
             }
           },
+
           client: {
             clientID: string;
             clientSecret: string;

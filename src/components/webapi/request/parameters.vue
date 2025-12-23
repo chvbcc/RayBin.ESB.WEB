@@ -67,7 +67,7 @@
 
 <template>
   <a-form ref="formRef" :model="model" layout="vertical">
-    <a-table :data-source="model" :columns="columns" :pagination="false" row-key="idnex" :scroll="{ y: 400 }" class="editable-table">
+    <a-table :data-source="model" :columns="columns" :pagination="false" row-key="index" :scroll="{ y: 400 }" class="editable-table">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">
           <a-form-item :name="[index, 'name']" no-style :rules="[{ required: true, message: $t('page.httpRequest.form.paramName') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">

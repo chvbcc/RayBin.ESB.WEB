@@ -67,12 +67,14 @@ declare namespace Api {
       y: number;
       data?: Record<string, any>;
       attrs?: Record<string, any>;
-      ports?: Array<{
-        id: string;
-        group: string;
-        keyType: string;
-        attrs: Record<string, any>;
-      }>;
+      ports?: {
+        items: Array<{
+          id: string;
+          group: string;
+          keyType: string;
+          attrs: Record<string, any>;
+        }>;
+      }
     }
 
     type TaskDatabaseModel = { task: TaskModel; taskDatabase: TaskDatabase;};
@@ -83,28 +85,33 @@ declare namespace Api {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //#region WebApi Task
     // 8000  Call,  8001 Pull, 8002 Push
-    type RequestType = '8000' | '8001' | '8002';
+    type InterfaceType = '8000' | '8001' | '8002';
 
-    type TaskWebApi = Common.CommonRecord<{
+    type TaskWebApi = {
       id: number;
       taskID: number;
-      requestType: RequestType;
+      interfaceType: InterfaceType;
+      authorizeID: number;
       method: string;
       requestUrl: string;
       timeOut: number;
       queryParameters: string;
-      bodyType: string;
-      bodyContent: string;
+      requestBodyType: string;
+      requestBodyContent: string;
       headers: string;
-      authType: string;
-      authContent: string;
-      responseType: string;
-      responseContent: string;
-      judgeCallResult: string;
+      tokenPassBy: number;
+      tokenPrefix: string;
+      responseBodyType: string;
+      responseBodyContent: string;
+      judgeMode: number;
+      jdgeCondition: string;
       handleCallResult: string;
       dataMapping: string;
       diagramData: string;
-    }>;
+      shareVariables: string;
+    };
+
+    type TaskWebApiModel = { task: TaskModel; taskWebApi: TaskWebApi;};
     //#endregion
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
