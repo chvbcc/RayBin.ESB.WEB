@@ -380,6 +380,8 @@ const local: App.I18n.Schema = {
     webApi:
     {
       title: 'Web API Task',
+      requestList: 'Request List',
+      requestInterface: 'Request Interface',
       paramName: 'Name',
       paramType: 'Type',
       paramValue: 'Value',

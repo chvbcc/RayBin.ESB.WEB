@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { shallowRef, defineProps } from 'vue'
+import { shallowRef } from 'vue'
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor'
 const editor = shallowRef(VueMonacoEditor)
 

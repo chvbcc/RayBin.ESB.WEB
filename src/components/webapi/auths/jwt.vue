@@ -6,7 +6,7 @@
   import { algorithmOptions, yesOrNoOptions } from '@/constants/options';
 
   // 1. 定义默认模型
-  const { formRef, validate, resetFields } = useAntdForm();
+  const { validate, resetFields } = useAntdForm();
   const model = defineModel<Api.Authorize.JwtConfig>('model', { default: () => ({}) });
 
   // 2. 定义验证规则
@@ -32,7 +32,7 @@
 </script>
 
 <template>
-  <a-form ref="formRef" :model="model" :rules="rules" :label-col="labelCol">
+  <a-form :model="model" :rules="rules" :label-col="labelCol">
     <a-row :gutter="[16, 16]">
       <a-col :span="24" :md="12" :lg="12">
         <a-form-item :label="$t('page.authorize.jwt.algorithm')" name="algorithm" class="m-0">

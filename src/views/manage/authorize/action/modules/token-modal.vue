@@ -1,9 +1,6 @@
 <script setup lang="ts">
+import { ref, shallowRef, watch } from 'vue';
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
-import { defineEmits, defineProps, ref, shallowRef } from 'vue';
-
-// 监听programmeLanguage变化，更新语言和代码
-import { watch } from 'vue';
 
 const editor = shallowRef();
 
@@ -30,12 +27,14 @@ const defaultCsharpCode = `
 
   }
 `;
+
 const defaultPythonCode = `
   # This Python Code Example
   # Task starts before execution
   def getToken():
       pass
 `;
+
 // 编辑器内容
 const code = ref<string>(props.programmeLanguage === '7001' ? defaultPythonCode : defaultCsharpCode);
 
@@ -95,14 +94,7 @@ watch(
 
 <template>
   <a-modal v-model:open="visible" title="Code Editor" style="width: 90%; max-height: 60vh">
-    <VueMonacoEditor
-      v-model:value="code"
-      theme="vs-dark"
-      :options="MONACO_EDITOR_OPTIONS"
-      :language="lang"
-      style="width: 100%; height: 800px"
-      @mount="handleEditorMount"
-    />
+    <VueMonacoEditor v-model:value="code" theme="vs-dark" :options="MONACO_EDITOR_OPTIONS" :language="lang" style="width: 100%; height: 800px" @mount="handleEditorMount" />
     <template #footer>
       <a-space :size="13">
         <a-button @click="handleCancel">{{ $t('common.cancel') }}</a-button>

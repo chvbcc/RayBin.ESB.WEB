@@ -13,22 +13,22 @@
 
   const columns = [
     {
-      title: createRequiredTitle($t('page.httpRequest.paramName')),
+      title: createRequiredTitle($t('page.webApi.paramName')),
       dataIndex: 'name',
       width: '25%'
     },
     {
-      title: createRequiredTitle($t('page.httpRequest.paramValue')),
+      title: createRequiredTitle($t('page.webApi.paramValue')),
       dataIndex: 'value',
       width: '25%'
     },
     {
-      title: $t('page.httpRequest.contentType'),
+      title: $t('page.webApi.contentType'),
       dataIndex: 'contentType',
       width: '25%'
     },
     {
-      title: $t('page.httpRequest.uploadFile'),
+      title: $t('page.webApi.uploadFile'),
       dataIndex: 'filePath',
       width: '23%'
     },
@@ -91,17 +91,17 @@
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">
           <a-form-item :name="[index, 'name']" no-style :rules="[{ required: true }]" :validate-trigger="['change', 'blur']">
-            <a-input v-model:value="record.name" :placeholder="$t('page.httpRequest.form.paramName')"  class="w-full" />
+            <a-input v-model:value="record.name" :placeholder="$t('page.webApi.form.paramName')"  class="w-full" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'value'">
             <a-form-item :name="[index, 'value']" no-style :rules="[{ required: true }]" :validate-trigger="['change', 'blur']">
-              <a-input v-model:value="record.value" :placeholder="$t('page.httpRequest.form.paramValue')" :disabled="record.isFile" />
+              <a-input v-model:value="record.value" :placeholder="$t('page.webApi.form.paramValue')" :disabled="record.isFile" />
             </a-form-item>
           </template>
         <template v-else-if="column.dataIndex === 'contentType'">
           <a-form-item :name="[index, 'contentType']">
-            <a-auto-complete v-model:value="record.contentType" :options="contentTypeOptions" :placeholder="$t('page.httpRequest.form.contentType')" :filter-Option="true" class="w-full" :disabled="record.isFile" />
+            <a-auto-complete v-model:value="record.contentType" :options="contentTypeOptions" :placeholder="$t('page.webApi.form.contentType')" :filter-Option="true" class="w-full" :disabled="record.isFile" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'filePath'">
@@ -111,7 +111,7 @@
               <a-button type="link" @click="removeFile(record as Api.Task.FormData)">{{ $t('common.delete') }}</a-button>
             </div>
             <a-upload v-else :before-upload="(file) => beforeUpload(file, record as Api.Task.FormData)" :max-count="1" :show-upload-list="false" >
-              <a-button><UploadOutlined />{{ $t('page.httpRequest.form.uploadFile') }}</a-button>
+              <a-button><UploadOutlined />{{ $t('page.webApi.form.uploadFile') }}</a-button>
             </a-upload>
           </a-form-item>
         </template>

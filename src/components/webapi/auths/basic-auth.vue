@@ -4,7 +4,7 @@
   import { useAntdForm, useFormRules } from '@/hooks/common/form';
 
   // 1. 定义默认模型
-  const { formRef, validate, resetFields } = useAntdForm();
+  const { validate, resetFields } = useAntdForm();
   const model = defineModel<Api.Authorize.BasicAuthConfig>('model', { default: () => ({}) });
 
   // 2. 定义验证规则
@@ -29,7 +29,7 @@
 </script>
 
 <template>
-  <a-form ref="formRef" :model="model" :rules="rules" :label-col="labelCol">
+  <a-form :model="model" :rules="rules" :label-col="labelCol">
     <a-row :gutter="[16, 16]">
       <a-col :span="24" :md="12" :lg="12">
         <a-form-item :label="$t('page.authorize.basicAuth.username')" name="username" class="mt-0">

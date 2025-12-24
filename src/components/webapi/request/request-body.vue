@@ -6,15 +6,14 @@
   import CodeEditor from './bodys/code-editor.vue';
   import { UploadOutlined } from '@ant-design/icons-vue';
   import SvgIcon from '@/components/custom/svg-icon.vue';
-  import type { UploadProps, FormInstance } from 'ant-design-vue';
+  import type { UploadProps } from 'ant-design-vue';
 
-  const codeEditorRef = ref<InstanceType<typeof CodeEditor>>();
-  const formDataRef = ref<InstanceType<typeof FormData>>();
-  const urlEncodedRef = ref<InstanceType<typeof UrlEncoded>>();
+
   const fileList = ref<UploadProps['fileList']>([]);
 
   // 表单实例
-  const formRef = ref<FormInstance>();
+  //const formRef = ref<FormInstance>();
+
   // 使用defineModel直接管理数据
   const model = defineModel<Api.Task.BodyConfig>('model', { default: () => ({}) });
 
@@ -48,7 +47,7 @@
       <div class="none">
         <div class="container">
             <SvgIcon localIcon="no-data" class="icon" />
-            <span class="text-nodata">{{$t('page.httpRequest.noBodyData')}}</span>
+            <span class="text-nodata">{{$t('page.webApi.noBodyData')}}</span>
           </div>
       </div>
     </div>
@@ -65,12 +64,11 @@
       <div class="binary">
         <div class="container">
           <a-upload v-model:file-list="fileList" :max-count="1">
-            <a-button class="button"><upload-outlined></upload-outlined>{{ $t('page.httpRequest.form.uploadFile') }}</a-button>
+            <a-button class="button"><upload-outlined></upload-outlined>{{ $t('page.webApi.form.uploadFile') }}</a-button>
           </a-upload>
         </div>
       </div>
     </div>
-
   </a-form>
 </template>
 

@@ -561,6 +561,8 @@ declare namespace App {
         webApi:
         {
           title: string;
+          requestList: string;
+          requestInterface: string;
           paramName: string;
           paramType: string;
           paramValue: string;

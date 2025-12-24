@@ -2,6 +2,7 @@
   import { $t, language } from '@/locales';
   import { ref, computed } from 'vue';
   import type { TableColumnsType } from 'ant-design-vue';
+  import WebApiModal from './modules/webapi-modal.vue';
   import { convertOptions, translateOptions, convertDateTime } from '@/utils/common';
   import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions,taskStatusOptions, programmeLanguageOptions } from '@/constants/options';
 
@@ -41,6 +42,9 @@
       width: 160
     }
   ];
+
+  // 参数定义
+  const webApiModalVisible = ref(false);
 
   // 根据语言动态设置 labelCol 宽度
   const labelCol = language() === 'en-US' ?  { style: { width: '141px' } } :  { style: { width: '100px' } };
@@ -117,9 +121,10 @@
 
   // #region 3. 添加API请求
   function addRow () {
-    const newItem = createWebApiModel();
-    newItem.id = itemModel.value.length + 1;
-    itemModel.value.unshift(newItem);
+    webApiModalVisible.value = true;
+    // const newItem = createWebApiModel();
+    // newItem.id = itemModel.value.length + 1;
+    // itemModel.value.unshift(newItem);
   }
   // #endregion
 
@@ -132,6 +137,11 @@
   }
   // #endregion
 
+  // #region 5. 处理DataHandleModal返回的内容
+  function handleConfirm(content: string) {
+    webApiModalVisible.value = false;
+  }
+// #endregion
   // #region 3. 初始化时
   // onMounted(async () => {
   //   const id = Number(route.query.id ?? 0);
@@ -196,7 +206,7 @@
             </a-col>
           </a-row>
       </a-card>
-      <a-card>
+      <a-card :title="$t('page.webApi.requestList')">
         <template #extra>
             <div class="flex flex-wrap justify-end gap-x-12px gap-y-8px lt-sm:(w-200px py-12px)">
             <slot name="prefix"></slot>
@@ -230,6 +240,7 @@
         </a-table>
       </a-card>
     </a-form>
+    <WebApiModal v-model:visible="webApiModalVisible" @confirm="handleConfirm" />
   </div>
 </template>
 

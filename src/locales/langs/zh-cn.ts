@@ -380,6 +380,8 @@ const local: App.I18n.Schema = {
     webApi:
     {
       title: '网络接口任务',
+      requestList: '请求列表',
+      requestInterface: '请求接口',
       paramName: '参数名',
       paramType: '参数类型',
       paramValue: '参数值',

@@ -204,7 +204,7 @@ function authorizeTest() {
 
 // #region 4. 获取Token
 function getToken() {
-
+  tokenModalVisible.value = true;
 }
 
 // #region 7. 关闭alert的处理函数
