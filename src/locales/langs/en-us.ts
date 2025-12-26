@@ -380,6 +380,8 @@ const local: App.I18n.Schema = {
     webApi:
     {
       title: 'Web API Task',
+      titleAdd: 'Add Web API',
+      titleEdit: 'Edit Web API',
       requestList: 'Request List',
       requestInterface: 'Request Interface',
       paramName: 'Name',
@@ -390,7 +392,7 @@ const local: App.I18n.Schema = {
       noBodyData: 'No Request Body',
       description: 'Description',
       interfaceType: 'Interface Type',
-      authorizeID: 'Authorize',
+      authorize: 'Request Authorize',
       method: 'Request Method',
       requestUrl: 'Request URL',
       timeOut: 'Timeout',
@@ -418,7 +420,7 @@ const local: App.I18n.Schema = {
           uploadFile: 'Click upload file',
           description: 'Please enter parameter description',
           interfaceType: 'Please select interface type',
-          authorizeID: 'Please select authorize',
+          authorize: 'Please select authorize',
           method: 'Please select request method',
           requestUrl: 'Please enter request URL',
           timeOut: 'Please enter timeout',

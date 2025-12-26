@@ -1,11 +1,14 @@
 <script lang="ts" setup>
   import { $t, language } from '@/locales';
-  import { ref, computed } from 'vue';
-  import type { TableColumnsType } from 'ant-design-vue';
+  import { ref, onMounted, computed } from 'vue';
+  import { TaskWebApi } from '@/service/api/task';
+  import { useRoute, useRouter } from 'vue-router';
   import WebApiModal from './modules/webapi-modal.vue';
+  import type { TableColumnsType } from 'ant-design-vue';
   import { convertOptions, translateOptions, convertDateTime } from '@/utils/common';
-  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions,taskStatusOptions, programmeLanguageOptions } from '@/constants/options';
+  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions,taskStatusOptions, interfaceTypeRecord, programmeLanguageOptions } from '@/constants/options';
 
+  // #region 1. 表格列
   const columns: TableColumnsType<Api.Task.TaskWebApi> = [
     {
       key: 'id',
@@ -19,7 +22,14 @@
       dataIndex: 'interfaceType',
       title: $t('page.webApi.interfaceType'),
       align: 'center',
-      width: 100
+      width: 100,
+      customRender: ({ record }) => {
+        if (record.interfaceType === null) {
+          return null;
+        }
+        const label = $t(interfaceTypeRecord[record.interfaceType]);
+        return label;
+      }
     },
     {
       key: 'method',
@@ -42,30 +52,34 @@
       width: 160
     }
   ];
+  // #endregion
 
-  // 参数定义
+  // #region 2. 参数定义
+  const route = useRoute();
+  const router = useRouter();
   const webApiModalVisible = ref(false);
-
+8
   // 根据语言动态设置 labelCol 宽度
   const labelCol = language() === 'en-US' ?  { style: { width: '141px' } } :  { style: { width: '100px' } };
 
   // 定义默认模型
   const model = ref<Api.Task.TaskWebApiModel>(createDefaultModel());
-  const itemModel = ref<Api.Task.TaskWebApi[]>([]);
+  const currentItemModel = ref<Api.Task.TaskWebApi | undefined>(undefined);
 
+  // 计算属性
   const runTimeValue = computed<string | undefined>({
     get: () => convertDateTime(model.value.task.runTime),
     set: value => {
         model.value.task.runTime = convertDateTime(value);
     }
   });
+  // #endregion
 
+  // #region 3. 创建默认模型
   function createDefaultModel(): Api.Task.TaskWebApiModel {
-    const task = createTaskModel();
-    const taskWebApi = createWebApiModel();
     return {
-      task: task,
-      taskWebApi: taskWebApi
+      task: createTaskModel(),
+      taskWebApi: []
     };
   }
 
@@ -86,12 +100,12 @@
     };
   }
 
-  function createWebApiModel(): Api.Task.TaskWebApi {
+    function createWebApiModel(): Api.Task.TaskWebApi {
     return {
       id: 0,
       taskID: 0,
       interfaceType: '8000',
-      authorizeID: 0,
+      authorize: undefined,
       method: 'GET',
       requestUrl: '',
       timeOut: 0,
@@ -111,47 +125,69 @@
       shareVariables: ''
     };
   }
+  // #endregion
 
-  // #region 11. isDebug 计算属性，用于在 Select 组件中绑定 'true'/'false' 字符串值
+  // #region 4. isDebug 计算属性，用于在 Select 组件中绑定 'true'/'false' 字符串值
   const booleanYesOrNoValue = computed({
     get: () => model.value.task.isDebug ? 'true' : 'false',
     set: (val: 'true' | 'false') => { model.value.task.isDebug = val === 'true'; }
   });
   // #endregion
 
-  // #region 3. 添加API请求
+  // #region 5. 添加API请求
   function addRow () {
+    currentItemModel.value = createWebApiModel();
+    currentItemModel.value.id = model.value.taskWebApi.length + 1;
     webApiModalVisible.value = true;
-    // const newItem = createWebApiModel();
-    // newItem.id = itemModel.value.length + 1;
-    // itemModel.value.unshift(newItem);
   }
   // #endregion
 
-  // #region 3. 删除API请求
-  function handleDelete(id: number) {
-    const index = itemModel.value.findIndex(item => item.id === id);
-    if (index !== -1) {
-      itemModel.value.splice(index, 1);
+  // #region 6. 编辑API请求
+  function editRow(record: Api.Task.TaskWebApi) {
+    currentItemModel.value = { ...record }; // 复制对象以避免直接修改
+    webApiModalVisible.value = true;
+  }
+  // #region 7. 删除API请求
+  function deleteRow(id: number) {
+    if (model.value.taskWebApi) {
+      const index = model.value.taskWebApi.findIndex(item => item.id === id);
+      if (index !== -1) {
+        model.value.taskWebApi.splice(index, 1);
+      }
     }
   }
   // #endregion
 
-  // #region 5. 处理DataHandleModal返回的内容
-  function handleConfirm(content: string) {
+  // #region 8. 处理DataHandleModal返回的内容
+  function handleConfirm(record: Api.Task.TaskWebApi) {
     webApiModalVisible.value = false;
+    if (record && model.value.taskWebApi) {
+      const existingIndex = model.value.taskWebApi.findIndex(item => item.id === record.id);
+      if (existingIndex >= 0) {
+        // 编辑现有项目 - 更新数组中的项目
+        model.value.taskWebApi[existingIndex] = { ...record };
+      } else {
+        // 新增项目 - 添加到数组开头
+        if (!record.id || record.id === 0) {
+          record.id = model.value.taskWebApi.length + 1;
+        }
+        model.value.taskWebApi.unshift(record);
+      }
+    }
   }
-// #endregion
-  // #region 3. 初始化时
-  // onMounted(async () => {
-  //   const id = Number(route.query.id ?? 0);
-  //   if (id) {
-  //     const { error, data } = await AuthorizeApi.fetchGetModel(id);
-  //     if (!error && data) {
-  //       model.value = { ...createDefaultModel(), ...data };
-  //     }
-  //   }
-  // });
+  // #endregion
+
+  // #region 9. 初始化时
+  onMounted(async () => {
+    const id = Number(route.query.id ?? 0);
+    if (id) {
+      const { error, data } = await TaskWebApi.fetchGetModel(id);
+      if (!error && data) {
+        model.value = data;
+        currentItemModel.value = data.taskWebApi || [];
+      }
+    }
+  });
   // #endregion
 </script>
 
@@ -220,15 +256,15 @@
             </slot>
           </div>
         </template>
-        <a-table ref="tableRef" :data-source="itemModel" :columns="columns" :pagination="false" row-key="id">
+        <a-table ref="tableRef" :data-source="model.taskWebApi" :columns="columns" :pagination="false" row-key="id">
             <template #bodyCell="{ column, record }">
               <template v-if="column.key === 'operate'">
                 <div class="flex-center gap-8px">
-                  <a-button type="default" :class="`orange-btn row-btn ${language() === 'en-US' ? 'en-edit' : ''}`">
+                  <a-button type="default" :class="`orange-btn row-btn ${language() === 'en-US' ? 'en-edit' : ''}`" @click="editRow(record as Api.Task.TaskWebApi)">
                     <icon-mdi-square-edit-outline class="align-sub text-16px" />
                     <span>{{ $t('common.edit') }}</span>
                   </a-button>
-                  <a-popconfirm :title="$t('common.confirmDelete')" @confirm="handleDelete(record.id)">
+                  <a-popconfirm :title="$t('common.confirmDelete')" @confirm="deleteRow(record.id)">
                     <a-button type="default" class="red-btn row-btn">
                       <icon-mdi-trash-can-outline class="align-sub text-16px" />
                       <span>{{ $t('common.delete') }}</span>
@@ -240,7 +276,7 @@
         </a-table>
       </a-card>
     </a-form>
-    <WebApiModal v-model:visible="webApiModalVisible" @confirm="handleConfirm" />
+    <WebApiModal v-model:visible="webApiModalVisible" v-model:value="currentItemModel"  @confirm="handleConfirm" />
   </div>
 </template>
 

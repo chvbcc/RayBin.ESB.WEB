@@ -225,7 +225,6 @@
 
   // #region 9. 添加数据对象
   function handleAdd(dataObjectNodes: Api.Task.DataObjectNode[]) {
-    console.log('添加数据对象:', dataObjectNodes);
     relationDiagramRef.value?.addDataObjects(dataObjectNodes);
   }
   // #endregion

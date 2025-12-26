@@ -380,6 +380,8 @@ const local: App.I18n.Schema = {
     webApi:
     {
       title: '网络接口任务',
+      titleAdd: '新增接口',
+      titleEdit: '编辑接口',
       requestList: '请求列表',
       requestInterface: '请求接口',
       paramName: '参数名',
@@ -390,7 +392,7 @@ const local: App.I18n.Schema = {
       noBodyData: '无请求主体',
       description: '描述',
       interfaceType: '接口类型',
-      authorizeID: '授权',
+      authorize: '请求授权',
       method: '请求方法',
       requestUrl: '请求地址',
       timeOut: '超时时间',
@@ -418,7 +420,7 @@ const local: App.I18n.Schema = {
           uploadFile: '点击上传文件',
           description: '请输入参数描述',
           interfaceType: '请选择接口类型',
-          authorizeID: '请选择授权',
+          authorize: '请选择授权',
           method: '请选择请求方法',
           requestUrl: '请输入请求地址',
           timeOut: '请输入超时时间',

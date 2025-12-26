@@ -91,7 +91,7 @@ declare namespace Api {
       id: number;
       taskID: number;
       interfaceType: InterfaceType;
-      authorizeID: number;
+      authorize: number | undefined;
       method: string;
       requestUrl: string;
       timeOut: number;
@@ -111,7 +111,7 @@ declare namespace Api {
       shareVariables: string;
     };
 
-    type TaskWebApiModel = { task: TaskModel; taskWebApi: TaskWebApi;};
+    type TaskWebApiModel = { task: TaskModel; taskWebApi: TaskWebApi[]};
     //#endregion
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

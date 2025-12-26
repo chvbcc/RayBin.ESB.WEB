@@ -561,6 +561,8 @@ declare namespace App {
         webApi:
         {
           title: string;
+          titleAdd: string;
+          titleEdit: string;
           requestList: string;
           requestInterface: string;
           paramName: string;
@@ -571,7 +573,7 @@ declare namespace App {
           noBodyData: string;
           description: string;
           interfaceType: string;
-          authorizeID: string;
+          authorize: string;
           method: string;
           requestUrl: string;
           timeOut: string;
@@ -599,7 +601,7 @@ declare namespace App {
             uploadFile: string;
             description: string;
             interfaceType: string;
-            authorizeID: string;
+            authorize: string;
             method: string;
             requestUrl: string;
             timeOut: string;

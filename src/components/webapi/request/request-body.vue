@@ -8,15 +8,10 @@
   import SvgIcon from '@/components/custom/svg-icon.vue';
   import type { UploadProps } from 'ant-design-vue';
 
-
   const fileList = ref<UploadProps['fileList']>([]);
-
-  // 表单实例
-  //const formRef = ref<FormInstance>();
 
   // 使用defineModel直接管理数据
   const model = defineModel<Api.Task.BodyConfig>('model', { default: () => ({}) });
-
 
   const language = computed(() => {
     switch (model.value.type) {

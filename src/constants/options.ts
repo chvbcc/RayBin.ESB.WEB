@@ -126,12 +126,12 @@ export const permissionTypeOptions = transformRecordToOption(permissionTypeRecor
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // token
-export const requestTypeRecord: Record<Api.Task.RequestType, App.I18n.I18nKey> = {
+export const interfaceTypeRecord: Record<Api.Task.InterfaceType, App.I18n.I18nKey> = {
   '8000': 'dropdownList.requestType.call',
   '8001': 'dropdownList.requestType.pull',
   '8002': 'dropdownList.requestType.push'
 };
-export const requestTypeOptions = transformRecordToOption(requestTypeRecord);
+export const interfaceTypeOptions = transformRecordToOption(interfaceTypeRecord);
 
 export const methodOptions = [
   { label: 'GET', value: 'GET' },

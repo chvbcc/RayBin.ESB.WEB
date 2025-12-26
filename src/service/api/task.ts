@@ -141,6 +141,23 @@ export namespace TaskWebApi {
     });
   }
 
+  export function fetchGetAuthorizes(userId: number) {
+    return request({
+      url: '/taskwebapi/getAuthorizes',
+      method: 'get',
+      params: { userId }
+    });
+  }
+
+  export function fetchGetModel(taskId: number) {
+    return request({
+      url: '/taskwebapi/getModel',
+      method: 'get',
+      params: { taskId }
+    });
+  }
+
+
   export function fetchDelete(id: number) {
     return request({
       url: '/taskwebapi/delete',
