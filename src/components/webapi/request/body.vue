@@ -4,11 +4,7 @@
   import UrlEncoded from './parameters.vue';
   import FormData from './bodys/form-data.vue';
   import CodeEditor from './bodys/code-editor.vue';
-  import { UploadOutlined } from '@ant-design/icons-vue';
   import SvgIcon from '@/components/custom/svg-icon.vue';
-  import type { UploadProps } from 'ant-design-vue';
-
-  const fileList = ref<UploadProps['fileList']>([]);
 
   // 使用defineModel直接管理数据
   const model = defineModel<Api.Task.BodyConfig>('model', { default: () => ({}) });
@@ -36,7 +32,6 @@
       <a-radio :value="4">text</a-radio>
       <a-radio :value="5">form-data</a-radio>
       <a-radio :value="6">form-urlencoded</a-radio>
-      <a-radio :value="7">binary</a-radio>
     </a-radio-group>
     <div v-show="model.type == 0">
       <div class="none">
@@ -54,15 +49,6 @@
     </div>
     <div v-show="model.type == 6">
       <UrlEncoded ref="urlEncodedRef" v-model:model="model.urlEncodeds"></UrlEncoded>
-    </div>
-    <div v-show="model.type == 7">
-      <div class="binary">
-        <div class="container">
-          <a-upload v-model:file-list="fileList" :max-count="1">
-            <a-button class="button"><upload-outlined></upload-outlined>{{ $t('page.webApi.form.uploadFile') }}</a-button>
-          </a-upload>
-        </div>
-      </div>
     </div>
   </a-form>
 </template>

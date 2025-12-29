@@ -561,6 +561,7 @@ declare namespace App {
         webApi:
         {
           title: string;
+          interfaceInfo: string;
           titleAdd: string;
           titleEdit: string;
           requestList: string;
@@ -578,9 +579,9 @@ declare namespace App {
           requestUrl: string;
           timeOut: string;
           queryParameter: string;
-          requestBodyType: string;
+          requestBody: string;
           requestBodyContent: string;
-          header: string;
+          headers: string;
           tokenPassBy: string;
           tokenPrefix: string;
           responseBodyType: string;
@@ -606,7 +607,6 @@ declare namespace App {
             requestUrl: string;
             timeOut: string;
             queryParameter: string;
-            requestBodyType: string;
             requestBodyContent: string;
             header: string;
             tokenPassBy: string;

@@ -57,6 +57,7 @@ declare module 'vue' {
     AWatermark: typeof import('ant-design-vue/es')['Watermark']
     BasicAuth: typeof import('./../components/webapi/auths/basic-auth.vue')['default']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
+    Body: typeof import('./../components/webapi/request/body.vue')['default']
     ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']
     Client: typeof import('./../components/webapi/auths/client.vue')['default']
     CodeEditor: typeof import('./../components/webapi/request/bodys/code-editor.vue')['default']

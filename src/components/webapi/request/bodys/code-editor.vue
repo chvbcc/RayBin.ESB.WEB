@@ -33,6 +33,6 @@ function handleEditorMount(editorInstance: any) {
   </div>
 </template>
 <style scoped>
-  .code { width:100%; height: 500px; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin-top: 10px;}
-  .code .editor { width:100%; height: 500px; }
+  .code { width:100%; height: 300px; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin-top: 10px;}
+  .code .editor { width:100%; height: 300px; }
 </style>

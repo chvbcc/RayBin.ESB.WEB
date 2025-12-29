@@ -95,10 +95,9 @@ declare namespace Api {
       method: string;
       requestUrl: string;
       timeOut: number;
-      queryParameters: string;
-      requestBodyType: string;
-      requestBodyContent: string;
-      headers: string;
+      queryParameters: Param[];
+      requestBody: BodyConfig;
+      headers: Param[];
       tokenPassBy: number;
       tokenPrefix: string;
       responseBodyType: string;
@@ -135,8 +134,7 @@ declare namespace Api {
       Html = 3,
       Text = 4,
       FormData = 5,
-      UrlEncoded = 6,
-      Binary = 7
+      UrlEncoded = 6
     }
 
     type Param = {
@@ -161,16 +159,6 @@ declare namespace Api {
       urlEncodeds?: Param[];
       binaryFilePath?: string;
     };
-
-    type RequestConfig = {
-        requestUrl: string;
-        method: string;
-        queryParameters: Param[];
-        headers: Param[];
-        body: BodyConfig;
-        //authorization: AuthConfig;
-        timeout: number;
-    }
     //#endregion
 
     /* Task industry plc */

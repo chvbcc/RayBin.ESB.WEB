@@ -70,17 +70,17 @@
     <a-table :data-source="model" :columns="columns" :pagination="false" row-key="index" :scroll="{ y: 400 }" class="editable-table">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">
-          <a-form-item :name="[index, 'name']" no-style :rules="[{ required: true, message: $t('page.webApi.form.paramName') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">
+          <a-form-item :name="[index, 'name']" no-style :rules="[{ required: (record.value !== '' || record.valueType !== 0 || record.description !== '') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">
             <a-input v-model:value="record.name" :placeholder="$t('page.webApi.form.paramName')" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'valueType'">
-          <a-form-item :name="[index, 'valueType']" no-style :rules="[{ required: true, message: $t('page.webApi.form.paramType') }]" :validate-trigger="['blur']" style="margin-bottom: 0">
+          <a-form-item :name="[index, 'valueType']" no-style :rules="[{ required: (record.name !== '' || record.value !== '' || record.description !== '') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">
             <a-select v-model:value="record.valueType" :options="paramTypeOptions" :placeholder="$t('page.webApi.form.paramType')" class="w-full" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'value'">
-          <a-form-item :name="[index, 'value']" no-style :rules="[{ required: true, message: $t('page.webApi.form.paramValue') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">
+          <a-form-item :name="[index, 'value']" no-style :rules="[{ required: (record.name !== '' || record.valueType !== 0 || record.description !== '') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">
             <a-input v-model:value="record.value" :placeholder="$t('page.webApi.form.paramValue')" />
           </a-form-item>
         </template>

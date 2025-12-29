@@ -10,6 +10,7 @@
     title
   ];
 
+  // 表格列定义
   const columns = [
     {
       title: createRequiredTitle($t('page.webApi.paramName')),
@@ -67,26 +68,26 @@
 </script>
 
 <template>
-  <a-form ref="formRef" :model="model" layout="vertical">
+  <a-form ref="formRef":model="model" layout="vertical">
     <a-table :data-source="model" :columns="columns" :pagination="false" :scroll="{ y: 400 }" row-key="index" class="editable-table">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">
-          <a-form-item :name="[index, 'name']" no-style :rules="[{ required: true }]" :validate-trigger="['change', 'blur']">
+          <a-form-item :name="[index, 'name']" no-style :validate-trigger="['change', 'blur']" :rules="[{ required: (record.value !== '' || record.valueType !== 0 || record.description !== '') }]">
             <a-auto-complete v-model:value="record.name" :options="paramNameOptions" :placeholder="$t('page.webApi.form.paramName')" :filter-option="true" class="w-full" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'valueType'">
-          <a-form-item :name="[index, 'valueType']" no-style :rules="[{ required: true }]" :validate-trigger="['change']">
+          <a-form-item :name="[index, 'valueType']" no-style :validate-trigger="['change', 'blur']" :rules="[{ required: (record.name !== '' || record.value !== '' || record.description !== '') }]">
             <a-select v-model:value="record.valueType" :options="paramTypeOptions" :placeholder="$t('page.webApi.form.paramType')" class="w-full" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'value'">
-          <a-form-item :name="[index, 'value']" no-style :rules="[{ required: true }]" :validate-trigger="['change', 'blur']">
+          <a-form-item :name="[index, 'value']" no-style :validate-trigger="['change', 'blur']" :rules="[{ required: (record.name !== '' || record.valueType !== 0 || record.description !== '') }]">
             <a-input v-model:value="record.value" :placeholder="$t('page.webApi.form.paramValue')" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'description'">
-          <a-form-item :name="[index, 'description']">
+          <a-form-item :name="[index, 'description']" >
             <a-input v-model:value="record.description" :placeholder="$t('page.webApi.form.description')" />
           </a-form-item>
         </template>

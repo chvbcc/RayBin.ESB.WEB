@@ -2,7 +2,7 @@
   import { $t, language } from '@/locales';
   import { ref, onMounted, computed } from 'vue';
   import { TaskWebApi } from '@/service/api/task';
-  import { useRoute, useRouter } from 'vue-router';
+  import { useRoute } from 'vue-router';
   import WebApiModal from './modules/webapi-modal.vue';
   import type { TableColumnsType } from 'ant-design-vue';
   import { convertOptions, translateOptions, convertDateTime } from '@/utils/common';
@@ -56,7 +56,6 @@
 
   // #region 2. 参数定义
   const route = useRoute();
-  const router = useRouter();
   const webApiModalVisible = ref(false);
 8
   // 根据语言动态设置 labelCol 宽度
@@ -100,7 +99,7 @@
     };
   }
 
-    function createWebApiModel(): Api.Task.TaskWebApi {
+  function createWebApiModel(): Api.Task.TaskWebApi {
     return {
       id: 0,
       taskID: 0,
@@ -108,11 +107,16 @@
       authorize: undefined,
       method: 'GET',
       requestUrl: '',
-      timeOut: 0,
-      queryParameters: '',
-      requestBodyType: '',
-      requestBodyContent: '',
-      headers: '',
+      timeOut: 180,
+      queryParameters: [createParamModel()],
+      requestBody: {
+        type: 0,
+        raw: '',
+        formDatas: [createFormDataModel()],
+        urlEncodeds: [createParamModel()],
+        binaryFilePath: ''
+      },
+      headers: [createParamModel()],
       tokenPassBy: 0,
       tokenPrefix: '',
       responseBodyType: '',
@@ -123,6 +127,25 @@
       dataMapping: '',
       diagramData: '',
       shareVariables: ''
+    };
+  }
+
+  function createFormDataModel(): Api.Task.FormData {
+    return {
+      name: '',
+      value: '',
+      isFile: false,
+      filePath: '',
+      contentType: ''
+    };
+  }
+
+  function createParamModel(): Api.Task.Param {
+    return {
+      name: '',
+      value: '',
+      valueType: 0,
+      description: ''
     };
   }
   // #endregion
