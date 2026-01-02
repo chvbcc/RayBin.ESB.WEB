@@ -28,7 +28,7 @@ const { scrollConfig } = useTableScroll();
 const visible = defineModel<boolean>('visible', { default: false });
 
 //#region 列配置
-const columns: TableColumnsType<Api.SystemManage.Permission> = [
+const columns = computed<TableColumnsType<Api.SystemManage.Permission>>(() => [
    {
     key: 'menuTitle',
     dataIndex: 'menuTitle',
@@ -68,7 +68,7 @@ const columns: TableColumnsType<Api.SystemManage.Permission> = [
     align: 'center',
     minWidth: 200
   }
-];
+]);
 //#endregion
 
 //#region 菜单树

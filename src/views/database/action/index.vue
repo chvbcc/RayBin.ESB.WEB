@@ -55,9 +55,6 @@
         runMode: '6000',
         runFrequency: 0, // 应为数字类型
         runTime: undefined,
-        dataHandle: 0, // 新增（根据 DataHandle 类型应为 0 或 1）
-        programmeLanguage: '7000',
-        dataHandleScript: '',
         isDebug: false,
         status: 0,
         description: ''
@@ -65,6 +62,9 @@
       taskDatabase: {
         id: 0,
         taskID: 0,
+        dataHandle: 0,
+        programmeLanguage: '7000',
+        dataHandleScript: '',
         dataMapping: '',
         diagramData: '',
       }
@@ -105,10 +105,10 @@
     };
 
     const programmeLanguageRule: App.Global.FormRule = {
-      required: model.value.task.dataHandle == 1,
+      required: model.value.taskDatabase.dataHandle == 1,
       validateTrigger: 'blur',
       validator: async (rule, value) => {
-        if (model.value.task.dataHandle == 1 && !value) {
+        if (model.value.taskDatabase.dataHandle == 1 && !value) {
           return Promise.reject(new Error(($t('page.task.form.programmeLanguage') as string)));
         }
         return Promise.resolve();
@@ -254,7 +254,7 @@
 
   // #region 12. 处理DataHandleModal返回的内容
   function handleConfirm(content: string) {
-    model.value.task.dataHandleScript = content;
+    model.value.taskDatabase.dataHandleScript = content;
     dataHandleModalVisible.value = false;
   }
   // #endregion
@@ -287,7 +287,7 @@
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.task.programmeLanguage')" name="programmeLanguage" class="m-0">
-                <a-select v-model:value="model.task.programmeLanguage" :placeholder="$t('page.task.form.programmeLanguage')" :options="programmeLanguageOptions" allow-clear />
+                <a-select v-model:value="model.taskDatabase.programmeLanguage" :placeholder="$t('page.task.form.programmeLanguage')" :options="programmeLanguageOptions" allow-clear />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
@@ -298,7 +298,7 @@
             <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.task.dataHandle')" name="dataHandle" class="m-0">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                  <a-select v-model:value="model.task.dataHandle" :placeholder="$t('page.task.form.dataHandle')" :options="convertOptions(dataHandleOptions)" class="flex-1" />
+                  <a-select v-model:value="model.taskDatabase.dataHandle" :placeholder="$t('page.task.form.dataHandle')" :options="convertOptions(dataHandleOptions)" class="flex-1" />
                   <a-button type="primary" class="bule-btn ml-3" @click="showDataHandleModal()">{{$t('page.task.dataHandle')}}</a-button>
                 </div>
               </a-form-item>
@@ -346,7 +346,7 @@
       </a-card>
     </a-form>
     <DataObjectModal v-model:visible="dataObjectModalVisible" :connection-id="dialogModel.connectionID" :data-object-type="dialogModel.dataObjectType" :selected-data-object-names="selectedDataObjectNames" @delete="handleDelete" @add="handleAdd" />
-    <DataHandleModal v-model:visible="dataHandleModalVisible" :programme-language="model.task.programmeLanguage" @confirm="handleConfirm" />
+    <DataHandleModal v-model:visible="dataHandleModalVisible" :programme-language="model.taskDatabase.programmeLanguage" @confirm="handleConfirm" />
   </div>
 </template>
 <style scoped>

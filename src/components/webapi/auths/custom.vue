@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { $t } from '@/locales';
-import { h, nextTick, ref } from 'vue';
+import { h, nextTick, ref, computed } from 'vue';
 import type { FormInstance } from 'ant-design-vue';
 import { customItemTypeOptions } from '@/constants/options';
 
@@ -10,7 +10,7 @@ const createRequiredTitle = (title: string) => () => [
   title
 ];
 
-const columns = [
+const columns = computed(() => [
   {
     title: createRequiredTitle($t('page.authorize.custom.name')),
     dataIndex: 'name',
@@ -36,7 +36,7 @@ const columns = [
     key: 'operation',
     width: 75
   }
-];
+]);
 
 // 创建空行
 const createEmptyModel = (): Api.Authorize.CustomItem => ({

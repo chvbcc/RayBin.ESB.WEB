@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { $t } from '@/locales';
-  import { h, nextTick, ref } from 'vue';
+  import { h, nextTick, ref, computed } from 'vue';
   import type { FormInstance } from 'ant-design-vue';
   import { UploadOutlined } from '@ant-design/icons-vue';
   import { contentTypeOptions } from '@/constants/options';
@@ -11,7 +11,7 @@
     title
   ];
 
-  const columns = [
+  const columns = computed(() => [
     {
       title: createRequiredTitle($t('page.webApi.paramName')),
       dataIndex: 'name',
@@ -37,7 +37,7 @@
       key: 'operation',
       width: 75
     }
-  ];
+  ]);
 
   const createEmptyModel = (): Api.Task.FormData => ({
     name: '',

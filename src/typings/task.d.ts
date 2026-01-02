@@ -31,14 +31,11 @@ declare namespace Api {
       runMode: RunMode;
       runTime: string | null | undefined;
       runFrequency: number;
-      dataHandle: DataHandle;
-      programmeLanguage: string;
-      dataHandleScript: string;
       isDebug: boolean;
       status: TaskStatus;
       description: string;
     }>;
-    type TaskModel = Pick<Task, | 'id' | 'taskType' | 'taskName' | 'runMode' | 'runTime' | 'runFrequency' | 'dataHandle' | 'programmeLanguage' | 'dataHandleScript' | 'isDebug' | 'status' | 'description'>;
+    type TaskModel = Pick<Task, | 'id' | 'taskType' | 'taskName' | 'runMode' | 'runTime' | 'runFrequency' | 'isDebug' | 'status' | 'description'>;
 
     // Mapping Dialog
     type DialogModal = {
@@ -54,6 +51,9 @@ declare namespace Api {
     type TaskDatabase = {
       id: number;
       taskID: number;
+      dataHandle: DataHandle;
+      programmeLanguage: string;
+      dataHandleScript: string;
       dataMapping: string;
       diagramData: string;
     };
@@ -98,13 +98,15 @@ declare namespace Api {
       queryParameters: Param[];
       requestBody: BodyConfig;
       headers: Param[];
-      tokenPassBy: number;
+      tokenPassBy: Location | undefined;
       tokenPrefix: string;
       responseBodyType: string;
       responseBodyContent: string;
       judgeMode: number;
       jdgeCondition: string;
-      handleCallResult: string;
+      dataHandle: DataHandle;
+      programmeLanguage: string;
+      dataHandleScript: string;
       dataMapping: string;
       diagramData: string;
       shareVariables: string;
@@ -117,6 +119,11 @@ declare namespace Api {
     // HTTP request
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //#region Http request
+    enum Location {
+      Header = 0,
+      Query = 1
+    }
+
     enum ParamType {
       String = 0,
       Integer = 1,

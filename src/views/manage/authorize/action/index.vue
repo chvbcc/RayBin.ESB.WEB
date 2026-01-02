@@ -102,7 +102,8 @@ const createDefaultModel = (): Api.Authorize.AuthorizeModel => ({
 });
 
 // 根据语言动态设置 labelCol 宽度
-const labelCol = language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } };
+const labelCol = computed(() => language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } });
+
 
 // 定义默认模型
 const model = ref(createDefaultModel());
@@ -246,12 +247,6 @@ function handleBack() {
   appStore.tabStore.removeActiveTab();
   router.push({ name: 'manage_authorize_default' });
 }
-// #endregion
-
-// #region 8. 监听语言变化，动态更新 labelCol 的宽度
-watch(language, newLang => {
-  labelCol.style.width = newLang === 'en-US' ? '130px' : '100px';
-});
 // #endregion
 </script>
 

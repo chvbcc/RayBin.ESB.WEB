@@ -500,12 +500,12 @@ const local: App.I18n.Schema = {
         clientID: 'Client ID',
         clientSecret: 'Client Secret',
         scopes: 'Scopes',
-        clientAuthentication: 'Client Authentication Type',
+        clientAuthentication: 'Authentication Type',
         form: {
           clientID: 'Please enter client ID',
           clientSecret: 'Please enter client secret',
           scopes: 'Please enter scopes',
-          clientAuthentication: 'Please select client authentication type'
+          clientAuthentication: 'Please select authentication type'
         }
       },
       password: {

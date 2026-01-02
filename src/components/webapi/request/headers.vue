@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { $t } from '@/locales';
-  import { h, nextTick, ref } from 'vue';
+  import { h, nextTick, ref, computed } from 'vue';
   import type { FormInstance } from 'ant-design-vue';
   import { paramTypeOptions, paramNameOptions } from '@/constants/options';
 
@@ -11,7 +11,7 @@
   ];
 
   // 表格列定义
-  const columns = [
+  const columns = computed(() => [
     {
       title: createRequiredTitle($t('page.webApi.paramName')),
       dataIndex: 'name',
@@ -37,7 +37,7 @@
       key: 'operation',
       width: 75
     }
-  ];
+  ]);
 
   // 创建空行
   const createEmptyModel = (): Api.Task.Param => ({
@@ -69,7 +69,7 @@
 
 <template>
   <a-form ref="formRef":model="model" layout="vertical">
-    <a-table :data-source="model" :columns="columns" :pagination="false" :scroll="{ y: 400 }" row-key="index" class="editable-table">
+    <a-table :data-source="model" :columns="columns" :pagination="false" :scroll="{ y: 310 }" row-key="index" class="editable-table">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">
           <a-form-item :name="[index, 'name']" no-style :validate-trigger="['change', 'blur']" :rules="[{ required: (record.value !== '' || record.valueType !== 0 || record.description !== '') }]">
@@ -87,7 +87,7 @@
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'description'">
-          <a-form-item :name="[index, 'description']" >
+          <a-form-item :name="[index, 'description']" no-style>
             <a-input v-model:value="record.description" :placeholder="$t('page.webApi.form.description')" />
           </a-form-item>
         </template>
@@ -103,6 +103,6 @@
 </template>
 
 <style scoped>
-.editable-table { margin-top: 20px; }
+.editable-table { padding: 0; }
 .editable-row-operations { display: flex; justify-content: center; align-items: center; }
 </style>

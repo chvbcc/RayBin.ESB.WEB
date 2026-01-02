@@ -5,7 +5,7 @@ import { useAppStore } from '@/store/modules/app';
 import { TaskDatabaseApi } from '@/service/api/task';
 import TaskSearch from '@/components/task/task-search.vue';
 import { useTable, useTableOperate } from '@/hooks/common/table';
-import { dataHandleRecord, runModeRecord, taskStatusRecord } from '@/constants/options';
+import { runModeRecord, taskStatusRecord } from '@/constants/options';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -34,20 +34,6 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       title: $t('page.task.taskName'),
       align: 'center',
       minWidth: 120
-    },
-    {
-      key: 'dataHandle',
-      dataIndex: 'dataHandle',
-      title: $t('page.task.dataHandle'),
-      align: 'center',
-      minWidth: 88,
-      customRender: ({ record } )=> {
-        if (record.dataHandle === null) {
-          return null;
-        }
-        const label = $t(dataHandleRecord[record.dataHandle]);
-        return label;
-      }
     },
     {
       key: 'runMode',

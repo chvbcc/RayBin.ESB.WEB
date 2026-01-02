@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { $t } from '@/locales';
-  import { h, nextTick, ref } from 'vue';
+  import { h, nextTick, ref, computed } from 'vue';
   import type { FormInstance } from 'ant-design-vue';
   import { paramTypeOptions } from '@/constants/options';
 
@@ -10,7 +10,7 @@
     title
   ];
 
-  const columns = [
+  const columns = computed(() => [
     {
       title: createRequiredTitle($t('page.webApi.paramName')),
       dataIndex: 'name',
@@ -36,7 +36,7 @@
       key: 'operation',
       width: 75
     }
-  ];
+  ]);
 
   // 创建空行
   const createEmptyModel = (): Api.Task.Param => ({
@@ -67,25 +67,25 @@
 
 <template>
   <a-form ref="formRef" :model="model" layout="vertical">
-    <a-table :data-source="model" :columns="columns" :pagination="false" row-key="index" :scroll="{ y: 400 }" class="editable-table">
+    <a-table :data-source="model" :columns="columns" :pagination="false" row-key="index" :scroll="{ y: 310 }" class="editable-table">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">
-          <a-form-item :name="[index, 'name']" no-style :rules="[{ required: (record.value !== '' || record.valueType !== 0 || record.description !== '') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">
+          <a-form-item :name="[index, 'name']" no-style :rules="[{ required: (record.value !== '' || record.valueType !== 0 || record.description !== '') }]" :validate-trigger="['change','blur']">
             <a-input v-model:value="record.name" :placeholder="$t('page.webApi.form.paramName')" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'valueType'">
-          <a-form-item :name="[index, 'valueType']" no-style :rules="[{ required: (record.name !== '' || record.value !== '' || record.description !== '') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">
+          <a-form-item :name="[index, 'valueType']" no-style :rules="[{ required: (record.name !== '' || record.value !== '' || record.description !== '') }]" :validate-trigger="['change','blur']">
             <a-select v-model:value="record.valueType" :options="paramTypeOptions" :placeholder="$t('page.webApi.form.paramType')" class="w-full" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'value'">
-          <a-form-item :name="[index, 'value']" no-style :rules="[{ required: (record.name !== '' || record.valueType !== 0 || record.description !== '') }]" :validate-trigger="['change','blur']" style="margin-bottom: 0">
+          <a-form-item :name="[index, 'value']" no-style :rules="[{ required: (record.name !== '' || record.valueType !== 0 || record.description !== '') }]" :validate-trigger="['change','blur']">
             <a-input v-model:value="record.value" :placeholder="$t('page.webApi.form.paramValue')" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'description'">
-          <a-form-item :name="[index, 'description']" style="margin-bottom: 0">
+          <a-form-item :name="[index, 'description']" no-style>
             <a-input v-model:value="record.description" :placeholder="$t('page.webApi.form.description')" />
         </a-form-item>
         </template>
@@ -101,6 +101,6 @@
 </template>
 
 <style scoped>
-.editable-table { margin-top: 20px; }
+.editable-table { padding: 0; }
 .editable-row-operations { display: flex; justify-content: center; align-items: center; }
 </style>

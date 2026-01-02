@@ -9,7 +9,7 @@
   import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions,taskStatusOptions, interfaceTypeRecord, programmeLanguageOptions } from '@/constants/options';
 
   // #region 1. 表格列
-  const columns: TableColumnsType<Api.Task.TaskWebApi> = [
+  const columns = computed<TableColumnsType<Api.Task.TaskWebApi>>(() => [
     {
       key: 'id',
       dataIndex: 'id',
@@ -22,7 +22,7 @@
       dataIndex: 'interfaceType',
       title: $t('page.webApi.interfaceType'),
       align: 'center',
-      width: 100,
+      width: 150,
       customRender: ({ record }) => {
         if (record.interfaceType === null) {
           return null;
@@ -36,7 +36,7 @@
       dataIndex: 'method',
       title: $t('page.webApi.method'),
       align: 'center',
-      width: 100
+      width: 140
     },
     {
       key: 'requestUrl',
@@ -51,7 +51,7 @@
       align: 'center',
       width: 160
     }
-  ];
+  ]);
   // #endregion
 
   // #region 2. 参数定义
@@ -59,7 +59,7 @@
   const webApiModalVisible = ref(false);
 8
   // 根据语言动态设置 labelCol 宽度
-  const labelCol = language() === 'en-US' ?  { style: { width: '141px' } } :  { style: { width: '100px' } };
+  const labelCol = computed(() => language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } });
 
   // 定义默认模型
   const model = ref<Api.Task.TaskWebApiModel>(createDefaultModel());
@@ -90,9 +90,6 @@
       runMode: '6000',
       runFrequency: 0,
       runTime: undefined,
-      dataHandle: 0,
-      programmeLanguage: '7000',
-      dataHandleScript: '',
       isDebug: false,
       status: 0,
       description: ''
@@ -117,13 +114,15 @@
         binaryFilePath: ''
       },
       headers: [createParamModel()],
-      tokenPassBy: 0,
+      tokenPassBy: undefined,
       tokenPrefix: '',
       responseBodyType: '',
       responseBodyContent: '',
       judgeMode: 0,
       jdgeCondition: '',
-      handleCallResult: '',
+      dataHandle: 0,
+      programmeLanguage: '7000',
+      dataHandleScript: '',
       dataMapping: '',
       diagramData: '',
       shareVariables: ''
@@ -241,21 +240,8 @@
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.programmeLanguage')" name="programmeLanguage" class="m-0">
-                <a-select v-model:value="model.task.programmeLanguage" :placeholder="$t('page.task.form.programmeLanguage')" :options="programmeLanguageOptions" allow-clear />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.task.status')" name="status" class="m-0">
                 <a-select v-model:value="model.task.status" :placeholder="$t('page.task.form.status')" :options="convertOptions(taskStatusOptions)" />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.dataHandle')" name="dataHandle" class="m-0">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <a-select v-model:value="model.task.dataHandle" :placeholder="$t('page.task.form.dataHandle')" :options="convertOptions(dataHandleOptions)" class="flex-1" />
-                  <a-button type="primary" class="bule-btn ml-3">{{$t('page.task.dataHandle')}}</a-button>
-                </div>
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
