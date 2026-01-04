@@ -1,12 +1,12 @@
 <script lang="ts" setup>
+  import { useRoute } from 'vue-router';
   import { $t, language } from '@/locales';
   import { ref, onMounted, computed } from 'vue';
   import { TaskWebApi } from '@/service/api/task';
-  import { useRoute } from 'vue-router';
   import WebApiModal from './modules/webapi-modal.vue';
   import type { TableColumnsType } from 'ant-design-vue';
   import { convertOptions, translateOptions, convertDateTime } from '@/utils/common';
-  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions,taskStatusOptions, interfaceTypeRecord, programmeLanguageOptions } from '@/constants/options';
+  import { booleanYesOrNoOptions, runModeOptions,taskStatusOptions, interfaceTypeRecord } from '@/constants/options';
 
   // #region 1. 表格列
   const columns = computed<TableColumnsType<Api.Task.TaskWebApi>>(() => [
@@ -116,12 +116,12 @@
       headers: [createParamModel()],
       tokenPassBy: undefined,
       tokenPrefix: '',
-      responseBodyType: '',
+      responseBodyType: 'json',
       responseBodyContent: '',
-      judgeMode: 0,
-      jdgeCondition: '',
+      statusHandleLanguage: '7000',
+      statusHandleScript: '',
       dataHandle: 0,
-      programmeLanguage: '7000',
+      dataHandleLanguage: '7000',
       dataHandleScript: '',
       dataMapping: '',
       diagramData: '',
@@ -159,7 +159,7 @@
   // #region 5. 添加API请求
   function addRow () {
     currentItemModel.value = createWebApiModel();
-    currentItemModel.value.id = model.value.taskWebApi.length + 1;
+    currentItemModel.value.id = 0;
     webApiModalVisible.value = true;
   }
   // #endregion
@@ -167,6 +167,7 @@
   // #region 6. 编辑API请求
   function editRow(record: Api.Task.TaskWebApi) {
     currentItemModel.value = { ...record }; // 复制对象以避免直接修改
+    currentItemModel.value.id = model.value.taskWebApi.length + 1;
     webApiModalVisible.value = true;
   }
   // #region 7. 删除API请求

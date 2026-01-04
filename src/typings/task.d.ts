@@ -52,7 +52,7 @@ declare namespace Api {
       id: number;
       taskID: number;
       dataHandle: DataHandle;
-      programmeLanguage: string;
+      dataHandleLanguage: string;
       dataHandleScript: string;
       dataMapping: string;
       diagramData: string;
@@ -102,10 +102,10 @@ declare namespace Api {
       tokenPrefix: string;
       responseBodyType: string;
       responseBodyContent: string;
-      judgeMode: number;
-      jdgeCondition: string;
+      statusHandleLanguage: string;
+      statusHandleScript: string;
       dataHandle: DataHandle;
-      programmeLanguage: string;
+      dataHandleLanguage: string;
       dataHandleScript: string;
       dataMapping: string;
       diagramData: string;

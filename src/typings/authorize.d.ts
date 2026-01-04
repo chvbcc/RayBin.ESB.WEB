@@ -114,7 +114,7 @@ declare namespace Api {
       ntlmConfig: NtlmConfig; // NTLM
       tokenRetrievalType: TokenRetrievalType; // 令牌检索方式 分为路径，和代码
       tokenPath: string; // 令牌路径
-      programmeLanguage: string; // 程序语言
+      tokenHandleLanguage: string; // 程序语言
       tokenCode: string; // 令牌代码
       tokenPassBy: Location; // 令牌传递位置
       tokenPrefix: string; // 令牌前缀（Query：access_token Header：Bearer）
@@ -126,6 +126,6 @@ declare namespace Api {
     type AuthorizeList = Common.PaginatingQueryRecord<Authorize>;
     /* Authorize model */
     type AuthorizeModel = Pick<Authorize,| 'id' | 'name' | 'method' | 'requestUrl' | 'timeOut' | 'type' | 'customConfig' | 'apiKeyConfig' | 'basicAuthConfig' | 'clientConfig'
-      | 'passwordConfig' | 'jwtConfig' | 'ntlmConfig' | 'tokenRetrievalType' | 'tokenPath' | 'tokenCode' | 'programmeLanguage' | 'tokenPassBy' | 'tokenPrefix' | 'description' >;
+      | 'passwordConfig' | 'jwtConfig' | 'ntlmConfig' | 'tokenRetrievalType' | 'tokenPath' | 'tokenCode' | 'tokenHandleLanguage' | 'tokenPassBy' | 'tokenPrefix' | 'description' >;
   }
 }

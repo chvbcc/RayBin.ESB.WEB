@@ -14,7 +14,7 @@ import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import Password from '@/components/webapi/auths/password.vue';
 import { useAntdForm, useFormRules } from '@/hooks/common/form';
 import BasicAuth from '@/components/webapi/auths/basic-auth.vue';
-import { computed, onMounted, ref, shallowRef, watch } from 'vue';
+import { computed, onMounted, ref, shallowRef } from 'vue';
 import { authTypeOptions, locationOptions, methodOptions, programmeLanguageOptions, tokenRetrievalTypeOptions } from '@/constants/options';
 
 // #region 1. 参数定义
@@ -94,7 +94,7 @@ const createDefaultModel = (): Api.Authorize.AuthorizeModel => ({
   },
   tokenRetrievalType: 0,
   tokenPath: 'access_token',
-  programmeLanguage: 'C#',
+  tokenHandleLanguage: 'C#',
   tokenCode: '',
   tokenPassBy: 0,
   tokenPrefix: 'access_token',
@@ -155,7 +155,7 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
   // 根据type和tokenRetrievalType动态判断必填规则
   const tokenRetrievalTypeRule: App.Global.FormRule = { required: model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
   const tokenPathRule: App.Global.FormRule = { required: (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 0 ? true : false };
-  const programmeLanguageRule: App.Global.FormRule = { required: (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 1 ? true : false };
+  const tokenHandleLanguageRule: App.Global.FormRule = { required: (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 1 ? true : false };
   const tokenPassByRule: App.Global.FormRule = { required: model.value.type === 0 || model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
   const tokenPrefixRule: App.Global.FormRule = { required: model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
   return {
@@ -165,8 +165,8 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
     type: defaultRequiredRule,
     tokenRetrievalType: tokenRetrievalTypeRule,
     tokenPath: tokenPathRule,
-    programmeLanguage: programmeLanguageRule,
-    tokenCode: programmeLanguageRule,
+    tokenHandleLanguage: tokenHandleLanguageRule,
+    tokenCode: tokenHandleLanguageRule,
     tokenPassBy: tokenPassByRule,
     tokenPrefix: tokenPrefixRule
   };
@@ -305,7 +305,7 @@ function handleBack() {
           <a-col :span="24" :md="12" :lg="12">
             <a-form-item :label="$t('page.authorize.tokenCode')" name="tokenCode" class="m-0">
               <div style="display: flex; align-items: center; gap: 10px">
-                <a-select v-model:value="model.programmeLanguage" :placeholder="$t('page.task.form.programmeLanguage')" :options="programmeLanguageOptions" allow-clear class="flex-1" :disabled="model.tokenRetrievalType === 0 || model.type === 0 || model.type === 1 || model.type === 2 || model.type === 6" />
+                <a-select v-model:value="model.tokenHandleLanguage" :placeholder="$t('page.authorize.form.tokenHandleLanguage')" :options="programmeLanguageOptions" allow-clear class="flex-1" :disabled="model.tokenRetrievalType === 0 || model.type === 0 || model.type === 1 || model.type === 2 || model.type === 6" />
                 <a-button type="primary" class="bule-btn ml-3" :disabled="model.tokenRetrievalType === 0" @click="getToken">
                   {{ $t('page.authorize.tokenCode') }}
                 </a-button>
@@ -314,7 +314,7 @@ function handleBack() {
           </a-col>
           <a-col :span="24" :md="12" :lg="12">
             <a-form-item :label="$t('page.authorize.tokenPassBy')" name="tokenPassBy" class="m-0">
-              <a-select v-model:value="model.tokenPassBy" :placeholder="$t('page.task.form.dataHandle')" :options="locationOptions" allow-clear :disabled="model.type === 2 || model.type === 6" />
+              <a-select v-model:value="model.tokenPassBy" :placeholder="$t('page.authorize.form.tokenPassBy')" :options="locationOptions" allow-clear :disabled="model.type === 2 || model.type === 6" />
             </a-form-item>
           </a-col>
           <a-col :span="24" :md="12" :lg="12">
@@ -369,7 +369,7 @@ function handleBack() {
         </div>
       </a-card>
     </a-form>
-    <TokenModal v-model:visible="tokenModalVisible" :programme-language="model.programmeLanguage" @confirm="handleConfirm" />
+    <TokenModal v-model:visible="tokenModalVisible" :programme-language="model.tokenHandleLanguage" @confirm="handleConfirm" />
     <CustomAlert v-if="showAlert"  :message="message" :type="type" :description="description" show-icon closable @close="handleCloseAlert" />
   </div>
 </template>

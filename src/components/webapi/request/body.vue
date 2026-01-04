@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { $t } from '@/locales';
-  import { ref, computed } from 'vue';
+  import { computed } from 'vue';
   import UrlEncoded from './parameters.vue';
   import FormData from './bodys/form-data.vue';
   import CodeEditor from './bodys/code-editor.vue';

@@ -13,7 +13,6 @@
   import { autoLayoutGraph } from '@/utils/dagreLayout';
   import { onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
 
-
   // #region 1. 参数定义
   // 图实例
   const graph = ref<Graph>();

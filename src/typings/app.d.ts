@@ -507,9 +507,6 @@ declare namespace App {
           runMode: string;
           runTime: string;
           runFrequency: string;
-          dataHandle: string;
-          programmeLanguage: string;
-          dataHandleScript: string;
           isDebug: string;
           status: string;
           description: string;
@@ -530,9 +527,6 @@ declare namespace App {
             runMode: string;
             runTime: string;
             runFrequency: string;
-            dataHandle: string;
-            programmeLanguage: string;
-            dataHandleScript: string;
             isDebug: string;
             status: string;
             description: string;
@@ -548,6 +542,9 @@ declare namespace App {
           taskID: string;
           connectionID: string;
           dataObjectType: string;
+          dataHandle: string;
+          dataHandleLanguage: string;
+          dataHandleScript: string;
           dataMapping: string;
           createUserID: string;
           createTime: string;
@@ -555,17 +552,20 @@ declare namespace App {
           form: {
             connectionID: string;
             dataObjectType: string;
+            dataHandle: string;
+            dataHandleLanguage: string;
+            dataHandleScript: string
             dataMapping: string;
           };
         };
         webApi:
         {
           title: string;
-          interfaceInfo: string;
-          titleAdd: string;
-          titleEdit: string;
+          requestNew: string;
+          requestEdit: string;
+          requestInfo: string;
+          responseInfo: string;
           requestList: string;
-          requestInterface: string;
           paramName: string;
           paramType: string;
           paramValue: string;
@@ -586,9 +586,10 @@ declare namespace App {
           tokenPrefix: string;
           responseBodyType: string;
           responseBodyContent: string;
-          judgeMode: string;
-          judgeCondition: string;
-          handleCallResult: string;
+          programLanguage: string;
+          statusHandleScript: string;
+          dataHandle: string;
+          dataHandleScript: string;
           dataMapping: string;
           diagramData: string;
           shareVariables: string;
@@ -613,9 +614,10 @@ declare namespace App {
             tokenPrefix: string;
             responseBodyType: string;
             responseBodyContent: string;
-            judgeMode: string;
-            judgeCondition: string;
-            handleCallResult: string;
+            programLanguage: string;
+            statusHandleScript: string;
+            dataHandle: string;
+            dataHandleScript: string;
             dataMapping: string;
             diagramData: string;
             shareVariables: string;
@@ -729,7 +731,7 @@ declare namespace App {
           tokenRetrievalType: string;
           tokenPath: string;
           getToken: string;
-          programmeLanguage: string;
+          tokenHandleLanguage: string;
           tokenCode: string;
           tokenPassBy: string;
           tokenPrefix: string;
@@ -748,7 +750,7 @@ declare namespace App {
             tokenPath: string;
             tokenCode: string;
             tokenPassBy: string;
-            programmeLanguage: string;
+            tokenHandleLanguage: string;
             tokenPrefix: string;
             description: string;
           };

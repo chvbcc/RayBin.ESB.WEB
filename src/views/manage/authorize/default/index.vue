@@ -5,8 +5,8 @@
   import { $t } from '@/locales';
   import { useAppStore } from '@/store/modules/app';
   import { AuthorizeApi } from '@/service/api/manage';
-  import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
   import AuthorizeSearch from './modules/authorize-search.vue';
+  import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
   const router = useRouter();
   const appStore = useAppStore();
