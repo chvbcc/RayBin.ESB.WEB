@@ -149,20 +149,36 @@ export namespace TaskWebApi {
     });
   }
 
-  export function fetchGetModel(taskId: number) {
+  export function fetchGetModel(id: number) {
     return request({
       url: '/taskwebapi/getModel',
       method: 'get',
-      params: { taskId }
+      params: { id }
     });
   }
-
 
   export function fetchDelete(id: number) {
     return request({
       url: '/taskwebapi/delete',
       method: 'delete',
       params: { id }
+    });
+  }
+
+  export function fetchCheckName(taskName: string, createUserId: number, id: number) {
+    return request({
+      url: '/taskwebapi/checkName',
+      method: 'get',
+      params: { taskName, createUserId, id }
+    });
+  }
+
+  export function fetchSave(data: Api.Task.TaskWebApiModel) {
+    let url = data.task.id === 0 ? '/taskwebapi/add' : '/taskwebapi/update';
+    return request({
+      url: url,
+      method: 'post',
+      data
     });
   }
 }

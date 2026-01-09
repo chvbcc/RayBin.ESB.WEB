@@ -65,21 +65,6 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       }
     },
     {
-      key: 'dataHandle',
-      dataIndex: 'dataHandle',
-      title: $t('page.task.dataHandle'),
-      align: 'center',
-      width: 110,
-      customRender: ({ record } )=> {
-        if (record.dataHandle === null) {
-          return null;
-        }
-        const label = $t(dataHandleRecord[record.dataHandle]);
-        return label;
-      }
-
-    },
-    {
       key: 'runMode',
       dataIndex: 'runMode',
       title: $t('page.task.runMode'),

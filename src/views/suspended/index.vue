@@ -4,7 +4,7 @@ import { $t, language } from '@/locales';
 import TaskSearch from './task-search.vue';
 import { TaskApi } from '@/service/api/task';
 import { useTable } from '@/hooks/common/table';
-import { dataHandleRecord, taskTypeRecord, runModeRecord, taskStatusRecord, yesOrNoRecord } from '@/constants/options';
+import { taskTypeRecord, runModeRecord, taskStatusRecord, yesOrNoRecord } from '@/constants/options';
 
 // 添加响应式加载映射，追踪每个任务加载状态
 const taskLoadingMap = reactive<Record<number, boolean>>({});
@@ -63,21 +63,6 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
         const label = $t(yesOrNoRecord[isdebug]);
         return label;
       }
-    },
-    {
-      key: 'dataHandle',
-      dataIndex: 'dataHandle',
-      title: $t('page.task.dataHandle'),
-      align: 'center',
-      width: 110,
-      customRender: ({ record } )=> {
-        if (record.dataHandle === null) {
-          return null;
-        }
-        const label = $t(dataHandleRecord[record.dataHandle]);
-        return label;
-      }
-
     },
     {
       key: 'runMode',

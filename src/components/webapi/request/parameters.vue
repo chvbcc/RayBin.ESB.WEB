@@ -50,6 +50,14 @@
   const formRef = ref<FormInstance>();
   const model = defineModel<Api.Task.Param[]>('model', { default: () => [] });
 
+  // 组件内校验
+  async function validate() {
+    const valid = await formRef.value?.validate?.().catch(() => false);
+    if (!valid) return false;
+    return true;
+  }
+  defineExpose({ validate, clearValidate: () => formRef.value?.clearValidate() });
+
   // 添加新行
   const addRow = (index: number) => {
     model.value.splice(index + 1, 0, createEmptyModel());

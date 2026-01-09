@@ -1,13 +1,24 @@
 <script setup lang="ts">
   import { $t } from '@/locales';
-  import { computed } from 'vue';
+  import { ref, computed } from 'vue';
   import UrlEncoded from './parameters.vue';
   import FormData from './bodys/form-data.vue';
   import CodeEditor from './bodys/code-editor.vue';
   import SvgIcon from '@/components/custom/svg-icon.vue';
 
   // 使用defineModel直接管理数据
+  const formRef = ref();
   const model = defineModel<Api.Task.BodyConfig>('model', { default: () => ({}) });
+  const formDataRef = ref<InstanceType<typeof FormData>>();
+  const urlEncodedRef = ref<InstanceType<typeof UrlEncoded>>();
+  async function validate() {
+    const valid = await formRef.value?.validate?.().catch(() => false);
+    const validFormData = await formDataRef.value?.validate();
+    const validUrlEncoded = await urlEncodedRef.value?.validate();
+    if (!valid || !validFormData || !validUrlEncoded) return false;
+    return true;
+  }
+  defineExpose({ validate, clearValidate: () => formRef.value?.clearValidate() });
 
   const language = computed(() => {
     switch (model.value.type) {
@@ -21,6 +32,12 @@
         return 'plaintext';
     }
   });
+  const styleCodeRequired = computed(() => {
+    if ([1,2,3,4].includes(model.value.type) && !model.value.raw) {
+      return { borderColor: 'red' };
+    }
+    return {};
+  });
 </script>
 <template>
   <a-form ref="formRef" :model="model" layout="vertical">
@@ -33,7 +50,7 @@
       <a-radio :value="5">form-data</a-radio>
       <a-radio :value="6">form-urlencoded</a-radio>
     </a-radio-group>
-    <div v-show="model.type == 0">
+    <div v-show="model.type === 0">
       <div class="none">
         <div class="container">
             <SvgIcon localIcon="no-data" class="icon" />
@@ -41,13 +58,15 @@
           </div>
       </div>
     </div>
-    <div v-show="model.type === 1 || model.type == 2 || model.type === 3 || model.type == 4">
-      <CodeEditor ref="codeEditorRef" v-model:model="model.raw" :Language="language"></CodeEditor>
+    <div v-show="[1,2,3,4].includes(model.type)">
+      <a-form-item name="raw" noStyle :rules="[{ required: [1,2,3,4].includes(model.type)}]">
+        <CodeEditor ref="codeEditorRef" v-model:model="model.raw" :Language="language" :style="styleCodeRequired"></CodeEditor>
+      </a-form-item>
     </div>
-    <div v-show="model.type == 5">
+    <div v-show="model.type === 5">
       <FormData ref="formDataRef" v-model:model="model.formDatas"></FormData>
     </div>
-    <div v-show="model.type == 6">
+    <div v-show="model.type === 6">
       <UrlEncoded ref="urlEncodedRef" v-model:model="model.urlEncodeds"></UrlEncoded>
     </div>
   </a-form>

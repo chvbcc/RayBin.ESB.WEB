@@ -52,6 +52,14 @@
   // 使用defineModel直接管理数据
   const model = defineModel<Api.Task.FormData[]>('model', { default: () => [] });
 
+  // 组件内校验
+  async function validate() {
+    const valid = await formRef.value?.validate?.().catch(() => false);
+    if (!valid) return false;
+    return true;
+  }
+  defineExpose({ validate });
+
   // 添加新行
   const addRow = (index: number) => {
     model.value.splice(index + 1, 0, createEmptyModel());
@@ -90,22 +98,22 @@
     <a-table :data-source="model" :columns="columns" :pagination="false" :scroll="{ y: 400 }" row-key="index" class="editable-table">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">
-          <a-form-item :name="[index, 'name']" no-style :rules="[{ required: true }]" :validate-trigger="['change', 'blur']">
+          <a-form-item :name="[index, 'name']" no-style :rules="[{ required: (record.value !== '' || record.contentType !== '') }]" :validate-trigger="['change', 'blur']">
             <a-input v-model:value="record.name" :placeholder="$t('page.webApi.form.paramName')"  class="w-full" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'value'">
-            <a-form-item :name="[index, 'value']" no-style :rules="[{ required: true }]" :validate-trigger="['change', 'blur']">
+            <a-form-item :name="[index, 'value']" no-style :rules="[{ required: (record.name !== '' || record.contentType !== '') }]" :validate-trigger="['change', 'blur']">
               <a-input v-model:value="record.value" :placeholder="$t('page.webApi.form.paramValue')" :disabled="record.isFile" />
             </a-form-item>
           </template>
         <template v-else-if="column.dataIndex === 'contentType'">
-          <a-form-item :name="[index, 'contentType']">
+          <a-form-item :name="[index, 'contentType']" no-style :rules="[{ required: (record.name !== '' || record.value !== '') }]" :validate-trigger="['change', 'blur']">
             <a-auto-complete v-model:value="record.contentType" :options="contentTypeOptions" :placeholder="$t('page.webApi.form.contentType')" :filter-Option="true" class="w-full" :disabled="record.isFile" />
           </a-form-item>
         </template>
         <template v-else-if="column.dataIndex === 'filePath'">
-          <a-form-item :name="[index, 'filePath']">
+          <a-form-item :name="[index, 'filePath']" no-style>
             <div v-if="record.filePath" class="flex items-center">
               <span class="mr-2">{{ record.filePath }}</span>
               <a-button type="link" @click="removeFile(record as Api.Task.FormData)">{{ $t('common.delete') }}</a-button>

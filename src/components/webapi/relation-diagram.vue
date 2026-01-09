@@ -26,7 +26,6 @@
   const props = defineProps({
     // 可以传入自定义的配置选项
     config: { type: Object, default: () => ({}) },
-    dataSource: { type: Array, default: () => [] }
   })
   // #endregion
 
@@ -117,9 +116,13 @@
           const targetNodeId = targetView.cell.id;
           if (!targetNodeId) return false;
 
+          // 获取源节点 类型检查
+          const sourceNode = graphInstance.getCellById(sourceNodeId);
+          if (!sourceNode || !sourceNode.isNode()) return false;
+
           // 获取目标节点
           const targetNode = graphInstance.getCellById(targetNodeId);
-          if (!targetNode) return false;
+          if (!targetNode || !targetNode.isNode()) return false;
 
           // 规则2：只有Table 与 StoredProcedure 才能被连接
           // 获取自定义属性 dataObjectType
@@ -138,13 +141,12 @@
               edge.getTargetPortId() === targetPort
             );
           });
-
           if (exists) { return false; }
 
-          // 新规则：要么 source 连 target，要么 target 连 source；target 不可再向其它节点发起连接
+          // target 节点中只有 keyType === '2' 发的端口可以发起连接
+          const sourcePortInfo = sourceNode.getPort(sourcePort);
           const sourceWasTarget = graphInstance.getEdges().some(edge => edge.getTargetCellId() === sourceNodeId);
-          if (sourceWasTarget) { return false; }
-
+          if (sourceWasTarget && sourcePortInfo?.keyType !=='2') return false;
           return true;
         },
       }
@@ -274,19 +276,14 @@
   // #region 设置数据
 
   function setData(data?: { cells: any[] }) {
-    if (data && graph.value) {
-      const cells: Cell[] = [];
-      data.cells.forEach((item: any) => {
-        if (item.shape === 'edge') {
-          cells.push(graph.value!.createEdge(item))
-        } else {
-          cells.push(graph.value!.createNode(item))
-        }
-      });
-      graph.value?.resetCells(cells);
-      graph.value?.zoomToFit({ padding: 10, maxScale: 1 });
-      emit('dataLoaded', data);
-    }
+    if (!data || !graph.value) return;
+    const cells: Cell[] = [];
+    data.cells.forEach((item: any) => {
+      cells.push(item.shape === 'edge' ? graph.value!.createEdge(item) : graph.value!.createNode(item));
+    });
+    graph.value?.resetCells(cells);
+    graph.value?.zoomToFit({ padding: 10, maxScale: 1 });
+    emit('dataLoaded', data);
   }
   // #endregion
 
@@ -307,21 +304,6 @@
       graph.value.resize(); // 关键：通知 X6 重新计算尺寸
     }
   }
-  // #endregion
-
-  // #region 监控数据
-  watch(() => props.dataSource,
-    newData => {
-      if (!newData || newData.length === 0) return;
-      // 若图尚未初始化，延后到下一个 tick
-      if (!graph.value) {
-        nextTick(() => { if (graph.value) setData({ cells: newData as any[] }); });
-        return;
-      }
-      setData({ cells: newData as any[] });
-    },
-    { immediate: true, flush: 'post' } // 等待子组件挂载后再执行首次回调
-  );
   // #endregion
 
   // #region 添加表节点

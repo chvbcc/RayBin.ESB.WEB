@@ -51,6 +51,13 @@
   const formRef = ref<FormInstance>();
   // 使用defineModel直接管理数据
   const model = defineModel<Api.Task.Param[]>('model', {  default: () => []});
+  // 组件内校验
+  async function validate() {
+    const valid = await formRef.value?.validate?.().catch(() => false);
+    if (!valid) return false;
+    return true;
+  }
+  defineExpose({ validate, clearValidate: () => formRef.value?.clearValidate() });
 
   // 添加新行
   const addRow = (index: number) => {
@@ -68,7 +75,7 @@
 </script>
 
 <template>
-  <a-form ref="formRef":model="model" layout="vertical">
+  <a-form ref="formRef" :model="model" layout="vertical">
     <a-table :data-source="model" :columns="columns" :pagination="false" :scroll="{ y: 310 }" row-key="index" class="editable-table">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'name'">

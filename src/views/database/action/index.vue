@@ -73,61 +73,22 @@
   //#endregion
 
   // #region 2. 定义规则类型 验证表单
-  type taskRuleKey = Extract<keyof Api.Task.TaskDatabaseModel['task'], 'taskType' | 'taskName' | 'runMode' | 'runFrequency' | 'runTime' | 'dataHandle' | 'dataHandleLanguage' | 'dataHandleScript' | 'isDebug' | 'status'>;
-
-  const taskRules = computed<Record<taskRuleKey, App.Global.FormRule>>(() => {
-    const taskNameRule: App.Global.FormRule = {
-      required: true, // 添加 required: true，确保显示星号
-      validateTrigger: 'blur',
-      validator: async (_rule: any, value: string) => {
-        const name = (value ?? '').trim();
-        if (!name) {
-          return Promise.reject(new Error(($t('page.connection.form.connectionName') as string)));
-        }
-        const createUserId = parseInt(authStore.userInfo.userId) ?? 0;
-        const { error, data } = await TaskDatabaseApi.fetchCheckName(name, createUserId, model.value.task.id);
-        if (error && data) {
-          return Promise.reject(new Error($t('common.exists')));
-        }
-        return Promise.resolve();
+  const taskNameRule: App.Global.FormRule = {
+    required: true, // 添加 required: true，确保显示星号
+    validateTrigger: ['change', 'blur'],
+    validator: async (_rule: any, value: string) => {
+      const name = (value ?? '').trim();
+      if (!name) {
+        return Promise.reject(new Error(($t('page.connection.form.connectionName') as string)));
       }
-    };
-
-    const runTimeRule: App.Global.FormRule = {
-      required: model.value.task.runMode !== '6000',
-      validateTrigger: 'blur',
-      validator: async (rule, value) => {
-        if (model.value.task.runMode !== '6000' && !value) {
-          return Promise.reject(new Error(($t('page.task.form.runTime') as string)));
-        }
-        return Promise.resolve();
+      const createUserId = parseInt(authStore.userInfo.userId) ?? 0;
+      const { error, data } = await TaskDatabaseApi.fetchCheckName(name, createUserId, model.value.task.id);
+      if (error && data) {
+        return Promise.reject(new Error($t('common.exists')));
       }
-    };
-
-    const dataHandleLanguageRule: App.Global.FormRule = {
-      required: model.value.taskDatabase.dataHandle == 1,
-      validateTrigger: 'blur',
-      validator: async (rule, value) => {
-        if (model.value.taskDatabase.dataHandle == 1 && !value) {
-          return Promise.reject(new Error(($t('page.database.form.dataHandleLanguage') as string)));
-        }
-        return Promise.resolve();
-      }
-    };
-
-    return {
-      taskType: defaultRequiredRule,
-      taskName: taskNameRule,
-      runMode: defaultRequiredRule,
-      runFrequency: defaultRequiredRule,
-      runTime: runTimeRule,
-      dataHandle: defaultRequiredRule,
-      dataHandleLanguage: dataHandleLanguageRule,
-      dataHandleScript: defaultRequiredRule,
-      isDebug: defaultRequiredRule,
-      status: defaultRequiredRule
-    };
-  });
+      return Promise.resolve();
+    }
+  };
 
   type dialogRuleKey = Extract<keyof Api.Task.DialogModal, 'connectionID' | 'dataObjectType'>;
   const dialogRules = computed<Record<dialogRuleKey, App.Global.FormRule>>(() => {
@@ -180,10 +141,6 @@
 
   // #region 5. 保存数据对象
   async function handleSave() {
-    if (model.value.task.status == 0 && relationDiagramRef.value?.validateUnusedNodes()) {
-      window.$message?.error($t('page.task.needDataMapping'));
-      return;
-    }
     formRefTask.value?.validate().then(async () => {
       model.value.taskDatabase.diagramData = JSON.stringify(relationDiagramRef.value?.getData());
       const payload: Api.Task.TaskDatabaseModel = {
@@ -207,6 +164,11 @@
     }).catch(() => {
       return;
     });
+
+    if (model.value.task.status == 0 && relationDiagramRef.value?.validateUnusedNodes()) {
+      window.$message?.error($t('page.database.needDataMapping'));
+      return;
+    }
   }
   // #endregion
 
@@ -229,24 +191,14 @@
   }
   // #endregion
 
-  // #region 11. isDebug 计算属性，用于在 Select 组件中绑定 'true'/'false' 字符串值
+  // #region 10. isDebug 计算属性，用于在 Select 组件中绑定 'true'/'false' 字符串值
   const booleanYesOrNoValue = computed({
     get: () => model.value.task.isDebug ? 'true' : 'false',
     set: (val: 'true' | 'false') => { model.value.task.isDebug = val === 'true'; }
   });
   // #endregion
 
-  // #region 12. 监听 runMode 的变化，动态更新 runTime 的必填规则
-  watch(() => model.value.task.runMode, (newRunMode) => {
-    if (newRunMode === '6000') {
-      taskRules.value.runTime.required = false;
-    } else {
-      taskRules.value.runTime.required = true;
-    }
-  });
-  // #endregion
-
-  // #region 12. 处理DataHandleModal返回的内容
+  // #region 11. 处理DataHandleModal返回的内容
   function handleConfirm(content: string) {
     model.value.taskDatabase.dataHandleScript = content;
     dataHandleModalVisible.value = false;
@@ -256,41 +208,41 @@
 
 <template>
   <div class="min-h-500px flex flex-col h-full lt-sm:overflow-auto pr-3">
-    <a-form ref="formRefTask" :model="model" :rules="taskRules" :label-col="labelCol" class="flex flex-col">
+    <a-form ref="formRefTask" :model="model" :label-col="labelCol" class="flex flex-col">
       <a-card :title="$t('page.database.titleBaseInfo')" :bordered="false" class="mb-4">
           <a-row :gutter="[16, 16]">
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.taskName')" name="taskName" class="m-0">
+              <a-form-item :label="$t('page.task.taskName')" :name="['task','taskName']" :rules="taskNameRule" class="m-0">
                 <a-input v-model:value="model.task.taskName" :placeholder="$t('page.task.form.taskName')" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.isDebug')" name="isDebug" class="m-0">
+              <a-form-item :label="$t('page.task.isDebug')" :name="['task', 'isDebug']" :rules="[{ required: true }]" class="m-0">
                 <a-select v-model:value="booleanYesOrNoValue" :placeholder="$t('page.task.form.isDebug')" :options="translateOptions(booleanYesOrNoOptions)" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.runMode')" name="runMode" class="m-0">
+              <a-form-item :label="$t('page.task.runMode')" :name="['task', 'runMode']" :rules="[{ required: true }]" class="m-0">
                 <a-select v-model:value="model.task.runMode" :placeholder="$t('page.task.form.runMode')" :options="translateOptions(runModeOptions)" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.runTime')" name="runTime" class="m-0">
+              <a-form-item :label="$t('page.task.runTime')" :name="['task', 'runTime']" :rules="[{required: model.task.runMode !== '6000'}]" class="m-0">
                 <a-date-picker v-model:value="runTimeValue" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss"show-time :placeholder="$t('page.task.runTime')" style="width: 100%;" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.database.dataHandleLanguage')" name="dataHandleLanguage" class="m-0">
+              <a-form-item :label="$t('page.database.dataHandleLanguage')" :name="['taskDatabase', 'dataHandleLanguage']" :rules="[{required: model.taskDatabase.dataHandle == 1}]" class="m-0">
                 <a-select v-model:value="model.taskDatabase.dataHandleLanguage" :placeholder="$t('page.database.form.dataHandleLanguage')" :options="programmeLanguageOptions" allow-clear />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.status')" name="status" class="m-0">
+              <a-form-item :label="$t('page.task.status')" :name="['task', 'status']" :rules="[{ required: true }]" class="m-0">
                 <a-select v-model:value="model.task.status" :placeholder="$t('page.task.form.status')" :options="convertOptions(taskStatusOptions)" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.database.dataHandle')" name="dataHandle" class="m-0">
+              <a-form-item :label="$t('page.database.dataHandle')" :name="['taskDatabase', 'dataHandle']" class="m-0">
                 <div style="display: flex; align-items: center; gap: 10px;">
                   <a-select v-model:value="model.taskDatabase.dataHandle" :placeholder="$t('page.database.form.dataHandle')" :options="convertOptions(dataHandleOptions)" class="flex-1" />
                   <a-button type="primary" class="bule-btn ml-3" @click="showDataHandleModal()">{{$t('page.database.dataHandle')}}</a-button>
@@ -327,15 +279,15 @@
             <RelationDiagram ref="relationDiagramRef" />
           </div>
           <a-row :gutter="[16, 16]" class="mt-4 text-align-center">
-              <a-col :span="24" :md="24" :lg="24">
-                <a-button type="primary" @click="handleSave" class="blue-btn mr-8 pl-6 pr-6">
-                  {{$t('common.save')}}
-                </a-button>
-                <a-button type="primary" @click="handleBack" ghost class=" pl-6 pr-6">
-                  {{$t('common.back')}}
-                </a-button>
-              </a-col>
-            </a-row>
+            <a-col :span="24" :md="24" :lg="24">
+              <a-button type="primary" @click="handleSave" class="blue-btn mr-8 pl-6 pr-6">
+                {{$t('common.save')}}
+              </a-button>
+              <a-button type="primary" @click="handleBack" ghost class=" pl-6 pr-6">
+                {{$t('common.back')}}
+              </a-button>
+            </a-col>
+          </a-row>
         </div>
       </a-card>
     </a-form>
@@ -343,9 +295,9 @@
     <DataHandleModal v-model:visible="dataHandleModalVisible" :programme-language="model.taskDatabase.dataHandleLanguage" @confirm="handleConfirm" />
   </div>
 </template>
+
 <style scoped>
   .flex-1 {flex: 1 !important; }
-  /* 添加一个Monaco Editor按钮的样式 */
   .monaco-editor-btn { margin-bottom: 16px; }
   .diagram-container { background-color: #fCfCfC; border: #ECF0F1 1px solid; position: relative; }
   ::v-deep .ant-card .ant-card-body { height: 100%; flex: 1; box-sizing: border-box; overflow: hidden; }

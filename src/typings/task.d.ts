@@ -84,8 +84,8 @@ declare namespace Api {
     // WebApi Task
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //#region WebApi Task
-    // 8000  Call,  8001 Pull, 8002 Push
-    type InterfaceType = '8000' | '8001' | '8002';
+    // 8000  Call,  8001 Pull, 8002 Push (Single), 8003 Push (Batch)
+    type InterfaceType = '8000' | '8001' | '8002' | '8003';
 
     type TaskWebApi = {
       id: number;
@@ -100,11 +100,9 @@ declare namespace Api {
       headers: Param[];
       tokenPassBy: Location | undefined;
       tokenPrefix: string;
-      responseBodyType: string;
-      responseBodyContent: string;
-      statusHandleLanguage: string;
+      responseBody: string;
       statusHandleScript: string;
-      dataHandle: DataHandle;
+      dataHandle: number;
       dataHandleLanguage: string;
       dataHandleScript: string;
       dataMapping: string;
@@ -112,7 +110,7 @@ declare namespace Api {
       shareVariables: string;
     };
 
-    type TaskWebApiModel = { task: TaskModel; taskWebApi: TaskWebApi[]};
+    type TaskWebApiModel = { task: TaskModel; taskWebApis: TaskWebApi[]};
     //#endregion
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

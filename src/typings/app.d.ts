@@ -515,7 +515,6 @@ declare namespace App {
           run: string;
           pause: string;
           resume: string;
-          needDataMapping: string;
           taskStatus: {
             normal: string;
             draft: string;
@@ -549,6 +548,7 @@ declare namespace App {
           createUserID: string;
           createTime: string;
           addMapping: string;
+          needDataMapping: string;
           form: {
             connectionID: string;
             dataObjectType: string;
@@ -584,7 +584,7 @@ declare namespace App {
           headers: string;
           tokenPassBy: string;
           tokenPrefix: string;
-          responseBodyType: string;
+          responseContentTip: string;
           responseBodyContent: string;
           programLanguage: string;
           statusHandleScript: string;
@@ -595,6 +595,8 @@ declare namespace App {
           shareVariables: string;
           createUserID: string;
           createTime: string;
+          interfaceTest: string;
+          needDataMapping: string;
           form: {
             paramName: string;
             paramType: string;
@@ -954,7 +956,8 @@ declare namespace App {
         requestType: {
           call: string;
           pull: string;
-          push: string;
+          pushSingle: string;
+          pushBatch: string;
         };
       };
     };

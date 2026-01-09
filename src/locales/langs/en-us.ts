@@ -334,7 +334,6 @@ const local: App.I18n.Schema = {
       run: 'Run',
       pause: 'Pause',
       resume: 'Resume',
-      needDataMapping: 'Non-draft status must include data mapping.',
       taskStatus: {
         normal: 'Normal',
         draft: 'Draft',
@@ -368,6 +367,7 @@ const local: App.I18n.Schema = {
       addMapping: 'Add Mapping',
       createUserID: 'Create User ID',
       createTime: 'Create Time',
+      needDataMapping: 'Non-draft status must include data mapping.',
       form: {
         connectionID: 'Please select data connection',
         dataObjectType: 'Please select data object type',
@@ -403,10 +403,10 @@ const local: App.I18n.Schema = {
       headers: 'Headers',
       tokenPassBy: 'Token Pass By',
       tokenPrefix: 'Token Prefix',
-      responseBodyType: 'Response Body Type',
+      responseContentTip:"Response Content: (JSON format; otherwise, use a (Data Handle) script to convert it to JSON.)",
       responseBodyContent: 'Response Body Content',
       programLanguage: 'Program Language',
-      statusHandleScript: 'Status Handle Script',
+      statusHandleScript: ' Request Status',
       dataHandle: 'Data Handle',
       dataHandleScript: 'Data Handle Script',
       dataMapping: 'Data Mapping',
@@ -414,6 +414,8 @@ const local: App.I18n.Schema = {
       shareVariables: 'Share Variables',
       createUserID: 'Create User ID',
       createTime: 'Create Time',
+      interfaceTest: 'Interface Test',
+      needDataMapping: 'The current interface type must include data mapping.',
       form: {
           paramName: 'Please enter parameter name',
           paramType: 'Please select parameter type',
@@ -434,7 +436,7 @@ const local: App.I18n.Schema = {
           responseBodyType: 'Please select response body type',
           responseBodyContent: 'Please enter response body content',
           programLanguage: 'Please select program language',
-          statusHandleScript: 'Please enter API return status handle script',
+          statusHandleScript: 'Please enter the script to determine the successful status of the API response',
           dataHandle: 'Please select data handle',
           dataHandleScript: 'Please enter data handle script',
           dataMapping: 'Please enter data mapping',
@@ -796,7 +798,8 @@ const local: App.I18n.Schema = {
     requestType: {
       call: 'Call API',
       pull: 'Pull Data',
-      push: 'Push Data'
+      pushSingle: 'Push Single Data',
+      pushBatch: 'Push Batch Data'
     }
   },
 };

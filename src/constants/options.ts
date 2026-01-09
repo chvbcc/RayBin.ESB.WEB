@@ -129,7 +129,8 @@ export const permissionTypeOptions = transformRecordToOption(permissionTypeRecor
 export const interfaceTypeRecord: Record<Api.Task.InterfaceType, App.I18n.I18nKey> = {
   '8000': 'dropdownList.requestType.call',
   '8001': 'dropdownList.requestType.pull',
-  '8002': 'dropdownList.requestType.push'
+  '8002': 'dropdownList.requestType.pushSingle',
+  '8003': 'dropdownList.requestType.pushBatch'
 };
 export const interfaceTypeOptions = transformRecordToOption(interfaceTypeRecord);
 

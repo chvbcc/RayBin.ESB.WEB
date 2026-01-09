@@ -1,4 +1,5 @@
 import { $t } from '@/locales';
+import { debug } from 'console';
 import dayjs from 'dayjs';
 
 /**
@@ -72,7 +73,7 @@ export function toggleHtmlClass(className: string) {
   };
 }
 
-export function convertDateTime(dateTime: string | undefined | null ) {
+export function convertDateTime(dateTime: string | undefined | null ) : string | undefined {
   if (!dateTime || dateTime === '0001-01-01T00:00:00' || dateTime === '1900-01-01T00:00:00') {
     return undefined;
   }
@@ -80,13 +81,35 @@ export function convertDateTime(dateTime: string | undefined | null ) {
   return day.format('YYYY-MM-DDTHH:mm:ss');
 }
 
-export function getPromptMessage(query: any, result: string)
-{
+export function getPromptMessage(query: any, result: string) : string {
   if (query && (query.hasOwnProperty('id') || query == 'edit')) {
     const message =  result === "Success" ? 'common.updateSuccess' : 'common.updateFailed';
     return $t(message as App.I18n.I18nKey)
   } else {
     const message =  result === "Success" ? 'common.addSuccess' : 'common.addFailed';
     return $t(message as App.I18n.I18nKey)
+  }
+}
+
+export function isJson(input: unknown): boolean {
+  if (typeof input !== 'string') return false;
+  const value = input.trim();
+  try {
+    const v = JSON.parse(value);
+    return typeof v === 'object' && v !== null;
+  } catch {
+    return false;
+  }
+}
+
+export function isUrl(input: unknown): boolean {
+  if (typeof input !== 'string') return false;
+  const str = input.trim();
+  if (!str) return false;
+  try {
+    const u = new URL(str);
+    return ['http:', 'https:'].includes(u.protocol);
+  } catch {
+    return false;
   }
 }

@@ -334,7 +334,6 @@ const local: App.I18n.Schema = {
       run: '运行',
       pause: '暂停',
       resume: '恢复',
-      needDataMapping: '非草稿状态，必须包含数据映射。',
       taskStatus: {
         normal: '正常',
         draft: '草稿',
@@ -368,6 +367,7 @@ const local: App.I18n.Schema = {
       addMapping: '新增映射',
       createUserID: '创建用户',
       createTime: '创建时间',
+      needDataMapping: '非草稿状态，必须包含数据映射。',
       form: {
         connectionID: '请选择数据连接',
         dataObjectType: '请选择对象类型',
@@ -403,10 +403,10 @@ const local: App.I18n.Schema = {
       headers: '请求头',
       tokenPassBy: '传递位置',
       tokenPrefix: '令牌前缀',
-      responseBodyType: '接口响应类型',
+      responseContentTip: '响应内容： (接口返回的内容应为JSON格式, 否则请使用数据处理脚本将其转换为JSON格式)',
       responseBodyContent: '接口响应内容',
       programLanguage: '编程语言',
-      statusHandleScript: '状态处理脚本',
+      statusHandleScript: '请求状态判断',
       dataHandle: '数据处理',
       dataHandleScript: '数据处理脚本',
       dataMapping: '数据映射',
@@ -414,6 +414,8 @@ const local: App.I18n.Schema = {
       shareVariables: '共享变量',
       createUserID: '创建用户',
       createTime: '创建时间',
+      interfaceTest: '接口测试',
+      needDataMapping: '当前接口类型，必须包含数据映射。',
       form: {
           paramName: '请输入参数名',
           paramType: '请选择参数类型',
@@ -434,7 +436,7 @@ const local: App.I18n.Schema = {
           responseBodyType: '请选择响应类型',
           responseBodyContent: '请输入响应内容',
           programLanguage: '请选择编程语言',
-          statusHandleScript: '请输入API返回状态处理脚本',
+          statusHandleScript: '请输入接口返回成功状态的判断语句',
           dataHandle: '请选择数据处理',
           dataHandleScript: '请输入数据处理脚本',
           dataMapping: '请输入数据映射',
@@ -796,7 +798,8 @@ const local: App.I18n.Schema = {
     requestType: {
       call: '调用接口',
       pull: '拉取数据',
-      push: '推送数据'
+      pushSingle: '推送单条数据',
+      pushBatch: '推送批量数据'
     }
   },
 };
