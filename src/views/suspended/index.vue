@@ -3,7 +3,7 @@ import { reactive } from 'vue';
 import { $t, language } from '@/locales';
 import TaskSearch from './task-search.vue';
 import { TaskApi } from '@/service/api/task';
-import { useTable } from '@/hooks/common/table';
+import { useTable, useTableOperate } from '@/hooks/common/table';
 import { taskTypeRecord, runModeRecord, taskStatusRecord, yesOrNoRecord } from '@/constants/options';
 
 // 添加响应式加载映射，追踪每个任务加载状态
@@ -115,17 +115,23 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       width: 90,
       customRender:  ({ record })=> (
         <div class="flex-center gap-8px">
-          <a-button type="default" class={`blue-btn row-btn ${language() === 'en-US' ? 'en-edit' : ''}`} loading={taskLoadingMap[record.id]} onClick={() => resumeTask(record.id)} >
+          <a-button type="default" class={`blue-btn row-btn ${language() === 'en-US' ? 'en-resume' : ''}`} loading={taskLoadingMap[record.id]} onClick={() => resumeTask(record.id)} >
             <icon-ic-baseline-restore class="align-sub text-icon" />
              <span>{$t('page.task.resume')}</span>
           </a-button>
+          <a-popconfirm title={$t('common.confirmDelete')} onConfirm={() => handleDelete(record.id)}>
+            <a-button type="default" class="red-btn row-btn">
+              <icon-mdi-trash-can-outline class="align-sub text-16px" />
+              <span>{$t('common.delete')}</span>
+            </a-button>
+          </a-popconfirm>
         </div>
       )
     }
   ]
 });
 
-
+const { onDeleted } = useTableOperate(data, getData);
 async function resumeTask(id: number) {
   const { error, response } = await TaskApi.fetchSetStatus(id, 0);;
   if (error) { window.$message?.error($t('common.updateFailed')); return; }
@@ -140,11 +146,24 @@ async function resumeTask(id: number) {
   }
 }
 
+async function handleDelete(id: number) {
+  const { error, response } = await TaskApi.fetchDelete(id);
+  if (error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = response.data as { code: string; msg: string; data: string };
+  if (result.msg === "success") {
+    onDeleted();
+  } else if (result.msg === "fail") {
+    window.$message?.error(result.data);
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
+  }
+}
+
 </script>
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <TaskSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
-    <a-card :title="$t('page.database.title')" :bordered="false" class="card-wrapper sm:flex-1-hidden">
+    <a-card :title="$t('page.task.suspendedTitle')" :bordered="false" class="card-wrapper sm:flex-1-hidden">
       <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" size="small" :loading="loading" row-key="id" :pagination="mobilePagination" bordered />
     </a-card>
   </div>

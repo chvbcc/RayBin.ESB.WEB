@@ -515,6 +515,8 @@ declare namespace App {
           run: string;
           pause: string;
           resume: string;
+          pendingTitle: string;
+          suspendedTitle: string;
           taskStatus: {
             normal: string;
             draft: string;
@@ -630,11 +632,14 @@ declare namespace App {
           viewLogDetail: string;
           taskID: string;
           taskType: string;
+          runMode: string;
+          runTime: string;
           taskName: string;
           logLevel: string;
           message: string;
           spentTime: string;
           createTime: string;
+          taskDeleted: string;
           form: {
               taskType: string;
               logLevel: string;

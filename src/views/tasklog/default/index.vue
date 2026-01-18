@@ -5,7 +5,7 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import TaskLogSearch from './modules/tasklog-search.vue';
 import { useTable, useTableOperate } from '@/hooks/common/table';
-import { fetchGetPagingList, fetchDelete } from '@/service/api/log';
+import { fetchGetPagingList, fetchDeletes } from '@/service/api/log';
 import { taskTypeRecord, logLevelRecord } from '@/constants/options';
 
 const router = useRouter();
@@ -84,8 +84,9 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       key: 'message',
       dataIndex: 'message',
       title: $t('page.taskLog.message'),
-      align: 'center',
-      minWidth: 180
+      align: 'left',
+      minWidth: 180,
+      ellipsis: true
     },
     {
       key: 'createTime',
@@ -96,6 +97,22 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       customRender: ({ record }) => {
         return record.createTime ? dayjs(record.createTime).format('YYYY-MM-DD') : '';
       }
+    },
+    {
+      key: 'operate',
+      title: $t('common.operate'),
+      align: 'center',
+      width: 130,
+      customRender:  ({ record })=> (
+        <div class="flex-center gap-8px">
+          <a-popconfirm title={$t('common.confirmDelete')} onConfirm={() => handleDelete(record.id)}>
+            <a-button type="default" class="red-btn row-btn">
+              <icon-mdi-trash-can-outline class="align-sub text-16px" />
+              <span>{$t('common.delete')}</span>
+            </a-button>
+          </a-popconfirm>
+        </div>
+      )
     }
   ]
 });
@@ -104,13 +121,27 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
 const { checkedRowKeys, rowSelection, onDeleted } = useTableOperate(data, getData);
 const disableDelete = computed(() => !checkedRowKeys.value.length || loading.value);
 
-async function handleDelete() {
+async function handleDeletes() {
   if (disableDelete.value) return;
   const ids = [...checkedRowKeys.value];
-  const { error } = await fetchDelete(ids);
+  const { error } = await fetchDeletes(ids);
   if (!error) {
     onDeleted();
     window.$message?.success($t('common.deleteSuccess'));
+  } else {
+    window.$message?.error($t('common.deleteFailed'));
+  }
+}
+
+async function handleDelete(id: number) {
+  const ids = [id];
+  const { error, response } = await fetchDeletes(ids);
+  if (error) { window.$message?.error($t('common.deleteFailed')); return; }
+  const result = response.data as { code: string; msg: string; data: string };
+  if (result.msg === "success") {
+    onDeleted();
+  } else if (result.msg === "fail") {
+    window.$message?.error(result.data);
   } else {
     window.$message?.error($t('common.deleteFailed'));
   }
@@ -143,7 +174,7 @@ function refresh() {
           <div class="flex flex-wrap justify-end gap-x-12px gap-y-8px lt-sm:(w-200px py-12px)">
           <slot name="prefix"></slot>
           <slot name="default">
-            <a-popconfirm :title="$t('common.confirmDelete')" :disabled="disableDelete" @confirm="handleDelete">
+            <a-popconfirm :title="$t('common.confirmDelete')" :disabled="disableDelete" @confirm="handleDeletes">
               <a-button type="primary" ghost :disabled="disableDelete">
                 <template #icon>
                   <icon-ic-round-plus class="align-sub text-icon" />

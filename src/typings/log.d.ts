@@ -14,6 +14,8 @@ declare namespace Api {
     type TaskLog = Common.CommonRecord<{
       taskID: number;
       taskType: Api.Task.TaskType;
+      runMode: Api.Task.RunMode;
+      runTime: string | null | undefined;
       taskName: string;
       logLevel: LogLevel;
       message: string;
@@ -23,6 +25,6 @@ declare namespace Api {
     }>;
 
     /* TaskLog model */
-    type TaskLogModel = Pick<TaskLog, 'id' | 'taskID' | 'taskType' | 'taskName' | 'logLevel' | 'message' | 'spentTime' | 'createUserID' | 'createTime'>;
+    type TaskLogModel = Pick<TaskLog, 'id' | 'taskID' | 'taskType' | 'runMode' | 'runTime' | 'taskName' | 'logLevel' | 'message' | 'spentTime' | 'createUserID' | 'createTime'>;
   }
 }

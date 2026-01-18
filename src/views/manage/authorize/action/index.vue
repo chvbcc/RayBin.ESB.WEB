@@ -154,10 +154,10 @@ const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => {
 
   // 根据type和tokenRetrievalType动态判断必填规则
   const tokenRetrievalTypeRule: App.Global.FormRule = { required: model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
-  const tokenPathRule: App.Global.FormRule = { required: (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 0 ? true : false };
+  const tokenPathRule: App.Global.FormRule = { required: (model.value.type === 0 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 0 ? true : false };
   const tokenHandleLanguageRule: App.Global.FormRule = { required: (model.value.type === 3 || model.value.type === 4 || model.value.type === 5) && model.value.tokenRetrievalType === 1 ? true : false };
   const tokenPassByRule: App.Global.FormRule = { required: model.value.type === 0 || model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
-  const tokenPrefixRule: App.Global.FormRule = { required: model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
+  const tokenPrefixRule: App.Global.FormRule = { required: model.value.type === 0 || model.value.type === 1 || model.value.type === 3 || model.value.type === 4 || model.value.type === 5 ? true : false };
   return {
     name: nameRule,
     method: defaultRequiredRule,
@@ -299,7 +299,7 @@ function handleBack() {
           </a-col>
           <a-col :span="24" :md="12" :lg="12">
             <a-form-item :label="$t('page.authorize.tokenPath')" name="tokenPath" class="m-0">
-              <a-input v-model:value="model.tokenPath" :placeholder="$t('page.authorize.form.tokenPath')" :disabled="model.tokenRetrievalType === 1 || model.type === 0 || model.type === 1 || model.type === 2 || model.type === 6" />
+              <a-input v-model:value="model.tokenPath" :placeholder="$t('page.authorize.form.tokenPath')" :disabled="model.tokenRetrievalType === 1 || model.type === 1 || model.type === 2 || model.type === 6" />
             </a-form-item>
           </a-col>
           <a-col :span="24" :md="12" :lg="12">
@@ -319,7 +319,7 @@ function handleBack() {
           </a-col>
           <a-col :span="24" :md="12" :lg="12">
             <a-form-item :label="$t('page.authorize.tokenPrefix')" name="tokenPrefix" class="m-0">
-              <a-input v-model:value="model.tokenPrefix" :placeholder="$t('page.authorize.form.tokenPrefix')" :disabled="model.type === 0 || model.type === 2 || model.type === 6" />
+              <a-input v-model:value="model.tokenPrefix" :placeholder="$t('page.authorize.form.tokenPrefix')" :disabled="model.type === 2 || model.type === 6" />
             </a-form-item>
           </a-col>
         </a-row>

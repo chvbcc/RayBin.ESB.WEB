@@ -28,7 +28,7 @@ export function fetchSave(data: Api.Connection.ConnectionModel) {
 }
 
 /** delete connection by id */
-export function fetchDelete(ids: number[]) {
+export function fetchDeletes(ids: number[]) {
   return request({
     url: '/tasklog/delete',
     method: 'delete',

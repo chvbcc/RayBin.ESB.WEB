@@ -131,22 +131,20 @@
           // 只允许连接到 dataObjectType === 'table' 的节点
           if (targetDataObjectType === 'view') return false;
 
-          // 规则3：禁止目标节点被同一个源多次连接
+          // 规则3：data下有个 nodeType == api 的节点不能相互连接
+          if (sourceNode.getData()?.nodeType === 'api' && targetNode.getData()?.nodeType === 'api') return false;
 
+          // 规则4：禁止目标节点被同一个源多次连接
           // 检查是否已存在：同一个源节点 → 同一个目标节点的同一个目标端口
           const exists = graphInstance.getEdges().some(edge => {
-            return (
-              edge.getSourceCellId() === sourceNodeId &&
-              edge.getTargetCellId() === targetNodeId &&
-              edge.getTargetPortId() === targetPort
-            );
+            return (edge.getSourceCellId() === sourceNodeId &&  edge.getTargetCellId() === targetNodeId && edge.getTargetPortId() === targetPort);
           });
           if (exists) { return false; }
 
-          // target 节点中只有 keyType === '2' 发的端口可以发起连接
+          // 规则5: target 节点中只有 keyType === '2' 发的端口可以发起连接
           const sourcePortInfo = sourceNode.getPort(sourcePort);
           const sourceWasTarget = graphInstance.getEdges().some(edge => edge.getTargetCellId() === sourceNodeId);
-          if (sourceWasTarget && sourcePortInfo?.keyType !=='2') return false;
+          if (sourceWasTarget && sourcePortInfo?.keyType !==2) return false;
           return true;
         },
       }
@@ -232,21 +230,21 @@
 
     switch (item) {
       case 'Key':
-        node.setPortProp(portId, 'keyType', '1');
+        node.setPortProp(portId, 'keyType', 1);
         node.setPortProp(portId, 'attrs/portNameLabel/fontWeight', 'bold');
         node.setPortProp(portId, 'attrs/portNameLabel/fill', 'black');
         node.setPortProp(portId, 'attrs/portTypeLabel/fontWeight', 'bold');
         node.setPortProp(portId, 'attrs/portTypeLabel/fill', 'black');
         break;
       case 'OutKey':
-        node.setPortProp(portId, 'keyType', '2');
+        node.setPortProp(portId, 'keyType', 2);
         node.setPortProp(portId, 'attrs/portNameLabel/fontWeight', 'bold');
         node.setPortProp(portId, 'attrs/portNameLabel/fill', 'red');
         node.setPortProp(portId, 'attrs/portTypeLabel/fontWeight', 'bold');
         node.setPortProp(portId, 'attrs/portTypeLabel/fill', 'red');
         break;
       case 'DeleteKey':
-        node.setPortProp(portId, 'keyType', '0');
+        node.setPortProp(portId, 'keyType', 0);
         node.setPortProp(portId, 'attrs/portNameLabel/fontWeight', 'normal');
         node.setPortProp(portId, 'attrs/portNameLabel/fill', '#000');
         node.setPortProp(portId, 'attrs/portTypeLabel/fontWeight', 'normal');
@@ -282,7 +280,10 @@
       cells.push(item.shape === 'edge' ? graph.value!.createEdge(item) : graph.value!.createNode(item));
     });
     graph.value?.resetCells(cells);
-    graph.value?.zoomToFit({ padding: 10, maxScale: 1 });
+    const nodes = cells.filter(cell => cell.isNode()) as Node[];
+    nodes.forEach(node => {
+      autoLayoutGraph(graph, node);
+    });
     emit('dataLoaded', data);
   }
   // #endregion
@@ -350,6 +351,13 @@
   });
   // #endregion
 
+  // #region 清空所有节点和连线
+  function clearNodes() {
+    if (!graph.value) return;
+    graph.value?.clearCells();
+  }
+  // #endregion
+
   // #region 根据label名称删除多个节点
   function deleteDataObjects(nodeNames: string[], dataObjectType: Api.Task.DataObjectType): boolean {
     if (!graph.value || !nodeNames || nodeNames.length === 0) return false;
@@ -391,14 +399,25 @@
   }
   //#endregion
 
+  function addEdges (edges: any[])  {
+    // 实现添加边的逻辑
+    if (graph.value) {
+      edges.forEach(edge => {
+        graph.value?.addEdge(edge);
+      });
+    }
+  }
+
   // #region 暴露公共方法给父组件
   const exposeMethods = {
     getData,
     getDataObjectNames,
     setData,
     addDataObjects,
+    clearNodes,
     deleteDataObjects,
-    validateUnusedNodes
+    validateUnusedNodes,
+    addEdges
   };
 
   // 暴露方法

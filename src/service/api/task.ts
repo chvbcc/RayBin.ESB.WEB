@@ -35,6 +35,14 @@ export namespace TaskApi {
       params: { taskId, status}
     });
   }
+
+  export function fetchDelete(id: number) {
+    return request({
+      url: '/task/delete',
+      method: 'delete',
+      params: { id }
+    });
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,12 +181,28 @@ export namespace TaskWebApi {
     });
   }
 
-  export function fetchSave(data: Api.Task.TaskWebApiModel) {
-    let url = data.task.id === 0 ? '/taskwebapi/add' : '/taskwebapi/update';
+  // 授权测试
+  export function fetchTest(data: Api.Task.TaskWebApi) {
     return request({
-      url: url,
+      url: '/taskwebapi/apiTest',
       method: 'post',
       data
     });
+  }
+
+  export function fetchSave(data: Api.Task.TaskWebApiModel) {
+    if (data.task.id === 0) {
+      return request({
+        url: '/taskwebapi/add',
+        method: 'post',
+        data: { ...data }
+      });
+    } else {
+      return request({
+        url:  '/taskwebapi/update',
+        method: 'post',
+        data: { ...data }
+      });
+    }
   }
 }

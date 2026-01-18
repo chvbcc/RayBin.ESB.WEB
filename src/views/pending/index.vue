@@ -4,7 +4,7 @@ import { $t, language } from '@/locales';
 import TaskSearch from './task-search.vue';
 import { TaskApi } from '@/service/api/task';
 import { useTable } from '@/hooks/common/table';
-import { dataHandleRecord, taskTypeRecord, runModeRecord, taskStatusRecord, yesOrNoRecord } from '@/constants/options';
+import { taskTypeRecord, runModeRecord, taskStatusRecord, yesOrNoRecord } from '@/constants/options';
 
 // 添加响应式加载映射，追踪每个任务加载状态
 const taskLoadingMap = reactive<Record<number, boolean>>({});
@@ -156,7 +156,7 @@ async function pauseTask(id: number) {
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <TaskSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
-    <a-card :title="$t('page.database.title')" :bordered="false" class="card-wrapper sm:flex-1-hidden">
+    <a-card :title="$t('page.task.pendingTitle')" :bordered="false" class="card-wrapper sm:flex-1-hidden">
       <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" size="small" :loading="loading" row-key="id" :pagination="mobilePagination" bordered />
     </a-card>
   </div>

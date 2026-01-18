@@ -1,5 +1,4 @@
 import { $t } from '@/locales';
-import { debug } from 'console';
 import dayjs from 'dayjs';
 
 /**

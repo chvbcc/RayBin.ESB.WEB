@@ -85,7 +85,8 @@
   function createDefaultModel(): Api.Task.TaskWebApiModel {
     return {
       task: createTaskModel(),
-      taskWebApis: []
+      taskWebApis: [],
+      deleteWebApiIds: []
     };
   }
 
@@ -108,7 +109,7 @@
       id: 0,
       taskID: 0,
       interfaceType: '8000',
-      authorize: undefined,
+      authorizeID: undefined,
       method: 'GET',
       requestUrl: '',
       timeOut: 180,
@@ -160,11 +161,11 @@
     validator: async (_rule: any, value: string) => {
       const name = (value ?? '').trim();
       if (!name) {
-        return Promise.reject(new Error(($t('page.connection.form.connectionName') as string)));
+        return Promise.reject(new Error(($t('page.task.form.taskName') as string)));
       }
       const createUserId = parseInt(authStore.userInfo.userId) ?? 0;
       const { error, data } = await TaskWebApi.fetchCheckName(name, createUserId, model.value.task.id);
-      if (error && data) {
+      if (!error && data) {
         return Promise.reject(new Error($t('common.exists')));
       }
       return Promise.resolve();
@@ -182,20 +183,39 @@
   function addRow () {
     currentItemModel.value = createWebApiModel();
     currentItemModel.value.id = 0;
+    currentItemModel.value.requestUrl = '';
+    currentItemModel.value.responseBody = '';
+    currentItemModel.value.diagramData = '';
     webApiModalVisible.value = true;
   }
   // #endregion
 
   // #region 6. 编辑API请求
   function editRow(record: Api.Task.TaskWebApi) {
+    if (!record) return;
+    if (record.queryParameters === null || record.queryParameters?.length === 0) {
+      record.queryParameters = [createParamModel()];
+    }
+    if (record.headers === null || record.headers?.length === 0) {
+      record.headers = [createParamModel()];
+    }
+    if (record.authorizeID === 0) {
+      record.authorizeID = undefined;
+    }
     currentItemModel.value = { ...record }; // 复制对象以避免直接修改
     webApiModalVisible.value = true;
   }
+
   // #region 7. 删除API请求
   function deleteRow(id: number) {
     if (model.value.taskWebApis) {
       const index = model.value.taskWebApis.findIndex(item => item.id === id);
       if (index !== -1) {
+        // 如果task ID 大于 0 为新增
+        if (model.value.task.id > 0 && model.value.taskWebApis[index].id > 0) {
+          model.value.deleteWebApiIds.push(model.value.taskWebApis[index].id as number);
+        }
+        // 从数组中移除该项目
         model.value.taskWebApis.splice(index, 1);
       }
     }
@@ -206,16 +226,12 @@
   function handleConfirm(record: Api.Task.TaskWebApi) {
     webApiModalVisible.value = false;
     if (record && model.value.taskWebApis) {
-      record.diagramData = JSON.stringify(record.diagramData);
       const existingIndex = model.value.taskWebApis.findIndex(item => item.id === record.id);
       if (existingIndex >= 0) {
         // 编辑现有项目 - 更新数组中的项目
         model.value.taskWebApis[existingIndex] = { ...record };
       } else {
         // 新增项目 - 添加到数组开头
-        if (!record.id || record.id === 0) {
-          record.id = model.value.taskWebApis.length + 1;
-        }
         model.value.taskWebApis.unshift(record);
       }
     }
@@ -227,7 +243,8 @@
     formRefTask.value?.validate().then(async () => {
       const payload: Api.Task.TaskWebApiModel = {
         task: { ...model.value.task },
-        taskWebApis: [...model.value.taskWebApis]
+        taskWebApis: [...model.value.taskWebApis],
+        deleteWebApiIds: [...model.value.deleteWebApiIds]
       };
       if (payload.taskWebApis.length === 0) payload.task.status = 1;
       // 提交保存
@@ -266,7 +283,7 @@
         currentItemModel.value = data.taskWebApi || [];
       }
     } else {
-      model.value =  createDefaultModel();
+      model.value = createDefaultModel();
     }
   });
   // #endregion

@@ -21,34 +21,41 @@
   // 监听programmeLanguage变化，更新语言和代码
   const dataHandleCsharpCode = `
     // This C# Code Example
-    // Task starts before execution
-    private List<dynamic> BeforeStarts(List<dynamic> dynamics, DatabaseAccessor dataHelper)
+    // Convert the non JSON data returned by the API into the JSON format defined in ResponseBody
+    private string HandleApiResult(string apiResult)
     {
         // 用户代码
-        return dynamics;
+        var responseBody = new
+        {
+          value = apiResult.Substring(0, 1),
+        };
+        return JsonConvert.SerializeObject(responseBody);
     }
-    return BeforeStarts(Dynamics, DataHelper);
 
     // Task ends after execution
-    private void AfterEnds(DatabaseAccessor sourceDataHelper, DatabaseAccessor targetDataHelper) {
+    private void TaskAfterEnds(DatabaseAccessor dataHelper) {
       // 用户代码
     }
   `
   const dataHandlePythonCode = `
-    # Task starts before execution
-    def before_starts(dynamics, data_helper, message):
-        # 用户代码（可修改 dynamics 并返回新的 List[dynamic]）
-        return dynamics
+    # This Python Code Example
+    # Convert the non JSON data returned by the API into the JSON format defined in ResponseBody
+    import clr
+    clr.AddReference('Newtonsoft.Json')
+    from Newtonsoft.Json import JsonConvert
 
-    result = before_starts(dynamics, data_helper, message)
+    def handle_api_result(api_result):
+      response_body = {"value": api_result[0:1] }
+      return JsonConvert.SerializeObject(response_body);
 
     # Task ends after execution
-    def after_ends(source_data_helper, target_data_helper, message):
+    def task_after_ends(data_helper):
       # 用户代码
       pass
   `
   // #endregion
   const formRef = ref();
+  const diagramData = ref({cells: []});
   const authStore = useAuthStore();
   const { defaultRequiredRule } = useFormRules();
   const { formRef: formRefDialog } = useAntdForm();
@@ -115,6 +122,14 @@
     };
   });
 
+  const objectTypeOptions = computed(() => {
+    if (webApiModel.value.interfaceType === '8001') {
+      return dataObjectTypeOptions.filter(option => option.value !== 'storedProcedure' && option.value !== 'view')
+    } else {
+      return dataObjectTypeOptions.filter(option => option.value !== 'storedProcedure')
+    }
+  });
+
   // 编辑器选项
   const MONACO_EDITOR_OPTIONS = {
     automaticLayout: true,
@@ -140,16 +155,20 @@
       return;
     }
 
-    webApiModel.value.responseBody = editorResponse.value.getValue();
-    if (webApiModel.value.responseBody.trim() === '' || !isJson(webApiModel.value.responseBody)) {
-      tabKey.value = 2;
-      editorResponseClass.value = 'editor-error';
-      return;
-    } else {
+    // 非调用类型
+    if (webApiModel.value.interfaceType !== "8000") {
+      if (editorResponse.value !== undefined) {
+        webApiModel.value.responseBody = editorResponse.value.getValue();
+      }
+      if (webApiModel.value.responseBody.trim() === '' || !isJson(webApiModel.value.responseBody)) {
+        tabKey.value = 2;
+        editorResponseClass.value = 'editor-error';
+        return;
+      }
       editorResponseClass.value = 'editor';
     }
 
-    if (webApiModel.value.dataHandle === 1) {
+    if (webApiModel.value.dataHandle === 1 && editorScript.value !== undefined) {
       webApiModel.value.dataHandleScript = editorScript.value.getValue();
       if (webApiModel.value.dataHandleScript.trim() === '') {
         tabKey.value = 3;
@@ -160,7 +179,7 @@
       }
     }
 
-    webApiModel.value.diagramData = relationDiagramRef.value?.getData();
+    webApiModel.value.diagramData = JSON.stringify(relationDiagramRef.value?.getData() ?? {cells: []});
     if (webApiModel.value.interfaceType !== "8000" && relationDiagramRef.value?.validateUnusedNodes()) {
       window.$message?.error($t('page.webApi.needDataMapping'));
       tabKey.value = 4;
@@ -173,48 +192,74 @@
   const handleTabChange = async (key: string | number) => {
     tabKey.value = key;
     if (key === 4) {
-        await nextTick();
-        setTimeout (()=>{
-          const raw = webApiModel.value.diagramData;
-          if (!raw) return;
-          relationDiagramRef.value?.setData(JSON.parse(raw));
-        }, 300);
-      // nextTick(() => {
-      //   webApiModel.value.responseBody = editorResponse.value.getValue();
-      //   const raw = webApiModel.value.responseBody;
-      //   if (isJson(raw)) {
-      //     let data = JSON.parse(raw);
-      //     const tables = parseJsonToTables(data);
-      //     const nodes = tables.map(table => ({
-      //       id: String(table.id),
-      //       shape: 'er-rect',
-      //       width: table.width,
-      //       height: 28,
-      //       x: 0,
-      //       y: 0,
-      //       data: { dataObjectType: 'table', id: table.id, parentId: table.parentId, sourceTarget: 'source' },
-      //       attrs: {
-      //         rect: {stroke: '#636b6d', fill: '#798386'},
-      //         text: { text: table.tableName }
-      //       },
-      //       ports: {
-      //         items: table.fields.map((field, index) => ({
-      //           id: String(index),
-      //           group: 'list',
-      //           keyType: '0',
-      //           attrs: {
-      //             portBody: { width: table.width, height: 28,stroke: '#798386', fill: '#F8F8F8'  },
-      //             portNameLabel: { text: field.fieldName },
-      //             portTypeLabel: { text: field.fieldType, refX: table.fieldTypeX }
-      //           }
-      //         }))
-      //       }
-      //     }));
-      //     relationDiagramRef.value?.addDataObjects(nodes);
-      //   }
-      // });
+      await nextTick();
+      // 清空整WebApi节点
+      if (webApiModel.value.id > 0 && webApiModel.value.diagramData !== '{"cells":[]}') {
+        diagramData.value = JSON.parse(webApiModel.value.diagramData);
+        relationDiagramRef.value?.setData(diagramData.value)
+        return;
+      }
+      // 获取最新的API节点数据
+      const newApiCells = getNewApiCells();
+      if (newApiCells && newApiCells.length > 0) {
+        // 检查是否已有API节点
+        const hasApiNodes = diagramData.value.cells.some((cell: any) => cell.data && cell.data.nodeType === 'api');
+        if (!hasApiNodes) {
+          // 如果没有API节点，直接添加
+          diagramData.value.cells.push(...newApiCells as never[]);
+        } else {
+          // 如果已有API节点，先删除现有的API节点，然后重新添加
+          diagramData.value.cells = diagramData.value.cells.filter((cell: any) => !(cell.data && cell.data.nodeType === 'api'));
+          diagramData.value.cells.push(...newApiCells as never[]);
+        }
+        // 创建新的WebApi节点
+        relationDiagramRef.value?.setData(diagramData.value);
+      }
     }
-  };
+    else {
+      await nextTick();
+      if (relationDiagramRef.value) {
+        const componentData = relationDiagramRef.value.getData();
+        if (typeof componentData === 'object' && componentData.cells.length > 0) {
+          diagramData.value = componentData;
+        }
+      }
+    }
+  }
+
+  function getNewApiCells() {
+      // 解析 responseBody 获取数据对象节点
+      const responseBody = editorResponse.value === undefined ? webApiModel.value.responseBody : editorResponse.value.getValue();
+      if (!isJson(responseBody)) return;
+      let data = JSON.parse(responseBody);
+      const tables = parseJsonToTables(data);
+      const newNodes  = tables.map(table => ({
+        id: String(table.id),
+        shape: 'er-rect',
+        width: table.width,
+        height: 28,
+        x: 0,
+        y: 0,
+        data: { connectionId: 0, dataObjectType: 'table', id: table.id, parentId: table.parentId, nodeType: 'api' },
+        attrs: {
+          rect: {stroke: '#636b6d', fill: '#798386'},
+          text: { text: table.tableName }
+        },
+        ports: {
+          items: table.fields.map((field, index) => ({
+            id: String(index),
+            group: 'list',
+            keyType: 0,
+            attrs: {
+              portBody: { width: table.width, height: 28,stroke: '#798386', fill: '#F8F8F8'  },
+              portNameLabel: { text: field.fieldName },
+              portTypeLabel: { text: field.fieldType, refX: table.fieldTypeX }
+            }
+          }))
+        }
+      }));
+      return newNodes;
+  }
 
   // 处理取消按钮
   function handleCancel() {
@@ -233,6 +278,7 @@
     }
   }
 
+  // 初始化授权选项
   async function initAuthorizeOptions() {
     // 获取连接列表并转换为 options
     const userId = Number(authStore.userInfo.userId);
@@ -246,6 +292,7 @@
     }
   }
 
+  // 处理授权选项变更
   function handleAuthorizeChange(authorizeId: number | undefined) {
     if (!authorizeId) return;
     const selectedAuthorize = authorizeData.value.find(item => item.id === authorizeId);
@@ -254,49 +301,8 @@
       webApiModel.value.tokenPrefix = selectedAuthorize.tokenPrefix;
     }
   }
-  //显示数据对象模态框
-  function showDataObjectModal() {
-    formRefDialog.value?.validate(['connectionID', 'dataObjectType']).then(() => {
-      selectedDataObjectNames.value = relationDiagramRef.value?.getDataObjectNames() || [];
-      dataObjectModalVisible.value = true;
-    })
-  }
 
-  // #region 8. 删除数据对象
-  function handleDelete(deleteItems: string[], dataObjectType: Api.Task.DataObjectType) {
-    relationDiagramRef.value?.deleteDataObjects(deleteItems, dataObjectType);
-  }
-  // #endregion
-
-  // #region 9. 添加数据对象
-  async function handleAdd(dataObjectNodes: Api.Task.DataObjectNode[]) {
-    relationDiagramRef.value?.addDataObjects(dataObjectNodes);
-  }
-  // #endregion
-
-  watch(visible, async (newVisible) => {
-    if (newVisible) {
-      tabKey.value = 1;
-      if (webApiModel.value.id === 0) {
-        nextTick(() => {
-          formRef.value?.clearValidate();
-          requestBodyRef.value?.clearValidate();
-          queryParameterRef.value?.clearValidate();
-          requestHeaderRef.value?.clearValidate();
-          formRefDialog.value?.clearValidate();
-          editorResponseClass.value = 'editor';
-          editorScriptClass.value = 'editor';
-          relationDiagramRef.value?.setData({ cells: [] });
-        });
-      }
-    }
-  });
-
-  onMounted(async () => {
-    await initConnectionOptions();
-    await initAuthorizeOptions();
-  });
-
+  // 处理响应内容变化
   function responseBodyChange() {
     const stringValue = editorResponse.value.getValue();
     if (stringValue.trim() === '' || !isJson(stringValue)) {
@@ -306,7 +312,7 @@
     }
   }
 
-  // #region 10. 处理数据处理脚本语言切换
+  // #region 12. 处理数据处理脚本语言切换
   function dataHandleChange(dataHandle: number) {
     if (dataHandle === 0) {
       webApiModel.value.dataHandleScript = '';
@@ -341,6 +347,62 @@
     }
   }
   // #endregion
+
+  // 显示数据对象模态框
+  function showDataObjectModal() {
+    formRefDialog.value?.validate(['connectionID', 'dataObjectType']).then(() => {
+      selectedDataObjectNames.value = relationDiagramRef.value?.getDataObjectNames() || [];
+      dataObjectModalVisible.value = true;
+    })
+  }
+
+  // 删除数据对象
+  function handleDelete(deleteItems: string[], dataObjectType: Api.Task.DataObjectType) {
+    relationDiagramRef.value?.deleteDataObjects(deleteItems, dataObjectType);
+  }
+
+  // 添加数据对象
+  async function handleAdd(dataObjectNodes: Api.Task.DataObjectNode[]) {
+    relationDiagramRef.value?.addDataObjects(dataObjectNodes);
+  }
+
+  // 测试接口
+  async function handleTest() {
+    const { error, data } = await TaskWebApi.fetchTest(webApiModel.value);
+    if (!error && webApiModel.value.responseBody === '') {
+      if (data === '') return;
+      webApiModel.value.responseBody = data;
+      editorResponseClass.value = 'editor';
+    }
+  }
+
+  // 监听 visible 改变
+  watch(visible, async (newVisible) => {
+    if (newVisible) {
+      tabKey.value = 1;
+      await nextTick(() => {
+        if (webApiModel.value.id === 0) {
+          formRef.value?.clearValidate();
+          requestBodyRef.value?.clearValidate();
+          queryParameterRef.value?.clearValidate();
+          requestHeaderRef.value?.clearValidate();
+          formRefDialog.value?.clearValidate();
+          editorResponseClass.value = 'editor';
+          editorScriptClass.value = 'editor';
+          diagramData.value = { cells: [] };
+        } else {
+            diagramData.value = JSON.parse(webApiModel.value.diagramData);
+        }
+        relationDiagramRef.value?.clearNodes();
+      })
+    }
+  });
+
+  // 组件挂载
+  onMounted(async () => {
+    await initConnectionOptions();
+    await initAuthorizeOptions();
+  });
 </script>
 
 <template>
@@ -367,7 +429,7 @@
               </a-col>
               <a-col :span="24" :md="8" :lg="8">
                 <a-form-item :label="$t('page.webApi.authorize')" name="authorize" class="m-2">
-                  <a-select v-model:value="webApiModel.authorize" :options="authorizeOptions" :placeholder="$t('page.webApi.form.authorize')" class="w-full" @change="handleAuthorizeChange(webApiModel.authorize)"></a-select>
+                  <a-select v-model:value="webApiModel.authorizeID" :options="authorizeOptions" :placeholder="$t('page.webApi.form.authorize')" class="w-full" @change="handleAuthorizeChange(webApiModel.authorizeID)"></a-select>
                 </a-form-item>
               </a-col>
               <a-col :span="24" :md="8" :lg="8">
@@ -384,7 +446,7 @@
                 <a-form-item :label="$t('page.webApi.requestUrl')" name="requestUrl" class="m-2">
                 <div style="display: flex; align-items: center; gap: 10px;">
                   <a-input v-model:value="webApiModel.requestUrl" :placeholder="$t('page.webApi.form.requestUrl')" class="flex-1" />
-                  <a-button type="primary" class="bule-btn ml-3">{{$t('page.webApi.interfaceTest')}}</a-button>
+                  <a-button type="primary" class="bule-btn ml-3" @click="handleTest">{{$t('page.webApi.interfaceTest')}}</a-button>
                 </div>
                 </a-form-item>
               </a-col>
@@ -404,7 +466,7 @@
             </a-tabs>
           </a-card>
         </a-tab-pane>
-        <a-tab-pane :key="2" :tab="$t('page.webApi.responseInfo')" :forceRender="true">
+        <a-tab-pane :key="2" :tab="$t('page.webApi.responseInfo')">
           <div class="code-box">
             <span>{{$t('page.webApi.statusHandleScript')}}： </span>
             <a-input v-model:value="webApiModel.statusHandleScript" class="w-128" :placeholder="$t('page.webApi.form.statusHandleScript')" />
@@ -414,7 +476,7 @@
             </div>
           </div>
         </a-tab-pane>
-        <a-tab-pane :key="3" :tab="$t('page.webApi.dataHandle')" :forceRender="true">
+        <a-tab-pane :key="3" :tab="$t('page.webApi.dataHandle')">
           <div class="code-box">
             <div class="inline pr-5">
               <span class="required"> * </span><span>{{$t('page.webApi.dataHandle')}}： </span>
@@ -443,7 +505,7 @@
               <a-col :span="24" :md="12" :lg="12">
                 <a-form-item :label="$t('page.database.dataObjectType')" name="dataObjectType" class="m-0">
                   <div style="display: flex; align-items: center; gap: 10px;">
-                    <a-select v-model:value="dialogModel.dataObjectType" :placeholder="$t('page.database.form.dataObjectType')" :options="translateOptions(dataObjectTypeOptions)" class="flex-1" style="width: 200px;" />
+                    <a-select v-model:value="dialogModel.dataObjectType" :placeholder="$t('page.database.form.dataObjectType')" :options="translateOptions(objectTypeOptions)" class="flex-1" style="width: 200px;" />
                     <a-button type="primary" class="orange-btn ml-3" @click="showDataObjectModal()">{{$t('page.database.addMapping')}}</a-button>
                   </div>
                 </a-form-item>
