@@ -193,9 +193,8 @@
     tabKey.value = key;
     if (key === 4) {
       await nextTick();
-      // 清空整WebApi节点
-      if (webApiModel.value.id > 0 && webApiModel.value.diagramData !== '{"cells":[]}') {
-        diagramData.value = JSON.parse(webApiModel.value.diagramData);
+      // 恢复编辑的节点
+      if (webApiModel.value.id > 0) { //&& diagramData.value.cells.length > 0
         relationDiagramRef.value?.setData(diagramData.value)
         return;
       }
