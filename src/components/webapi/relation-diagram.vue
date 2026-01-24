@@ -1,17 +1,21 @@
 <template>
     <div ref="graphContainer" class="x6-graph" @contextmenu.prevent ></div>
     <div id="context-menu" class="context-menu" v-show="contextMenu.visible" :style="{ left: contextMenu.x + 'px', top: contextMenu.y + 'px' }">
-      <div @click="handleMenuClick('Key')">主键</div>
-      <div @click="handleMenuClick('OutKey')">输出主键</div>
-      <div @click="handleMenuClick('DeleteKey')">删除主键</div>
-      <div @click="handleMenuClick('DeleteTable')">删除表视图</div>
+      <div @click="handleMenuClick('AutoKey')">{{$t('page.webApi.shortcutMenu.autoKey')}}</div>
+      <div @click="handleMenuClick('OutKey')">{{$t('page.webApi.shortcutMenu.outKey')}}</div>
+      <div @click="handleMenuClick('SearchKey')">{{$t('page.webApi.shortcutMenu.searchKey')}}</div>
+      <div @click="handleMenuClick('DeleteAllKey')">{{$t('page.webApi.shortcutMenu.deleteAllKey')}}</div>
+      <div @click="handleMenuClick('DeleteAutoKey')">{{$t('page.webApi.shortcutMenu.deleteAutoKey')}}</div>
+      <div @click="handleMenuClick('DeleteOutKey')">{{$t('page.webApi.shortcutMenu.deleteOutKey')}}</div>
+      <div @click="handleMenuClick('DeleteSearchKey')">{{$t('page.webApi.shortcutMenu.deleteSearchKey')}}</div>
+      <div @click="handleMenuClick('DeleteTable')">{{$t('page.webApi.shortcutMenu.deleteTable')}}</div>
     </div>
 </template>
 
 <script setup lang="ts">
   import { Graph, Cell, Shape, Node } from '@antv/x6'
   import { autoLayoutGraph } from '@/utils/dagreLayout';
-  import { onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
+  import { onMounted, onBeforeUnmount, ref, nextTick } from 'vue'
 
   // #region 1. 参数定义
   // 图实例
@@ -144,7 +148,7 @@
           // 规则5: target 节点中只有 keyType === '2' 发的端口可以发起连接
           const sourcePortInfo = sourceNode.getPort(sourcePort);
           const sourceWasTarget = graphInstance.getEdges().some(edge => edge.getTargetCellId() === sourceNodeId);
-          if (sourceWasTarget && sourcePortInfo?.keyType !==2) return false;
+          if (sourceWasTarget && sourcePortInfo?.keyType === 0 || sourcePortInfo?.keyType === 1 || sourcePortInfo?.keyType === 4 || sourcePortInfo?.keyType === 5) return false;
           return true;
         },
       }
@@ -185,6 +189,8 @@
 
     // 节点右键菜单
     graph.value.on('node:contextmenu', ({ e, node }) => {
+      if (!node) return;
+      if (node.getData()?.nodeType === 'api') return;
       let target = e.target.parentElement;
       if (target.nodeName === 'text') target = target.parentElement || null;
       if (target.nodeName ==='g') {
@@ -228,27 +234,85 @@
     if (!node || !portId || !graph.value) return;
     if (!node.isNode()) return;
 
+    enum KeyTypeEnum {
+      NONE = 0,        // 无选中
+      AutoKey = 1,     // 001
+      OutKey = 2,      // 010
+      AutoOut = 3,     // 011 (1|2)
+      SearchKey = 4,   // 100
+      AutoSearch = 5,  // 101 (1|4)
+      OutSearch = 6,   // 110 (2|4)
+      All = 7          // 111 (1|2|4)
+    }
+
+    // 第二步：定义样式映射表，为7种组合配置专属样式
+    const keyTypeStyleMap: Record<KeyTypeEnum, { fill: string, fontWeight: 'normal' | 'bold' }> = {
+      [KeyTypeEnum.NONE]: { fill: '#000', fontWeight: 'normal' },
+      [KeyTypeEnum.AutoKey]: { fill: 'black', fontWeight: 'bold' },
+      [KeyTypeEnum.OutKey]: { fill: 'red', fontWeight: 'bold' },
+      [KeyTypeEnum.SearchKey]: { fill: 'blue', fontWeight: 'bold' },
+      [KeyTypeEnum.AutoOut]: { fill: 'orange', fontWeight: 'bold' },
+      [KeyTypeEnum.AutoSearch]: { fill: 'purple', fontWeight: 'bold' },
+      [KeyTypeEnum.OutSearch]: { fill: 'green', fontWeight: 'bold' },
+      [KeyTypeEnum.All]: { fill: 'darkred', fontWeight: 'bold' }
+    };
+    // 获取当前 端口 keyType
+    let currentKeyType: number = node.getPortProp(portId, 'keyType')  || KeyTypeEnum.NONE;
+    // 定义样式更新函数，简化重复代码
+    const updatePortStyle = (style: { fill: string, fontWeight: 'normal' | 'bold' }) => {
+      node.setPortProp(portId, 'attrs/portNameLabel/fontWeight', style.fontWeight);
+      node.setPortProp(portId, 'attrs/portNameLabel/fill', style.fill);
+      node.setPortProp(portId, 'attrs/portTypeLabel/fontWeight', style.fontWeight);
+      node.setPortProp(portId, 'attrs/portTypeLabel/fill', style.fill);
+    };
     switch (item) {
-      case 'Key':
-        node.setPortProp(portId, 'keyType', 1);
-        node.setPortProp(portId, 'attrs/portNameLabel/fontWeight', 'bold');
-        node.setPortProp(portId, 'attrs/portNameLabel/fill', 'black');
-        node.setPortProp(portId, 'attrs/portTypeLabel/fontWeight', 'bold');
-        node.setPortProp(portId, 'attrs/portTypeLabel/fill', 'black');
+      // 叠加 AutoKey（已选中则不处理）
+      case 'AutoKey':
+        if (!(currentKeyType & KeyTypeEnum.AutoKey)) {
+          currentKeyType |= KeyTypeEnum.AutoKey;
+          node.setPortProp(portId, 'keyType', currentKeyType);
+          updatePortStyle(keyTypeStyleMap[currentKeyType as KeyTypeEnum]);
+        }
         break;
+      // 叠加 OutKey（已选中则不处理）
       case 'OutKey':
-        node.setPortProp(portId, 'keyType', 2);
-        node.setPortProp(portId, 'attrs/portNameLabel/fontWeight', 'bold');
-        node.setPortProp(portId, 'attrs/portNameLabel/fill', 'red');
-        node.setPortProp(portId, 'attrs/portTypeLabel/fontWeight', 'bold');
-        node.setPortProp(portId, 'attrs/portTypeLabel/fill', 'red');
+        if (!(currentKeyType & KeyTypeEnum.OutKey)) {
+          currentKeyType |= KeyTypeEnum.OutKey;
+          node.setPortProp(portId, 'keyType', currentKeyType);
+          updatePortStyle(keyTypeStyleMap[currentKeyType as KeyTypeEnum]);
+        }
         break;
-      case 'DeleteKey':
-        node.setPortProp(portId, 'keyType', 0);
-        node.setPortProp(portId, 'attrs/portNameLabel/fontWeight', 'normal');
-        node.setPortProp(portId, 'attrs/portNameLabel/fill', '#000');
-        node.setPortProp(portId, 'attrs/portTypeLabel/fontWeight', 'normal');
-        node.setPortProp(portId, 'attrs/portTypeLabel/fill', '#000');
+      // 叠加 SearchKey（已选中则不处理）
+      case 'SearchKey':
+        if (!(currentKeyType & KeyTypeEnum.SearchKey)) {
+          currentKeyType |= KeyTypeEnum.SearchKey;
+          node.setPortProp(portId, 'keyType', currentKeyType);
+          updatePortStyle(keyTypeStyleMap[currentKeyType as KeyTypeEnum]);
+        }
+        break;
+      // 删除所有Key（清空选中项）
+      case 'DeleteAllKey':
+        currentKeyType = KeyTypeEnum.NONE;
+        node.setPortProp(portId, 'keyType', currentKeyType);
+        updatePortStyle(keyTypeStyleMap[KeyTypeEnum.NONE]);
+        break;
+      // 删除自增主键（仅移除AutoKey，保留其他选中项）
+      case 'DeleteAutoKey':
+        currentKeyType &= ~KeyTypeEnum.AutoKey;
+        node.setPortProp(portId, 'keyType', currentKeyType);
+        updatePortStyle(keyTypeStyleMap[currentKeyType as KeyTypeEnum]);
+        break;
+      // 删除 OutKey（仅移除 OutKey，保留其他选中项）
+      case 'DeleteOutKey':
+        currentKeyType &= ~KeyTypeEnum.OutKey;
+        node.setPortProp(portId, 'keyType', currentKeyType);
+        updatePortStyle(keyTypeStyleMap[currentKeyType as KeyTypeEnum]);
+        break;
+      // 删除 SearchKey（仅移除 SearchKey，保留其他选中项）
+      case 'DeleteSearchKey':
+        currentKeyType &= ~KeyTypeEnum.SearchKey;
+        node.setPortProp(portId, 'keyType', currentKeyType);
+        updatePortStyle(keyTypeStyleMap[currentKeyType as KeyTypeEnum]);
         break;
     }
     hideContextMenu();

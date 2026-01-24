@@ -15,7 +15,6 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
   apiParams: {
     current: 1,
     size: 10,
-    taskID: undefined,
     taskName: undefined,
     taskType: undefined,
     logLevel: undefined,
@@ -25,7 +24,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       key: 'taskID',
       dataIndex: 'taskID',
       title: $t('page.taskLog.taskID'),
-      width: 120,
+      width: 90,
       align: 'center'
     },
     {
@@ -34,6 +33,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       title: $t('page.taskLog.taskName'),
       align: 'center',
       minWidth: 120,
+      ellipsis: true,
       customRender: ({ record }) => {
         return (
           <a-button type="link" onClick={() => router.push(`/tasklog/details/${record.id}`)}>
@@ -47,7 +47,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       dataIndex: 'taskType',
       title: $t('page.taskLog.taskType'),
       align: 'center',
-      width: 130,
+      width: 110,
       customRender: ({ record }) => {
         if (record.taskType === null) {
           return null;
@@ -61,7 +61,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       dataIndex: 'logLevel',
       title: $t('page.taskLog.logLevel'),
       align: 'center',
-      width: 130,
+      width: 90,
       customRender: ({ record }) => {
         if (record.logLevel === null) {
           return null;
@@ -75,7 +75,7 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       dataIndex: 'spentTime',
       title: $t('page.taskLog.spentTime'),
       align: 'center',
-      width: 130,
+      width: 90,
       customRender: ({ record }) => {
         return `${record.spentTime} ms`;
       }
@@ -95,14 +95,14 @@ const { columns, data, loading, getData, getDataByPage, mobilePagination, search
       align: 'center',
       width: 150,
       customRender: ({ record }) => {
-        return record.createTime ? dayjs(record.createTime).format('YYYY-MM-DD') : '';
+        return record.createTime ? dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') : '';
       }
     },
     {
       key: 'operate',
       title: $t('common.operate'),
       align: 'center',
-      width: 130,
+      width: 100,
       customRender:  ({ record })=> (
         <div class="flex-center gap-8px">
           <a-popconfirm title={$t('common.confirmDelete')} onConfirm={() => handleDelete(record.id)}>

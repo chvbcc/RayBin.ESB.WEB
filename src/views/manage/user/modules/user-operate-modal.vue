@@ -48,7 +48,7 @@ function createDefaultModel(): Api.SystemManage.UserModel {
     gender: '1',
     phone: '',
     email: '',
-    weChat: '',
+    weCom: '',
     dingDing: '',
     status: 0,
   };

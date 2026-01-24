@@ -85,6 +85,7 @@ declare module 'vue' {
     IconLocalBanner: typeof import('~icons/local/banner')['default']
     IconLocalDelete: typeof import('~icons/local/delete')['default']
     IconLocalLogo: typeof import('~icons/local/logo')['default']
+    IconMdiAccountPlus: typeof import('~icons/mdi/account-plus')['default']
     IconMdiDrag: typeof import('~icons/mdi/drag')['default']
     IconMdiRefresh: typeof import('~icons/mdi/refresh')['default']
     IconMdiSquareEditOutline: typeof import('~icons/mdi/square-edit-outline')['default']

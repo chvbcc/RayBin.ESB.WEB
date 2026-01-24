@@ -194,7 +194,7 @@
     if (key === 4) {
       await nextTick();
       // 恢复编辑的节点
-      if (webApiModel.value.id > 0) { //&& diagramData.value.cells.length > 0
+      if (webApiModel.value.id > 0 && diagramData.value.cells.length > 0) {
         relationDiagramRef.value?.setData(diagramData.value)
         return;
       }
@@ -232,6 +232,10 @@
       if (!isJson(responseBody)) return;
       let data = JSON.parse(responseBody);
       const tables = parseJsonToTables(data);
+      tables.forEach(table => {
+        console.log(table.tableName);
+      });
+      debugger
       const newNodes  = tables.map(table => ({
         id: String(table.id),
         shape: 'er-rect',

@@ -427,7 +427,7 @@ declare namespace App {
           resetPwd: {
             title: string;
           };
-          bindWeChat: {
+          bindWeCom: {
             title: string;
           };
         };
@@ -626,15 +626,25 @@ declare namespace App {
             diagramData: string;
             shareVariables: string;
           };
+          shortcutMenu: {
+            autoKey: string;
+            outKey: string;
+            searchKey: string;
+            deleteAllKey: string;
+            deleteAutoKey: string;
+            deleteOutKey: string;
+            deleteSearchKey: string;
+            deleteTable: string;
+          };
         };
         taskLog: {
           title: string;
           viewLogDetail: string;
           taskID: string;
           taskType: string;
+          taskName: string;
           runMode: string;
           runTime: string;
-          taskName: string;
           logLevel: string;
           message: string;
           spentTime: string;
@@ -644,6 +654,24 @@ declare namespace App {
               taskType: string;
               logLevel: string;
               taskName: string;
+          }
+        };
+        message: {
+          title: string;
+          taskID: string;
+          taskName: string;
+          taskType: string;
+          runMode: string;
+          runTime: string;
+          taskStatus: string;
+          employeeName: string;
+          employeeNo: string;
+          assignUser: string;
+          form: {
+            taskType: string;
+            taskName: string;
+            runMode: string;
+            employeeName: string;
           }
         };
         authorize : {
@@ -790,7 +818,7 @@ declare namespace App {
             gender: string;
             phone: string;
             email: string;
-            weChat: string;
+            weCom: string;
             dingDing: string;
             status: string;
             userRoles: string;

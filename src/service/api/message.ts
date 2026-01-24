@@ -1,11 +1,19 @@
 import { request } from '../request';
 
 /** get task log list */
-export function fetchGetPagingList(params?: Api.Log.SearchParams) {
-  return request<Api.Log.TaskLogList>({
-    url: '/tasklog/getPagingList',
+export function fetchGetPagingList(params?: Api.Message.SearchParams) {
+  return request<Api.Task.TaskList>({
+    url: '/message/getPagingList',
     method: 'get',
     params
+  });
+}
+
+export function fetchGetList(taskId?: number) {
+  return request<Api.Message.MessageList>({
+    url: '/message/getList',
+    method: 'get',
+    params: { taskId }
   });
 }
 

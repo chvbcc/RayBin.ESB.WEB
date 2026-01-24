@@ -13,7 +13,7 @@ declare namespace AntDesign {
    *
    * if you want to add a custom column, you should add a key to this type
    */
-  type CustomColumnKey = 'operate' | 'permission';
+  type CustomColumnKey = 'operate' | 'permission' | 'expand';
 
   type SetTableColumnKey<C, T> = Omit<C, 'key'> & { key?: keyof T | CustomColumnKey };
 

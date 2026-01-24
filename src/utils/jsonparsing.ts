@@ -13,17 +13,6 @@ function detectType(v: any): string {
   return "object";
 }
 
-function mergeFieldOrder(existing: Field[], candidate: Field[]): Field[] {
-  const seen = new Set(existing.map(f => f. fieldName));
-  for (const f of candidate) {
-    if (!seen.has(f.fieldName)) {
-      existing.push(f);
-      seen.add(f.fieldName);
-    }
-  }
-  return existing;
-}
-
 export function parseJsonToTables(input:  any): Table[] {
   let nextId = 1;
   const tables: Table[] = [];
@@ -52,11 +41,26 @@ export function parseJsonToTables(input:  any): Table[] {
     if (node && !Array.isArray(node) && typeof node === "object") {
       for (const key of Object.keys(node)) {
         const val = node[key];
+
+        // 过滤空数组
+        if (Array.isArray(val) && val.length === 0) {
+          continue;
+        }
+
         const t = detectType(val);
 
         if (t === "object") {
           if (Array.isArray(val)) {
-            handleArray(val, key, table.id);
+            // 检查数组元素类型
+            const firstNonNull = val.find(v => v !== null);
+            const elemType = detectType(firstNonNull);
+            if (elemType === "object") {
+              // 数组元素是对象，创建新表处理
+              handleArray(val, key, table.id);
+            } else {
+              // 数组元素是简单类型，作为字段添加到当前表
+              table.fields.push({ fieldName: key, fieldType: `${elemType}[]` });
+            }
           } else {
             handleNode(val, key, table. id);
           }
@@ -66,47 +70,99 @@ export function parseJsonToTables(input:  any): Table[] {
       }
       updateFieldLength(table);
     } else if (Array.isArray(node)) {
-      handleArray(node, tableName, parentId);
+      // 检查数组元素类型
+      const firstNonNull = node.find(v => v !== null);
+      const elemType = detectType(firstNonNull);
+      if (elemType === "object") {
+        // 数组元素是对象，创建新表处理
+        handleArray(node, tableName, parentId);
+      } else {
+        // 数组元素是简单类型，作为字段添加到当前表
+        table.fields.push({ fieldName: tableName, fieldType: `${elemType}[]` });
+        updateFieldLength(table);
+      }
     }
   }
 
   function handleArray(arr: any[], tableName:  string, parentId: number) {
+    // 过滤空数组
     if (arr.length === 0) {
-      addTable(tableName, parentId);
       return;
     }
+
     const firstNonNull = arr.find(v => v !== null);
     const t = detectType(firstNonNull);
     if (t === "object") {
       const mergedFields: Field[] = [];
+      const seenFields = new Set<string>();
+
+      // 第一次遍历：收集所有非对象字段
       for (const item of arr) {
         if (item && typeof item === "object" && ! Array.isArray(item)) {
-          const fields: Field[] = [];
           for (const k of Object.keys(item)) {
-            const vt = detectType(item[k]);
-            if (vt !== "object") fields.push({ fieldName: k, fieldType: vt });
+            const v = item[k];
+            const vt = detectType(v);
+
+            // 过滤空数组
+            if (Array.isArray(v) && v.length === 0) {
+              continue;
+            }
+
+            if (vt !== "object") {
+              // 简单类型字段，直接添加到 mergedFields
+              if (!seenFields.has(k)) {
+                mergedFields.push({ fieldName: k, fieldType: vt });
+                seenFields.add(k);
+              }
+            } else if (Array.isArray(v)) {
+              // 数组类型，检查元素类型
+              const arrFirstNonNull = v.find(vv => vv !== null);
+              const arrElemType = detectType(arrFirstNonNull);
+              if (!seenFields.has(k)) {
+                mergedFields.push({ fieldName: k, fieldType: `${arrElemType}[]` });
+                seenFields.add(k);
+              }
+            }
           }
-          mergeFieldOrder(mergedFields, fields);
         }
       }
+
+      // 创建主表
       const table = addTable(tableName, parentId);
       table.fields = mergedFields;
       updateFieldLength(table);
+
+      // 第二次遍历：处理嵌套对象
       for (const item of arr) {
         if (item && typeof item === "object" && !Array.isArray(item)) {
           for (const k of Object.keys(item)) {
             const v = item[k];
             const vt = detectType(v);
-            if (vt === "object") {
-              if (Array.isArray(v)) handleArray(v, k, table. id);
-              else handleNode(v, k, table.id);
+
+            // 过滤空数组
+            if (Array.isArray(v) && v.length === 0) {
+              continue;
+            }
+
+            if (vt === "object" && !Array.isArray(v)) {
+              // 嵌套对象，创建子表
+              handleNode(v, k, table.id);
             }
           }
         }
       }
-    } else {
-      const table = addTable(tableName, parentId);
-      table.fields.push({ fieldName: tableName, fieldType: `${t}[]` });
+    }
+    // 简单类型数组不再创建新表，而是作为字段添加到调用方的表中
+  }
+
+  // 检查输入是否为字符串，如果是则尝试解析为JSON
+  let parsedInput = input;
+  if (typeof input === "string") {
+    try {
+      parsedInput = JSON.parse(input);
+    } catch {
+      // 如果解析失败，将其视为普通字符串处理
+      parsedInput = input;
     }
   }
 
@@ -125,20 +181,59 @@ export function parseJsonToTables(input:  any): Table[] {
     return false; // 是复杂结构
   }
 
-  // 顶层只有复杂结构：不创建 root，直接处理每个子结构
-  if (!hasSimpleValues(input) && input && typeof input === "object" && !Array.isArray(input)) {
-    for (const key of Object.keys(input)) {
-      const val = input[key];
-      if (Array.isArray(val)) {
-        handleArray(val, key, 0);
-      } else {
-        handleNode(val, key, 0);
-      }
+  // 处理顶层输入
+  if (Array.isArray(parsedInput)) {
+    // 检查数组元素类型
+    const firstNonNull = parsedInput.find(v => v !== null);
+    const elemType = detectType(firstNonNull);
+    if (elemType === "object") {
+      // 数组元素是对象，创建新表处理
+      handleArray(parsedInput, "root", 0);
+    } else {
+      // 数组元素是简单类型，作为字段添加到当前表
+      const table = addTable("root", 0);
+      table.fields.push({ fieldName: "root", fieldType: `${elemType}[]` });
+      updateFieldLength(table);
     }
-    return tables;
+  } else if (parsedInput && typeof parsedInput === "object") {
+    // 顶层只有复杂结构：不创建 root，直接处理每个子结构
+    if (!hasSimpleValues(parsedInput)) {
+      for (const key of Object.keys(parsedInput)) {
+        const val = parsedInput[key];
+
+        // 过滤空数组
+        if (Array.isArray(val) && val.length === 0) {
+          continue;
+        }
+
+        if (Array.isArray(val)) {
+          // 检查数组元素类型
+          const firstNonNull = val.find(v => v !== null);
+          const elemType = detectType(firstNonNull);
+          if (elemType === "object") {
+            // 数组元素是对象，创建新表处理
+            handleArray(val, key, 0);
+          } else {
+            // 数组元素是简单类型，作为字段添加到当前表
+            const table = addTable(key, 0);
+            table.fields.push({ fieldName: key, fieldType: `${elemType}[]` });
+            updateFieldLength(table);
+          }
+        } else {
+          handleNode(val, key, 0);
+        }
+      }
+    } else {
+      // 有简单值：正常创建 root table
+      handleNode(parsedInput, "root", 0);
+    }
+  } else {
+    // 简单类型，创建一个表并添加为字段
+    const table = addTable("root", 0);
+    const t = detectType(parsedInput);
+    table.fields.push({ fieldName: "root", fieldType: t });
+    updateFieldLength(table);
   }
 
-  // 有简单值：正常创建 root table
-  handleNode(input, "root", 0);
   return tables;
 }

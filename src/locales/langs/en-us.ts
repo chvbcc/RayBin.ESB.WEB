@@ -185,14 +185,17 @@ const local: App.I18n.Schema = {
     webapi_default: 'Web API Task',
     webapi_action: 'Web API Task',
     industria: 'Industrial Interface Task',
-    industria_default: 'Industrial Interface Task',
-    industria_action: 'Industrial Interface Task',
+    industria_task: 'Industrial Interface Task',
+    industria_task_default: 'Industrial Interface Task',
+    industria_task_action: 'Industrial Interface Task',
     pending: 'Pending Task',
     suspended: 'Suspended Task',
     tasklog: 'Task Log',
     tasklog_default: 'Task Log',
     tasklog_details: 'Log Details',
     message: 'Notification Message',
+    message_default: 'Notification Message',
+    message_action: 'Notification Message',
     'user-center': 'User Center',
     manage: 'System Manage',
     manage_user: 'User Manage',
@@ -246,8 +249,8 @@ const local: App.I18n.Schema = {
       resetPwd: {
         title: 'Reset Password'
       },
-      bindWeChat: {
-        title: 'Bind WeChat'
+      bindWeCom: {
+        title: 'Bind WeCom'
       }
     },
     about: {
@@ -444,6 +447,16 @@ const local: App.I18n.Schema = {
           dataMapping: 'Please enter data mapping',
           diagramData: 'Please enter diagram data',
           shareVariables: 'Please enter share variables',
+      },
+      shortcutMenu: {
+        autoKey: 'Auto Increment Primary Key',
+        outKey: 'Output Primary Key',
+        searchKey: 'Search Primary Key',
+        deleteAllKey: 'Delete All Primary Keys',
+        deleteAutoKey: 'Delete Auto Increment Primary Key',
+        deleteOutKey: 'Delete Output Primary Key',
+        deleteSearchKey: 'Delete Search Primary Key',
+        deleteTable: 'Delete Table/View'
       }
     },
     taskLog: {
@@ -463,6 +476,23 @@ const local: App.I18n.Schema = {
         taskType: 'Please select task type',
         logLevel: 'Please select log level',
         taskName: 'Please enter task name',
+      },
+    },
+    message: {
+      title: 'Notification Message',
+      taskID: 'Task No.',
+      taskName: 'Task Name',
+      taskType: 'Task Type',
+      runMode: 'Run Mode',
+      runTime: 'Run Time',
+      taskStatus: 'Task Status',
+      employeeName: 'Employee Name',
+      assignUser: 'Assign User',
+      form: {
+        taskType: 'Please select task type',
+        taskName: 'Please enter task name',
+        runMode: 'Please select run mode',
+        employeeName: 'Please enter employee name',
       },
     },
     authorize: {
@@ -608,7 +638,7 @@ const local: App.I18n.Schema = {
         gender: 'Gender',
         phone: 'Phone',
         email: 'Email',
-        weChat: 'WeChat ID',
+        weCom: 'WeCom ID',
         dingDing: 'DingDing ID',
         status: 'Status',
         userRoles: 'User Role',

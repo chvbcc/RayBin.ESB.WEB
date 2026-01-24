@@ -1,7 +1,7 @@
 declare namespace Api {
   namespace Log {
     /* Task log search params */
-    type TaskLogSearchParams = Partial<Pick<TaskLog, 'taskID' | 'taskType' | 'taskName' | 'logLevel' | 'startCreateTime' | 'endCreateTime'> & Common.CommonSearchParams >;
+    type SearchParams = Partial<Pick<TaskLog, 'taskType' | 'taskName' | 'logLevel' | 'startCreateTime' | 'endCreateTime'> & Common.CommonSearchParams >;
 
     /* TaskLog list */
     type TaskLogList = Common.PaginatingQueryRecord<TaskLog>;

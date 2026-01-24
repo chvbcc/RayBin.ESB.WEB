@@ -15,7 +15,7 @@ EmployeeNo	varchar	员工编号
 Gender	varchar	性别
 Phone	varchar	电话
 Email	varchar	邮箱
-WeChat	varchar	微信标识
+WeCom	varchar	微信标识
 DingDing	varchar	钉钉标识
 Status	int	状态
 CreateTime	datetime	创建时间

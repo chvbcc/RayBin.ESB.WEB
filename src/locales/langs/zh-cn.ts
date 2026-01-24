@@ -185,14 +185,17 @@ const local: App.I18n.Schema = {
     webapi_default: '网络接口任务',
     webapi_action: '网络接口任务',
     industria: '工业接口任务',
-    industria_default: '工业接口任务',
-    industria_action: '工业接口任务',
+    industria_task: '工业接口任务',
+    industria_task_default: '工业接口任务',
+    industria_task_action: '工业接口任务',
     pending: '待运行任务',
     suspended: '已暂停任务',
     tasklog: '任务日志',
     tasklog_default: '任务日志',
     tasklog_details: '日志明细',
     message: '通知消息',
+    message_default: '通知消息',
+    message_action: '通知消息',
     'user-center': '个人中心',
     manage: '系统管理',
     manage_user: '用户管理',
@@ -246,8 +249,8 @@ const local: App.I18n.Schema = {
       resetPwd: {
         title: '重置密码'
       },
-      bindWeChat: {
-        title: '绑定微信'
+      bindWeCom: {
+        title: '绑定企业微信'
       }
     },
     about: {
@@ -444,6 +447,16 @@ const local: App.I18n.Schema = {
           dataMapping: '请输入数据映射',
           diagramData: '请输入图表数据',
           shareVariables: '请输入共享变量',
+      },
+      shortcutMenu: {
+        autoKey: '自增主键',
+        outKey: '输出主键',
+        searchKey: '查询主键',
+        deleteAllKey: '删除所有主键',
+        deleteAutoKey: '删除自增主键',
+        deleteOutKey: '删除输出主键',
+        deleteSearchKey: '删除查询主键',
+        deleteTable: '删除表视图'
       }
     },
     taskLog: {
@@ -463,6 +476,23 @@ const local: App.I18n.Schema = {
         taskType: '请选择任务类型',
         logLevel: '请选择日志级别',
         taskName: '请输入任务名称',
+      },
+    },
+    message: {
+      title: '通知消息',
+      taskID: '任务编号',
+      taskName: '任务名称',
+      taskType: '任务类型',
+      runMode: '运行方式',
+      runTime: '运行时间',
+      taskStatus: '任务状态',
+      employeeName: '员工姓名',
+      assignUser: '分配用户',
+      form: {
+        taskType: '请选择任务类型',
+        taskName: '请输入任务名称',
+        runMode: '请选择运行方式',
+        employeeName: '请输入接收消息的员工姓名'
       },
     },
     authorize: {
@@ -608,7 +638,7 @@ const local: App.I18n.Schema = {
         gender: '性别',
         phone: '电话',
         email: '邮箱',
-        weChat: '微信标识',
+        weCom: '微信标识',
         dingDing: '钉钉标识',
         status: '状态',
         userRoles: '用户角色',

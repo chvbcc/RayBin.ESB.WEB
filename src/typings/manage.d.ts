@@ -45,13 +45,13 @@ declare namespace Api {
       gender: Gender;
       phone: string;
       email: string;
-      weChat: string;
+      weCom: string;
       dingDing: string;
       status: Api.Common.EnableStatus;
     }>;
 
     /* User model */
-    type UserModel = Pick<User, | 'id' | 'username' | 'password' | 'userAvatar' | 'employeeName' | 'employeeNo' | 'gender' | 'phone' | 'email' | 'weChat' | 'dingDing' | 'status'>;
+    type UserModel = Pick<User, | 'id' | 'username' | 'password' | 'userAvatar' | 'employeeName' | 'employeeNo' | 'gender' | 'phone' | 'email' | 'weCom' | 'dingDing' | 'status'>;
 
     /* User dropdown */
     type Users = Pick<User, 'id' | 'username' | 'employeeName'>;

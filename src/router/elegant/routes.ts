@@ -131,28 +131,38 @@ export const generatedRoutes: GeneratedRoute[] = [
     },
     children: [
       {
-        name: 'industria_action',
-        path: '/industria/action',
-        component: 'view.industria_action',
+        name: 'industria_task',
+        path: '/industria/task',
         meta: {
-          title: 'industria_action',
-          i18nKey: 'route.industria_action'
-        }
-      },
-      {
-        name: 'industria_default',
-        path: '/industria/default',
-        component: 'view.industria_default',
-        meta: {
-          title: 'industria_default',
-          i18nKey: 'route.industria_default'
-        }
+          title: 'industria_task',
+          i18nKey: 'route.industria_task'
+        },
+        children: [
+          {
+            name: 'industria_task_action',
+            path: '/industria/task/action',
+            component: 'view.industria_task_action',
+            meta: {
+              title: 'industria_task_action',
+              i18nKey: 'route.industria_task_action'
+            }
+          },
+          {
+            name: 'industria_task_default',
+            path: '/industria/task/default',
+            component: 'view.industria_task_default',
+            meta: {
+              title: 'industria_task_default',
+              i18nKey: 'route.industria_task_default'
+            }
+          }
+        ]
       }
     ]
   },
   {
     name: 'login',
-    path: '/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?',
+    path: '/login/:module(pwd-login|code-login|register|reset-pwd|bind-weCom)?',
     component: 'layout.blank$view.login',
     props: true,
     meta: {
@@ -257,11 +267,31 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'message',
     path: '/message',
-    component: 'layout.base$view.message',
+    component: 'layout.base',
     meta: {
       title: 'message',
       i18nKey: 'route.message'
-    }
+    },
+    children: [
+      {
+        name: 'message_action',
+        path: '/message/action',
+        component: 'view.message_action',
+        meta: {
+          title: 'message_action',
+          i18nKey: 'route.message_action'
+        }
+      },
+      {
+        name: 'message_default',
+        path: '/message/default',
+        component: 'view.message_default',
+        meta: {
+          title: 'message_default',
+          i18nKey: 'route.message_default'
+        }
+      }
+    ]
   },
   {
     name: 'pending',
