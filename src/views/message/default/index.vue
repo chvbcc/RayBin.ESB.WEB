@@ -1,17 +1,15 @@
 <script setup lang="tsx">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { $t, language } from '@/locales';
-import { useAppStore } from '@/store/modules/app';
-import MessageSearch from './modules/message-search.vue';
-import { fetchGetPagingList, fetchGetList } from '@/service/api/message';
-import { useTable } from '@/hooks/common/table';
-import { runModeRecord, taskTypeRecord, taskStatusRecord } from '@/constants/options';
-import { debug } from 'console';
+  import { ref } from 'vue';
+  import { $t } from '@/locales';
+  import { useRouter } from 'vue-router';
+  import { useTable } from '@/hooks/common/table';
+  import { useAppStore } from '@/store/modules/app';
+  import MessageSearch from './modules/message-search.vue';
+  import { fetchGetPagingList, fetchGetList } from '@/service/api/message';
+  import { runModeRecord, taskTypeRecord, messageTypeRecord, taskStatusRecord } from '@/constants/options';
 
   const router = useRouter();
   const appStore = useAppStore();
-
   const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
     apiFn: fetchGetPagingList,
     apiParams: {
@@ -44,9 +42,7 @@ import { debug } from 'console';
         align: 'center',
         width: 138,
         customRender: ({ record }) => {
-          if (record.taskType === null) {
-            return null;
-          }
+          if (record.taskType === null) return null;
           const label = $t(taskTypeRecord[record.taskType]);
           return label;
         }
@@ -57,9 +53,7 @@ import { debug } from 'console';
         title: $t('page.message.runMode'),
         minWidth: 120,
         customRender: ({ record } )=> {
-          if (record.runMode === null) {
-            return null;
-          }
+          if (record.runMode === null) return null;
           const label = $t(runModeRecord[record.runMode]);
           return label;
         }
@@ -71,9 +65,7 @@ import { debug } from 'console';
         align: 'center',
         minWidth: 120,
         customRender: ({ record })=> {
-          if (record.status === null) {
-            return null;
-          }
+          if (record.status === null) return null;
           const label = $t(taskStatusRecord[record.status]);
           return label;
         }
@@ -97,7 +89,7 @@ import { debug } from 'console';
 
   async function handleAssignUser (taskId: number) {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'database_action' });
+    router.push({ name: 'message_action' });
   }
 
   // 缓存子表数据（key: 主表行ID, value: 子表数据），避免重复请求
@@ -105,26 +97,23 @@ import { debug } from 'console';
   const expandedRowKeys = ref<number[]>([]);
 
   // 异步获取子表数据（带缓存）
-  const getExpandedSubData = async (id: number) => {
-    //if (subTableDataCache.value[id]) return subTableDataCache.value[id];
-    const { error, data } = await fetchGetList(id);
-    if (error) { return []; }
-    subTableDataCache.value = {
-      ...subTableDataCache.value,
-      [id]: data || []
-    };
-    return;
-  }
+  const getExpandedSubData =async (id: number) => {
+    if (subTableDataCache.value[id]) return subTableDataCache.value[id];
+    const { data } = await fetchGetList(id);
+    subTableDataCache.value[id] = data || [];
+    return subTableDataCache.value[id];
+  };
 
   // 处理行展开/收起事件
   const handleExpand = async (expanded: boolean, record: any) => {
+    const id = record.id;
     if (expanded) {
-      if (!subTableDataCache.value[record.id]) {
-        await getExpandedSubData(record.id);
+      await getExpandedSubData(id);
+      if (!expandedRowKeys.value.includes(id)) {
+        expandedRowKeys.value.push(id);
       }
-      expandedRowKeys.value.push(record.id);
     } else {
-      const index = expandedRowKeys.value.indexOf(record.id);
+      const index = expandedRowKeys.value.indexOf(id);
       if (index > -1) {
         expandedRowKeys.value.splice(index, 1);
       }
@@ -137,14 +126,20 @@ import { debug } from 'console';
       <div class="pl-24px">
         <a-table rowKey="id"
           columns={[
-            { title: $t('page.message.messageType'), dataIndex: 'messageType', key: 'messageType' },
+            { title: $t('page.message.messageType'), dataIndex: 'messageType', key: 'messageType',
+              customRender: ({ record }: { record: Api.Message.MessageModel }) => {
+                if (record.messageType === null) return null;
+                const label = $t(messageTypeRecord[record.messageType]);
+                return label;
+              }
+            },
             { title: $t('page.message.employeeName'), dataIndex: 'employeeName', key: 'employeeName' },
             { title: $t('page.message.employeeNo'), dataIndex: 'employeeNo', key: 'employeeNo' },
             { title: $t('page.message.weCom'), dataIndex: 'weCom', key: 'weCom' },
             { title: $t('page.message.dingTalk'), dataIndex: 'dingTalk', key: 'dingTalk' },
             { title: $t('page.message.email'), dataIndex: 'email', key: 'email' },
           ]}
-          dataSource={subTableDataCache.value[record.id] || []}
+          dataSource={subTableDataCache.value[record.record.id] || []}
           pagination={false}
           size="small"
           class="sub-table"
@@ -183,4 +178,3 @@ import { debug } from 'console';
 </template>
 
 <style scoped></style>
-

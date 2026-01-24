@@ -185,6 +185,9 @@ const local: App.I18n.Schema = {
     webapi_default: '网络接口任务',
     webapi_action: '网络接口任务',
     industria: '工业接口任务',
+    industria_connection: '工业接口任务',
+    industria_connection_default: '工业接口任务',
+    industria_connection_action: '工业接口任务',
     industria_task: '工业接口任务',
     industria_task_default: '工业接口任务',
     industria_task_action: '工业接口任务',
@@ -829,6 +832,12 @@ const local: App.I18n.Schema = {
       table: '表',
       view: '视图',
       storedProcedure: '存储过程'
+    },
+    messageType: {
+      weCom: '企业微信',
+      dingTalk: '钉钉',
+      textMessage: '短信',
+      email: '邮件'
     },
     logLevel: {
       info: '信息',

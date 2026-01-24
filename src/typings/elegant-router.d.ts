@@ -29,6 +29,9 @@ declare module "@elegant-router/types" {
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
     "industria": "/industria";
+    "industria_connection": "/industria/connection";
+    "industria_connection_action": "/industria/connection/action";
+    "industria_connection_default": "/industria/connection/default";
     "industria_task": "/industria/task";
     "industria_task_action": "/industria/task/action";
     "industria_task_default": "/industria/task/default";
@@ -126,6 +129,8 @@ declare module "@elegant-router/types" {
     | "database_action"
     | "database_default"
     | "home"
+    | "industria_connection_action"
+    | "industria_connection_default"
     | "industria_task_action"
     | "industria_task_default"
     | "manage_authorize_action"

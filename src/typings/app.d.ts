@@ -985,6 +985,12 @@ declare namespace App {
           view: string;
           storedProcedure: string;
         };
+        messageType: {
+          weCom: string;
+          dingTalk: string;
+          textMessage: string;
+          email: string;
+        };
         logLevel: {
           info: string,
           success: string,

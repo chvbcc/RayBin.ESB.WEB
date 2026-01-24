@@ -7,8 +7,8 @@ declare namespace Api {
     type MessageList = Message[];
 
 
-    /* Message type  0 WeCom 企业微信  1 DingTalk 钉钉 3 TextMessage 短信  4 Email 邮件 */
-    type MessageType = 0 | 1 | 2 | 3 | 4;
+    /* Message type  0 WeCom 企业微信  1 DingTalk 钉钉 2 TextMessage 短信  3 Email 邮件 */
+    type MessageType = 0 | 1 | 2 | 3;
 
     /* Message */
     type Message = Common.CommonRecord<{
@@ -25,6 +25,6 @@ declare namespace Api {
     }>;
 
     /* Message model */
-    type MessageModel = Pick<Message, 'id' | 'taskID' | 'messageType' | 'messageContent' | 'userID' | 'createTime'>;
+    type MessageModel = Pick<Message, 'id' | 'taskID' | 'taskType' | 'taskName' | 'runMode' | 'runTime' | 'userID' | 'employeeName' | 'status' | 'messageType' | 'messageContent'>;
   }
 }

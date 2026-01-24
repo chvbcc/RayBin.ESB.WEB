@@ -185,6 +185,9 @@ const local: App.I18n.Schema = {
     webapi_default: 'Web API Task',
     webapi_action: 'Web API Task',
     industria: 'Industrial Interface Task',
+    industria_connection: 'PLC Connection',
+    industria_connection_default: 'PLC Connection',
+    industria_connection_action: 'PLC Connection',
     industria_task: 'Industrial Interface Task',
     industria_task_default: 'Industrial Interface Task',
     industria_task_action: 'Industrial Interface Task',
@@ -829,6 +832,12 @@ const local: App.I18n.Schema = {
       table: 'Table',
       view: 'View',
       storedProcedure: 'Stored Procedure'
+    },
+    messageType: {
+      weCom: 'WeCom',
+      dingTalk: 'DingTalk',
+      textMessage: 'Text Message',
+      email: 'Email'
     },
     logLevel: {
       info: 'Info',

@@ -87,6 +87,15 @@ export const dataObjectTypeRecord: Record<Api.Task.DataObjectType, App.I18n.I18n
 };
 export const dataObjectTypeOptions = transformRecordToOption(dataObjectTypeRecord);
 export const programmeLanguageOptions = [{ label: 'C#', value: '7000' }, { label: 'Python', value: '7001' }];
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// message
+export const messageTypeRecord: Record<Api.Message.MessageType, App.I18n.I18nKey> = {
+  0: 'dropdownList.messageType.weCom',
+  1: 'dropdownList.messageType.dingTalk',
+  2: 'dropdownList.messageType.textMessage',
+  3: 'dropdownList.messageType.email',
+};
+export const messageTypeOptions = convertRecordToOption(messageTypeRecord);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // log

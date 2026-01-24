@@ -131,6 +131,34 @@ export const generatedRoutes: GeneratedRoute[] = [
     },
     children: [
       {
+        name: 'industria_connection',
+        path: '/industria/connection',
+        meta: {
+          title: 'industria_connection',
+          i18nKey: 'route.industria_connection'
+        },
+        children: [
+          {
+            name: 'industria_connection_action',
+            path: '/industria/connection/action',
+            component: 'view.industria_connection_action',
+            meta: {
+              title: 'industria_connection_action',
+              i18nKey: 'route.industria_connection_action'
+            }
+          },
+          {
+            name: 'industria_connection_default',
+            path: '/industria/connection/default',
+            component: 'view.industria_connection_default',
+            meta: {
+              title: 'industria_connection_default',
+              i18nKey: 'route.industria_connection_default'
+            }
+          }
+        ]
+      },
+      {
         name: 'industria_task',
         path: '/industria/task',
         meta: {
