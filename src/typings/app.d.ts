@@ -666,7 +666,13 @@ declare namespace App {
           taskStatus: string;
           employeeName: string;
           employeeNo: string;
+          weCom: string;
+          dingTalk: string;
+          email: string;
+          userStatus: string;
           assignUser: string;
+          messageType: string;
+          messageContent: string;
           form: {
             taskType: string;
             taskName: string;
@@ -819,7 +825,7 @@ declare namespace App {
             phone: string;
             email: string;
             weCom: string;
-            dingDing: string;
+            dingTalk: string;
             status: string;
             userRoles: string;
             form: {

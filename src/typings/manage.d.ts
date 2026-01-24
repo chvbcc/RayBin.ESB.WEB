@@ -46,12 +46,12 @@ declare namespace Api {
       phone: string;
       email: string;
       weCom: string;
-      dingDing: string;
+      dingTalk: string;
       status: Api.Common.EnableStatus;
     }>;
 
     /* User model */
-    type UserModel = Pick<User, | 'id' | 'username' | 'password' | 'userAvatar' | 'employeeName' | 'employeeNo' | 'gender' | 'phone' | 'email' | 'weCom' | 'dingDing' | 'status'>;
+    type UserModel = Pick<User, | 'id' | 'username' | 'password' | 'userAvatar' | 'employeeName' | 'employeeNo' | 'gender' | 'phone' | 'email' | 'weCom' | 'dingTalk' | 'status'>;
 
     /* User dropdown */
     type Users = Pick<User, 'id' | 'username' | 'employeeName'>;

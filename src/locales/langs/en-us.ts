@@ -487,7 +487,14 @@ const local: App.I18n.Schema = {
       runTime: 'Run Time',
       taskStatus: 'Task Status',
       employeeName: 'Employee Name',
+      employeeNo: 'Employee No.',
+      weCom: 'WeCom',
+      dingTalk: 'DingTalk',
+      email: 'Email',
+      userStatus: 'User Status',
       assignUser: 'Assign User',
+      messageType: 'Message Type',
+      messageContent: 'Message Content',
       form: {
         taskType: 'Please select task type',
         taskName: 'Please enter task name',
@@ -639,7 +646,7 @@ const local: App.I18n.Schema = {
         phone: 'Phone',
         email: 'Email',
         weCom: 'WeCom ID',
-        dingDing: 'DingDing ID',
+        dingTalk: 'Ding Talk ID',
         status: 'Status',
         userRoles: 'User Role',
         form: {

@@ -49,7 +49,7 @@ function createDefaultModel(): Api.SystemManage.UserModel {
     phone: '',
     email: '',
     weCom: '',
-    dingDing: '',
+    dingTalk: '',
     status: 0,
   };
 }

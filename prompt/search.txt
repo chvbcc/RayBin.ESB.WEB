@@ -16,7 +16,7 @@ Gender	varchar	性别
 Phone	varchar	电话
 Email	varchar	邮箱
 WeCom	varchar	微信标识
-DingDing	varchar	钉钉标识
+DingTalk	varchar	钉钉标识
 Status	int	状态
 CreateTime	datetime	创建时间
 

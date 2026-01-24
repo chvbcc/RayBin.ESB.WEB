@@ -487,7 +487,14 @@ const local: App.I18n.Schema = {
       runTime: '运行时间',
       taskStatus: '任务状态',
       employeeName: '员工姓名',
+      employeeNo: '员工编号',
+      weCom: '企业微信',
+      dingTalk: '钉钉',
+      email: '邮箱',
+      userStatus: '用户状态',
       assignUser: '分配用户',
+      messageType: '消息类型',
+      messageContent: '消息内容',
       form: {
         taskType: '请选择任务类型',
         taskName: '请输入任务名称',
@@ -639,7 +646,7 @@ const local: App.I18n.Schema = {
         phone: '电话',
         email: '邮箱',
         weCom: '微信标识',
-        dingDing: '钉钉标识',
+        dingTalk: '钉钉标识',
         status: '状态',
         userRoles: '用户角色',
         form: {
