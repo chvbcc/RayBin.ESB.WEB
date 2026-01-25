@@ -1,36 +1,36 @@
-<script setup lang="ts">
-import { watch } from 'vue';
-import { $t, language } from '@/locales';
-import { translateOptions } from '@/utils/common';
-import { runModeOptions, taskTypeOptions } from '@/constants/options';
+<script setup lang="tsx">
+  import { watch } from 'vue';
+  import { $t, language } from '@/locales';
+  import { translateOptions } from '@/utils/common';
+  import { runModeOptions, taskTypeOptions } from '@/constants/options';
 
-defineOptions({
-  name: 'TaskSearch'
-});
+  defineOptions({
+    name: 'TaskSearch'
+  });
 
-interface Emits {
-  (e: 'reset'): void;
-  (e: 'search'): void;
-}
+  interface Emits {
+    (e: 'reset'): void;
+    (e: 'search'): void;
+  }
 
-const emit = defineEmits<Emits>();
+  const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.Task.TaskSearchParams>('model', { required: true });
+  const model = defineModel<Api.Task.TaskSearchParams>('model', { required: true });
 
-const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
+  const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
 
-function reset() {
-  emit('reset');
-}
+  function reset() {
+    emit('reset');
+  }
 
-function search() {
-  emit('search');
-}
+  function search() {
+    emit('search');
+  }
 
-// Watch for language changes and update labelCol dynamically
-watch(language, (newLang) => {
-  labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
-});
+  // Watch for language changes and update labelCol dynamically
+  watch(language, (newLang) => {
+    labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
+  });
 </script>
 
 <template>

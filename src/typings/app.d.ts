@@ -658,12 +658,15 @@ declare namespace App {
         };
         message: {
           title: string;
+          assignedUsers: string;
+          taskinfo: string;
           taskID: string;
           taskName: string;
           taskType: string;
           runMode: string;
           runTime: string;
           taskStatus: string;
+          description: string;
           employeeName: string;
           employeeNo: string;
           weCom: string;

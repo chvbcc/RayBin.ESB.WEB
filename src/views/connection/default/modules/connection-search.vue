@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { watch } from 'vue';
 import { $t, language } from '@/locales';
 import { translateOptions } from '@/utils/common';

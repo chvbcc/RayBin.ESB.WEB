@@ -1,30 +1,30 @@
-<script setup lang="ts">
-import { $t } from '@/locales';
-import { convertOptions } from '@/utils/common';
-import { enableStatusOptions } from '@/constants/options';
+<script setup lang="tsx">
+  import { $t } from '@/locales';
+  import { convertOptions } from '@/utils/common';
+  import { enableStatusOptions } from '@/constants/options';
 
-defineOptions({
-  name: 'UserSearch'
-});
+  defineOptions({
+    name: 'UserSearch'
+  });
 
-interface Emits {
-  (e: 'reset'): void;
-  (e: 'search'): void;
-}
+  interface Emits {
+    (e: 'reset'): void;
+    (e: 'search'): void;
+  }
 
-const emit = defineEmits<Emits>();
+  const emit = defineEmits<Emits>();
 
-const model = defineModel<Api.SystemManage.UserSearchParams>('model', { required: true });
+  const model = defineModel<Api.SystemManage.UserSearchParams>('model', { required: true });
 
-const labelCol = { style: { width: '80px' } };
+  const labelCol = { style: { width: '80px' } };
 
-async function reset() {
-  emit('reset');
-}
+  async function reset() {
+    emit('reset');
+  }
 
-async function search() {
-  emit('search');
-}
+  async function search() {
+    emit('search');
+  }
 </script>
 
 <template>

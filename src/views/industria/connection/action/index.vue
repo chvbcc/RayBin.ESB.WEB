@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { $t } from '@/locales';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@/store/modules/app';

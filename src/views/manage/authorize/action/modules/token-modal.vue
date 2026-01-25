@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { ref, shallowRef, watch } from 'vue';
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
 

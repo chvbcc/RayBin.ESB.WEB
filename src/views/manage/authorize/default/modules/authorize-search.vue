@@ -1,60 +1,60 @@
-<script setup lang="ts">
-import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
-import { computed, watch } from 'vue';
-import { $t, language } from '@/locales';
-import { methodOptions } from '@/constants/options';
+<script setup lang="tsx">
+  import type { Dayjs } from 'dayjs';
+  import dayjs from 'dayjs';
+  import { computed, watch } from 'vue';
+  import { $t, language } from '@/locales';
+  import { methodOptions } from '@/constants/options';
 
-defineOptions({
-  name: 'AuthorizeSearch'
-});
+  defineOptions({
+    name: 'AuthorizeSearch'
+  });
 
-interface Emits {
-  (e: 'reset'): void;
-  (e: 'search'): void;
-}
-
-type RangeValue = [Dayjs, Dayjs];
-
-const emit = defineEmits<Emits>();
-
-const model = defineModel<Api.Authorize.AuthorizeSearchParams>('model', { required: true });
-
-const labelCol = language() === 'en-US' ? { style: { width: '130px' } } : { style: { width: '90px' } };
-
-function reset() {
-  emit('reset');
-}
-
-function search() {
-  emit('search');
-}
-
-const isoFormat = 'YYYY-MM-DDTHH:mm:ss';
-
-const dateRange = computed<RangeValue | undefined>({
-  get: () => {
-    const { startCreateTime, endCreateTime } = model.value;
-    if (startCreateTime && endCreateTime) {
-      return [dayjs(startCreateTime), dayjs(endCreateTime)] as RangeValue;
-    }
-    return undefined;
-  },
-  set: value => {
-    if (value && value.length === 2) {
-      model.value.startCreateTime = value[0].format(isoFormat);
-      model.value.endCreateTime = value[1].format(isoFormat);
-    } else {
-      model.value.startCreateTime = undefined;
-      model.value.endCreateTime = undefined;
-    }
+  interface Emits {
+    (e: 'reset'): void;
+    (e: 'search'): void;
   }
-});
 
-// Watch for language changes and update labelCol dynamically
-watch(language, newLang => {
-  labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
-});
+  type RangeValue = [Dayjs, Dayjs];
+
+  const emit = defineEmits<Emits>();
+
+  const model = defineModel<Api.Authorize.AuthorizeSearchParams>('model', { required: true });
+
+  const labelCol = language() === 'en-US' ? { style: { width: '130px' } } : { style: { width: '90px' } };
+
+  function reset() {
+    emit('reset');
+  }
+
+  function search() {
+    emit('search');
+  }
+
+  const isoFormat = 'YYYY-MM-DDTHH:mm:ss';
+
+  const dateRange = computed<RangeValue | undefined>({
+    get: () => {
+      const { startCreateTime, endCreateTime } = model.value;
+      if (startCreateTime && endCreateTime) {
+        return [dayjs(startCreateTime), dayjs(endCreateTime)] as RangeValue;
+      }
+      return undefined;
+    },
+    set: value => {
+      if (value && value.length === 2) {
+        model.value.startCreateTime = value[0].format(isoFormat);
+        model.value.endCreateTime = value[1].format(isoFormat);
+      } else {
+        model.value.startCreateTime = undefined;
+        model.value.endCreateTime = undefined;
+      }
+    }
+  });
+
+  // Watch for language changes and update labelCol dynamically
+  watch(language, newLang => {
+    labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
+  });
 </script>
 
 <template>

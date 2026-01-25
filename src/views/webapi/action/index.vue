@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="tsx" setup>
   import { $t, language } from '@/locales';
   import { ref, onMounted, computed } from 'vue';
   import { TaskWebApi } from '@/service/api/task';

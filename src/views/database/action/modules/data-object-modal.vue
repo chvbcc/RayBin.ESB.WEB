@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { $t } from '@/locales';
 import { computed, ref, watch } from 'vue';
 import { DatabaseSchemaApi } from '@/service/api/task';

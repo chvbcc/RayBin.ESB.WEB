@@ -11,7 +11,7 @@ import { enableStatusRecord,yesOrNoRecord } from '@/constants/options';
 import { useTable, useTableOperate, useTableScroll } from '@/hooks/common/table';
 
 const authStore = useAuthStore();
-const { tableWrapperRef, scrollConfig } = useTableScroll();
+const { scrollConfig } = useTableScroll();
 
 const { columns, columnChecks, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
   apiFn: RoleApi.fetchGetPagingList,
@@ -171,7 +171,7 @@ function edit(id: number) {
       <template #extra>
         <TableHeaderOperation v-model:columns="columnChecks" :disabled-delete="checkedRowKeys.length === 0" :loading="loading" @add="handleAdd" @delete="handleBatchDelete" @refresh="getData" />
       </template>
-      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" :row-selection="rowSelection" size="small"
+      <a-table :columns="columns" :data-source="data" :row-selection="rowSelection" size="small"
         :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="mobilePagination" class="h-full" bordered />
       <RoleOperateDrawer v-model:visible="drawerVisible" :operate-type="operateType" :row-data="editingData" @submitted="getDataByPage" />
       <PermissionModal v-model:visible="permissionModalVisible" :role-id="currentRoleId" @submitted="getDataByPage" />

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { $t } from '@/locales';
 import { onMounted } from 'vue';
 import { computed, ref, watch } from 'vue';

@@ -17,14 +17,14 @@ declare namespace Api {
       taskName: string;
       runMode: Api.Task.RunMode;
       runTime: string | null | undefined;
+      status: Api.Task.TaskStatus;
       userID: number;
       employeeName: string;
-      status: Api.Task.TaskStatus;
       messageType: MessageType;
       messageContent: string;
     }>;
 
     /* Message model */
-    type MessageModel = Pick<Message, 'id' | 'taskID' | 'taskType' | 'taskName' | 'runMode' | 'runTime' | 'userID' | 'employeeName' | 'status' | 'messageType' | 'messageContent'>;
+    type MessageModel = Pick<Message, 'id' | 'taskID' | 'userID' | 'messageType' | 'messageContent'>;
   }
 }

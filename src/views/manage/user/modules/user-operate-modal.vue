@@ -1,176 +1,176 @@
-<script setup lang="ts">
-import { $t } from '@/locales';
-import { computed, ref, watch } from 'vue';
-import { getPromptMessage } from '@/utils/common';
-import { RoleApi, UserApi } from '@/service/api/manage';
-import { useAntdForm, useFormRules } from '@/hooks/common/form';
-import { enableStatusOptions, userGenderOptions } from '@/constants/options';
+<script setup lang="tsx">
+  import { $t } from '@/locales';
+  import { computed, ref, watch } from 'vue';
+  import { getPromptMessage } from '@/utils/common';
+  import { RoleApi, UserApi } from '@/service/api/manage';
+  import { useAntdForm, useFormRules } from '@/hooks/common/form';
+  import { enableStatusOptions, userGenderOptions } from '@/constants/options';
 
-defineOptions({
-  name: 'UserOperate  Modal'
-});
+  defineOptions({
+    name: 'UserOperate  Modal'
+  });
 
-interface Props {
-  operateType: AntDesign.TableOperateType;
-  rowData?: Api.SystemManage.User | null;
-}
+  interface Props {
+    operateType: AntDesign.TableOperateType;
+    rowData?: Api.SystemManage.User | null;
+  }
 
-const props = defineProps<Props>();
+  const props = defineProps<Props>();
 
-interface Emits {
-  (e: 'submitted'): void;
-}
+  interface Emits {
+    (e: 'submitted'): void;
+  }
 
-const emit = defineEmits<Emits>();
+  const emit = defineEmits<Emits>();
 
-const visible = defineModel<boolean>('visible', { default: false });
+  const visible = defineModel<boolean>('visible', { default: false });
 
-const { formRef, validate, resetFields } = useAntdForm();
-const { defaultRequiredRule } = useFormRules();
+  const { formRef, validate, resetFields } = useAntdForm();
+  const { defaultRequiredRule } = useFormRules();
 
-// 1. 定义标题
-const title = computed(() => {
-  const titles: Record<AntDesign.TableOperateType, string> = { add: $t('page.manage.user.addUser'), edit: $t('page.manage.user.editUser') };
-  return titles[props.operateType];
-});
+  // 1. 定义标题
+  const title = computed(() => {
+    const titles: Record<AntDesign.TableOperateType, string> = { add: $t('page.manage.user.addUser'), edit: $t('page.manage.user.editUser') };
+    return titles[props.operateType];
+  });
 
-// 2. 定义默认模型
-const model = ref<Api.SystemManage.UserModel>(createDefaultModel());
+  // 2. 定义默认模型
+  const model = ref<Api.SystemManage.UserModel>(createDefaultModel());
 
-function createDefaultModel(): Api.SystemManage.UserModel {
-  return {
-    id: 0,
-    username: '',
-    password: '',
-    userAvatar: '',
-    employeeName: '',
-    employeeNo: '',
-    gender: '1',
-    phone: '',
-    email: '',
-    weCom: '',
-    dingTalk: '',
-    status: 0,
-  };
-}
+  function createDefaultModel(): Api.SystemManage.UserModel {
+    return {
+      id: 0,
+      username: '',
+      password: '',
+      userAvatar: '',
+      employeeName: '',
+      employeeNo: '',
+      gender: '1',
+      phone: '',
+      email: '',
+      weCom: '',
+      dingTalk: '',
+      status: 0,
+    };
+  }
 
-// 3. 定义表单验证规则
-type RuleKey = Extract<keyof Api.SystemManage.User, 'username' | 'password' | 'employeeName' | 'email' | 'status'>;
+  // 3. 定义表单验证规则
+  type RuleKey = Extract<keyof Api.SystemManage.User, 'username' | 'password' | 'employeeName' | 'email' | 'status'>;
 
-const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => ({
-  username: {
-    required: true,
-    validator: async (_rule: any, value: string) => {
-      const userName = (value ?? '').trim();
-      if (!userName) {
-        return Promise.reject(new Error(($t('page.manage.user.form.username') as string)));
-      }
-      if (userName.length < 3 || userName.length > 20) {
-        return Promise.reject(new Error(($t('page.manage.user.form.usernameLength') as string)));
-      }
-      const { response } = await UserApi.fetchCheckUserName(userName, model.value.id);
-      const data = response.data as { code: string; msg: string; data: boolean };
-      if (data.msg==="success" && data.data) {
-        return Promise.reject(new Error($t('common.exists')));
-      }
-      return Promise.resolve();
+  const rules = computed<Record<RuleKey, App.Global.FormRule>>(() => ({
+    username: {
+      required: true,
+      validator: async (_rule: any, value: string) => {
+        const userName = (value ?? '').trim();
+        if (!userName) {
+          return Promise.reject(new Error(($t('page.manage.user.form.username') as string)));
+        }
+        if (userName.length < 3 || userName.length > 20) {
+          return Promise.reject(new Error(($t('page.manage.user.form.usernameLength') as string)));
+        }
+        const { response } = await UserApi.fetchCheckUserName(userName, model.value.id);
+        const data = response.data as { code: string; msg: string; data: boolean };
+        if (data.msg==="success" && data.data) {
+          return Promise.reject(new Error($t('common.exists')));
+        }
+        return Promise.resolve();
+      },
+      trigger: 'blur'
     },
-    trigger: 'blur'
-  },
-  password: model.value.id === 0
-    ? { required: true, min: 6, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' }
-    : { required: false, min: 0, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' },
-  employeeName: defaultRequiredRule,
-  email: {
-    required: true,
-    validator: async (_rule: any, value: string) => {
-      const email = (value ?? '').trim();
-      if (!email) {
-        return Promise.reject(new Error(($t('page.manage.user.form.email') as string)));
-      }
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailRegex.test(email)) {
-        return Promise.reject(new Error(($t('page.manage.user.form.email') as string)));
-      }
-      const { response } = await UserApi.fetchCheckEmail(email, model.value.id);
-      const data = response.data as { code: string; msg: string; data: boolean };
-      if (data.msg==="success" && data.data) {
-        return Promise.reject(new Error($t('common.exists')));
-      }
-      return Promise.resolve();
+    password: model.value.id === 0
+      ? { required: true, min: 6, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' }
+      : { required: false, min: 0, max: 20, message: $t('page.manage.user.form.passwordLength'), trigger: 'blur' },
+    employeeName: defaultRequiredRule,
+    email: {
+      required: true,
+      validator: async (_rule: any, value: string) => {
+        const email = (value ?? '').trim();
+        if (!email) {
+          return Promise.reject(new Error(($t('page.manage.user.form.email') as string)));
+        }
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email)) {
+          return Promise.reject(new Error(($t('page.manage.user.form.email') as string)));
+        }
+        const { response } = await UserApi.fetchCheckEmail(email, model.value.id);
+        const data = response.data as { code: string; msg: string; data: boolean };
+        if (data.msg==="success" && data.data) {
+          return Promise.reject(new Error($t('common.exists')));
+        }
+        return Promise.resolve();
+      },
+      trigger: 'blur'
     },
-    trigger: 'blur'
-  },
-  status: defaultRequiredRule
-}));
+    status: defaultRequiredRule
+  }));
 
-// 4. 用户角色和角色选项
-const userRoles = ref<number[]>([]);
-const roleOptions = ref<CommonType.Option<number>[]>([]);
+  // 4. 用户角色和角色选项
+  const userRoles = ref<number[]>([]);
+  const roleOptions = ref<CommonType.Option<number>[]>([]);
 
-// 5. 获取角色选项
-async function getRoleOptions() {
-  const { error, data } = await RoleApi.fetchGetList();
-  if (!error) {
-    roleOptions.value = data.map(item => ({
-      label: item.roleName,
-      value: item.id
-    }));
+  // 5. 获取角色选项
+  async function getRoleOptions() {
+    const { error, data } = await RoleApi.fetchGetList();
+    if (!error) {
+      roleOptions.value = data.map(item => ({
+        label: item.roleName,
+        value: item.id
+      }));
+    }
   }
-}
 
-// 6. 获取用户角色
-async function getUserRoles() {
-  if (!model.value.id) return;
-  const { error, data } = await RoleApi.fetchGetRoles(model.value.id);
-  if (!error) {
-    userRoles.value = data.map(item => item.id);
+  // 6. 获取用户角色
+  async function getUserRoles() {
+    if (!model.value.id) return;
+    const { error, data } = await RoleApi.fetchGetRoles(model.value.id);
+    if (!error) {
+      userRoles.value = data.map(item => item.id);
+    }
   }
-}
 
-// 7. 初始化模型
-function handleInitModel() {
-  model.value = createDefaultModel();
-  if (props.operateType === 'edit' && props.rowData) {
-    Object.assign(model.value, {
-      ...props.rowData,
-      password: ''
-    });
+  // 7. 初始化模型
+  function handleInitModel() {
+    model.value = createDefaultModel();
+    if (props.operateType === 'edit' && props.rowData) {
+      Object.assign(model.value, {
+        ...props.rowData,
+        password: ''
+      });
+    }
   }
-}
 
-// 8. 关闭模态框
-function closeModal() {
-  visible.value = false;
-}
-
-// 9. 提交表单
-async function handleSubmit() {
-  await validate();
-  const submitData = { ...model.value, userRoles: userRoles.value };
-  const { error, response } = await UserApi.fetchSave(submitData);
-  if (error) { window.$message?.error(getPromptMessage(props.operateType, "Failed")); return; }
-  const result = response.data as { code: string; msg: string; data: string };
-  if (result.msg === 'success') {
-    window.$message?.success(getPromptMessage(props.operateType, "Success"));
-    closeModal();
-  } else if (result.msg === 'fail') {
-    window.$message?.error(result.data);
-  } else {
-    window.$message?.error(getPromptMessage(props.operateType, "Failed"));
+  // 8. 关闭模态框
+  function closeModal() {
+    visible.value = false;
   }
-  emit('submitted');
-}
 
-// 10. 监听模态框状态
-watch(visible, () => {
-  if (visible.value) {
-    handleInitModel();
-    resetFields();
-    getRoleOptions();
-    getUserRoles();
+  // 9. 提交表单
+  async function handleSubmit() {
+    await validate();
+    const submitData = { ...model.value, userRoles: userRoles.value };
+    const { error, response } = await UserApi.fetchSave(submitData);
+    if (error) { window.$message?.error(getPromptMessage(props.operateType, "Failed")); return; }
+    const result = response.data as { code: string; msg: string; data: string };
+    if (result.msg === 'success') {
+      window.$message?.success(getPromptMessage(props.operateType, "Success"));
+      closeModal();
+    } else if (result.msg === 'fail') {
+      window.$message?.error(result.data);
+    } else {
+      window.$message?.error(getPromptMessage(props.operateType, "Failed"));
+    }
+    emit('submitted');
   }
-});
+
+  // 10. 监听模态框状态
+  watch(visible, () => {
+    if (visible.value) {
+      handleInitModel();
+      resetFields();
+      getRoleOptions();
+      getUserRoles();
+    }
+  });
 </script>
 
 <template>

@@ -1,62 +1,62 @@
-<script setup lang="ts">
-import { Dayjs } from 'dayjs';
-import { $t, language } from '@/locales';
-import { watch, computed } from 'vue';
-import { translateOptions, convertOptions } from '@/utils/common';
-import { taskTypeOptions, logLevelOptions } from '@/constants/options';
-import dayjs from 'dayjs';
+<script setup lang="tsx">
+  import { Dayjs } from 'dayjs';
+  import { $t, language } from '@/locales';
+  import { watch, computed } from 'vue';
+  import { translateOptions, convertOptions } from '@/utils/common';
+  import { taskTypeOptions, logLevelOptions } from '@/constants/options';
+  import dayjs from 'dayjs';
 
-defineOptions({
-  name: 'TaskLogSearch'
-});
+  defineOptions({
+    name: 'TaskLogSearch'
+  });
 
-interface Emits {
-  (e: 'reset'): void;
-  (e: 'search'): void;
-}
-
-type RangeValue = [Dayjs, Dayjs];
-
-const emit = defineEmits<Emits>();
-
-const model = defineModel<Api.Log.SearchParams>('model', { required: true });
-
-const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
-
-function reset() {
-  emit('reset');
-}
-
-function search() {
-  emit('search');
-}
-
-const isoFormat = 'YYYY-MM-DDTHH:mm:ss';
-
-const dateRange = computed<RangeValue | undefined>({
-  get: () => {
-    const { startCreateTime, endCreateTime } = model.value;
-    if (startCreateTime && endCreateTime) {
-      return [dayjs(startCreateTime), dayjs(endCreateTime)] as RangeValue;
-    }
-    return undefined;
-  },
-  set: value => {
-    if (value && value.length === 2) {
-      model.value.startCreateTime = value[0].format(isoFormat);
-      model.value.endCreateTime = value[1].format(isoFormat);
-    } else {
-      model.value.startCreateTime = undefined;
-      model.value.endCreateTime = undefined;
-    }
+  interface Emits {
+    (e: 'reset'): void;
+    (e: 'search'): void;
   }
-});
+
+  type RangeValue = [Dayjs, Dayjs];
+
+  const emit = defineEmits<Emits>();
+
+  const model = defineModel<Api.Log.SearchParams>('model', { required: true });
+
+  const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
+
+  function reset() {
+    emit('reset');
+  }
+
+  function search() {
+    emit('search');
+  }
+
+  const isoFormat = 'YYYY-MM-DDTHH:mm:ss';
+
+  const dateRange = computed<RangeValue | undefined>({
+    get: () => {
+      const { startCreateTime, endCreateTime } = model.value;
+      if (startCreateTime && endCreateTime) {
+        return [dayjs(startCreateTime), dayjs(endCreateTime)] as RangeValue;
+      }
+      return undefined;
+    },
+    set: value => {
+      if (value && value.length === 2) {
+        model.value.startCreateTime = value[0].format(isoFormat);
+        model.value.endCreateTime = value[1].format(isoFormat);
+      } else {
+        model.value.startCreateTime = undefined;
+        model.value.endCreateTime = undefined;
+      }
+    }
+  });
 
 
-// Watch for language changes and update labelCol dynamically
-watch(language, (newLang) => {
-  labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
-});
+  // Watch for language changes and update labelCol dynamically
+  watch(language, (newLang) => {
+    labelCol.style.width = newLang === 'en-US' ? '130px' : '90px';
+  });
 </script>
 
 <template>

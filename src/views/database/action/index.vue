@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script setup lang="tsx">
   import { $t, language } from '@/locales';
+  import { onMounted, computed, ref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useAppStore } from '@/store/modules/app';
   import { useAuthStore } from '@/store/modules/auth';
   import { TaskDatabaseApi } from '@/service/api/task';
-  import { onMounted, computed, ref, watch } from 'vue';
   import DataObjectModal from './modules/data-object-modal.vue';
   import DataHandleModal from './modules/data-handle-modal.vue';
   import { useAntdForm, useFormRules } from '@/hooks/common/form';

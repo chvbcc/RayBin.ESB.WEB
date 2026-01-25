@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
   import { $t, language } from '@/locales';
   import { TaskWebApi } from '@/service/api/task';
   import { useAuthStore } from '@/store/modules/auth';

@@ -38,7 +38,7 @@
       {
         key: 'taskType',
         dataIndex: 'taskType',
-        title: $t('page.task.taskType'),
+        title: $t('page.message.taskType'),
         align: 'center',
         width: 138,
         customRender: ({ record }) => {
@@ -77,7 +77,7 @@
         width: 130,
         customRender:  ({ record })=> (
           <div class="flex-center gap-8px">
-            <a-button type="default" class="blue-btn row-btn" onClick={() => handleAssignUser(record.id)} >
+            <a-button type="default" class="blue-btn row-btn" onClick={() => handleAssignUser(record)} >
               <icon-mdi-account-plus class="align-sub text-16px" />
               <span>{$t('page.message.assignUser')}</span>
             </a-button>
@@ -86,10 +86,21 @@
       }
     ]
   });
-
-  async function handleAssignUser (taskId: number) {
+  // 分配用户
+  async function handleAssignUser (record: Api.Task.TaskModel) {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'message_action' });
+    const model = encodeURIComponent(JSON.stringify({
+        taskId: record.id,
+        taskType: $t(taskTypeRecord[record.taskType]),
+        taskName: record.taskName,
+        runMode: $t(runModeRecord[record.runMode]),
+        status: $t(taskStatusRecord[record.status]),
+        description: record.description
+    }))
+    router.push({
+      name: 'message_action',
+      query: { model }
+    });
   }
 
   // 缓存子表数据（key: 主表行ID, value: 子表数据），避免重复请求
@@ -127,9 +138,9 @@
         <a-table rowKey="id"
           columns={[
             { title: $t('page.message.messageType'), dataIndex: 'messageType', key: 'messageType',
-              customRender: ({ record }: { record: Api.Message.MessageModel }) => {
+              customRender: ({ record }: { record: any }) => {
                 if (record.messageType === null) return null;
-                const label = $t(messageTypeRecord[record.messageType]);
+                const label = $t(messageTypeRecord[record.messageType as Api.Message.MessageType]);
                 return label;
               }
             },
@@ -154,6 +165,7 @@
     expandedRowKeys.value = [];
   }
 </script>
+
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <MessageSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
@@ -169,10 +181,7 @@
           </a-button>
         </div>
       </template>
-      <a-table ref="tableWrapperRef" :columns="columns" :data-source="data" size="small" :loading="loading" row-key="id" :pagination="mobilePagination" bordered
-        :expanded-row-keys="expandedRowKeys"
-        @expand="handleExpand"
-      :expanded-row-render="expandedRowRender" />
+      <a-table :columns="columns" :data-source="data" size="small" :loading="loading" row-key="id" :pagination="mobilePagination" bordered :expanded-row-keys="expandedRowKeys" @expand="handleExpand" :expanded-row-render="expandedRowRender" />
     </a-card>
   </div>
 </template>

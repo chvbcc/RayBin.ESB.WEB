@@ -1,52 +1,52 @@
-<script setup lang="ts">
-import { $t } from '@/locales';
-import { useRouter } from 'vue-router';
-import { computed, ref,onMounted } from 'vue';
-import { fetchGetModel } from '@/service/api/log';
-import { taskTypeRecord, runModeRecord, logLevelRecord } from '@/constants/options';
+<script setup lang="tsx">
+  import { $t } from '@/locales';
+  import { useRouter } from 'vue-router';
+  import { computed, ref,onMounted } from 'vue';
+  import { fetchGetModel } from '@/service/api/log';
+  import { taskTypeRecord, runModeRecord, logLevelRecord } from '@/constants/options';
 
-// 获取路由信息
-const router = useRouter();
-const model = ref<Api.Log.TaskLogModel>(createDefaultModel());
-function createDefaultModel(): Api.Log.TaskLogModel {
-  return {
-    id: 0,
-    taskID: 0,
-    taskType: '5000',
-    runMode: '6000',
-    runTime: '',
-    taskName: '',
-    spentTime: 0,
-    logLevel: 0,
-    message: '',
-    createUserID: 0,
-    createTime: '',
-  };
-}
-
-// 获取 URL 参数中的 id
-const taskId = computed(() => router.currentRoute.value.params.id);
-
-const runMode = computed(() => {
-  if (model.value.runMode ==  '6000') {
-    return ($t(runModeRecord[model.value.runMode])) || $t('page.taskLog.taskDeleted');
+  // 获取路由信息
+  const router = useRouter();
+  const model = ref<Api.Log.TaskLogModel>(createDefaultModel());
+  function createDefaultModel(): Api.Log.TaskLogModel {
+    return {
+      id: 0,
+      taskID: 0,
+      taskType: '5000',
+      runMode: '6000',
+      runTime: '',
+      taskName: '',
+      spentTime: 0,
+      logLevel: 0,
+      message: '',
+      createUserID: 0,
+      createTime: '',
+    };
   }
-  else  {
-    return ($t(runModeRecord[model.value.runMode]) + " " + model.value.runTime) || $t('page.taskLog.taskDeleted');
-  }
-})
 
-// 获取日志详情
-onMounted(async () => {
-  const { error, data } = await fetchGetModel(Number(taskId.value));
-  if (!error) {
-    model.value = data;
-  } else {
-    model.value = createDefaultModel();
-  }
-});
+  // 获取 URL 参数中的 id
+  const taskId = computed(() => router.currentRoute.value.params.id);
 
+  const runMode = computed(() => {
+    if (model.value.runMode ==  '6000') {
+      return ($t(runModeRecord[model.value.runMode])) || $t('page.taskLog.taskDeleted');
+    }
+    else  {
+      return ($t(runModeRecord[model.value.runMode]) + " " + model.value.runTime) || $t('page.taskLog.taskDeleted');
+    }
+  })
+
+  // 获取日志详情
+  onMounted(async () => {
+    const { error, data } = await fetchGetModel(Number(taskId.value));
+    if (!error) {
+      model.value = data;
+    } else {
+      model.value = createDefaultModel();
+    }
+  });
 </script>
+
 <template>
   <div class="min-h-500px flex flex-col h-full lt-sm:overflow-auto pr-3">
     <a-card :title="$t('page.taskLog.viewLogDetail')" :bordered="false" class="card-wrapper">
