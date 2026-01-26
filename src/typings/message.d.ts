@@ -1,7 +1,9 @@
 declare namespace Api {
   namespace Message {
-    /* Task log search params */
-    type SearchParams = Partial<Pick<Message, 'taskName' | 'taskType' | 'runMode' | 'employeeName'> & Common.CommonSearchParams >;
+    /* Task search params */
+    type TaskSearchParams = Partial<Pick<Api.Task.Task, 'taskName' | 'taskType' | 'runMode'> & Pick<Api.SystemManage.User, 'employeeName'> & Common.CommonSearchParams >;
+
+    type UserSearchParams = Partial<Pick<Message, 'taskID'> & Common.CommonSearchParams>;
 
     /* Message list */
     type MessageList = Message[];
@@ -13,16 +15,10 @@ declare namespace Api {
     /* Message */
     type Message = Common.CommonRecord<{
       taskID: number;
-      taskType: Api.Task.TaskType;
-      taskName: string;
-      runMode: Api.Task.RunMode;
-      runTime: string | null | undefined;
-      status: Api.Task.TaskStatus;
       userID: number;
-      employeeName: string;
       messageType: MessageType;
       messageContent: string;
-    }>;
+    }> & Api.SystemManage.User;
 
     /* Message model */
     type MessageModel = Pick<Message, 'id' | 'taskID' | 'userID' | 'messageType' | 'messageContent'>;

@@ -5,13 +5,13 @@
   import { useTable } from '@/hooks/common/table';
   import { useAppStore } from '@/store/modules/app';
   import MessageSearch from './modules/message-search.vue';
-  import { fetchGetPagingList, fetchGetList } from '@/service/api/message';
+  import { fetchGetTaskPagingList, fetchGetList } from '@/service/api/message';
   import { runModeRecord, taskTypeRecord, messageTypeRecord, taskStatusRecord } from '@/constants/options';
 
   const router = useRouter();
   const appStore = useAppStore();
   const { columns, data, loading, getData, getDataByPage, mobilePagination, searchParams, resetSearchParams } = useTable({
-    apiFn: fetchGetPagingList,
+    apiFn: fetchGetTaskPagingList,
     apiParams: {
       current: 1,
       size: 10,
@@ -24,21 +24,21 @@
       {
         key: 'id',
         dataIndex: 'id',
-        title: $t('page.message.taskID'),
+        title: $t('page.task.id'),
         width: 88,
         align: 'center'
       },
       {
         key: 'taskName',
         dataIndex: 'taskName',
-        title: $t('page.message.taskName'),
+        title: $t('page.task.taskName'),
         align: 'center',
         minWidth: 120
       },
       {
         key: 'taskType',
         dataIndex: 'taskType',
-        title: $t('page.message.taskType'),
+        title: $t('page.task.taskType'),
         align: 'center',
         width: 138,
         customRender: ({ record }) => {
@@ -50,7 +50,7 @@
       {
         key: 'runMode',
         dataIndex: 'runMode',
-        title: $t('page.message.runMode'),
+        title: $t('page.task.runMode'),
         minWidth: 120,
         customRender: ({ record } )=> {
           if (record.runMode === null) return null;
@@ -61,7 +61,7 @@
       {
         key: 'status',
         dataIndex: 'status',
-        title: $t('page.message.taskStatus'),
+        title: $t('page.task.status'),
         align: 'center',
         minWidth: 120,
         customRender: ({ record })=> {
@@ -138,17 +138,17 @@
         <a-table rowKey="id"
           columns={[
             { title: $t('page.message.messageType'), dataIndex: 'messageType', key: 'messageType',
-              customRender: ({ record }: { record: any }) => {
+              customRender: ({ record }: { record: Api.Message.Message }) => {
                 if (record.messageType === null) return null;
                 const label = $t(messageTypeRecord[record.messageType as Api.Message.MessageType]);
                 return label;
               }
             },
-            { title: $t('page.message.employeeName'), dataIndex: 'employeeName', key: 'employeeName' },
-            { title: $t('page.message.employeeNo'), dataIndex: 'employeeNo', key: 'employeeNo' },
-            { title: $t('page.message.weCom'), dataIndex: 'weCom', key: 'weCom' },
-            { title: $t('page.message.dingTalk'), dataIndex: 'dingTalk', key: 'dingTalk' },
-            { title: $t('page.message.email'), dataIndex: 'email', key: 'email' },
+            { title: $t('page.manage.user.employeeName'), dataIndex: 'employeeName', key: 'employeeName' },
+            { title: $t('page.manage.user.employeeNo'), dataIndex: 'employeeNo', key: 'employeeNo' },
+            { title: $t('page.manage.user.weCom'), dataIndex: 'weCom', key: 'weCom' },
+            { title: $t('page.manage.user.dingTalk'), dataIndex: 'dingTalk', key: 'dingTalk' },
+            { title: $t('page.manage.user.email'), dataIndex: 'email', key: 'email' },
           ]}
           dataSource={subTableDataCache.value[record.record.id] || []}
           pagination={false}

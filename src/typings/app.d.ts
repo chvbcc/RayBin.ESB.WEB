@@ -660,26 +660,10 @@ declare namespace App {
           title: string;
           assignedUsers: string;
           taskinfo: string;
-          taskID: string;
-          taskName: string;
-          taskType: string;
-          runMode: string;
-          runTime: string;
-          taskStatus: string;
-          description: string;
-          employeeName: string;
-          employeeNo: string;
-          weCom: string;
-          dingTalk: string;
-          email: string;
-          userStatus: string;
           assignUser: string;
           messageType: string;
           messageContent: string;
           form: {
-            taskType: string;
-            taskName: string;
-            runMode: string;
             employeeName: string;
           }
         };

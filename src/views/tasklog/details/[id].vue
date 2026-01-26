@@ -73,7 +73,8 @@
           <a-button type="default" class="blue-btn" @click="router.back()">
             <icon-stash:arrow-reply-solid class="align-sub text-icon" />
              <span style="padding-left:5px;">{{$t('common.back')}}</span>
-          </a-button></a-col>
+          </a-button>
+        </a-col>
       </a-row>
     </a-card>
   </div>

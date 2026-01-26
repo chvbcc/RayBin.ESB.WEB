@@ -14,7 +14,7 @@
 
   const emit = defineEmits<Emits>();
 
-  const model = defineModel<Api.Message.SearchParams>('model', { required: true });
+  const model = defineModel<Api.Message.TaskSearchParams>('model', { required: true });
 
   const labelCol = language() === 'en-US' ?  { style: { width: '130px' } } :  { style: { width: '90px' } };
 
@@ -37,23 +37,23 @@
     <a-form :model="model"  :label-col="labelCol" :labelWrap="true">
       <a-row :gutter="[16, 16]" wrap>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.message.taskName')" name="taskName" class="m-0">
+          <a-form-item :label="$t('page.task.taskName')" name="taskName" class="m-0">
             <a-input v-model:value="model.taskName" :placeholder="$t('page.task.form.taskName')" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.message.taskType')" name="taskType" class="m-0">
+          <a-form-item :label="$t('page.task.taskType')" name="taskType" class="m-0">
             <a-select v-model:value="model.taskType" :placeholder="$t('page.taskLog.form.taskType')" :options="translateOptions(taskTypeOptions)" allow-clear>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.message.runMode')" name="runMode" class="m-0">
+          <a-form-item :label="$t('page.task.runMode')" name="runMode" class="m-0">
             <a-select v-model:value="model.runMode" :placeholder="$t('page.task.form.runMode')" :options="translateOptions(runModeOptions)" allow-clear />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="12" :lg="12">
-          <a-form-item :label="$t('page.message.employeeName')" name="employeeName" class="m-0">
+          <a-form-item :label="$t('page.manage.user.employeeName')" name="employeeName" class="m-0">
             <a-input v-model:value="model.employeeName" :placeholder="$t('page.message.form.employeeName')" />
           </a-form-item>
         </a-col>

@@ -1,8 +1,16 @@
 import { request } from '../request';
 
 /** get task log list */
-export function fetchGetPagingList(params?: Api.Message.SearchParams) {
+export function fetchGetTaskPagingList(params?: Api.Message.TaskSearchParams) {
   return request<Api.Task.TaskList>({
+    url: '/message/getTaskPagingList',
+    method: 'get',
+    params
+  });
+}
+
+export function fetchGetPagingList(params?: Api.Message.UserSearchParams) {
+  return request({
     url: '/message/getPagingList',
     method: 'get',
     params
@@ -35,10 +43,10 @@ export function fetchSave(data: Api.Connection.ConnectionModel) {
   });
 }
 
-/** delete connection by id */
+/** batch delete by ids */
 export function fetchDeletes(ids: number[]) {
   return request({
-    url: '/tasklog/delete',
+    url: '/message/delete',
     method: 'delete',
     data: ids,
   });

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
   import { $t } from '@/locales';
   import { h, nextTick, ref, computed } from 'vue';
   import type { FormInstance } from 'ant-design-vue';

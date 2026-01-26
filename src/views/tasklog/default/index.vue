@@ -117,7 +117,6 @@
     ]
   });
 
-
   const { checkedRowKeys, rowSelection, onDeleted } = useTableOperate(data, getData);
   const disableDelete = computed(() => !checkedRowKeys.value.length || loading.value);
 
@@ -171,13 +170,12 @@
     <TaskLogSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
     <a-card :title="$t('page.taskLog.title')" :bordered="false" class="card-wrapper sm:flex-1-hidden">
       <template #extra>
-          <div class="flex flex-wrap justify-end gap-x-12px gap-y-8px lt-sm:(w-200px py-12px)">
-          <slot name="prefix"></slot>
+        <div class="flex flex-wrap justify-end gap-x-12px gap-y-8px lt-sm:(w-200px py-12px)">
           <slot name="default">
             <a-popconfirm :title="$t('common.confirmDelete')" :disabled="disableDelete" @confirm="handleDeletes">
               <a-button type="primary" ghost :disabled="disableDelete">
                 <template #icon>
-                  <icon-ic-round-plus class="align-sub text-icon" />
+                  <icon-mdi-trash-can-outline class="align-sub text-icon" />
                 </template>
                 <span class="ml-5px">{{ $t('common.delete') }}</span>
               </a-button>
