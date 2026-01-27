@@ -483,14 +483,37 @@ const local: App.I18n.Schema = {
     },
     message: {
       title: 'Notification Message',
+      messageEdit: 'Edit Message',
       taskinfo: 'Task Info',
       assignedUsers: 'Assigned Users',
       assignUser: 'Assign User',
       messageType: 'Message Type',
+      messageField:'Message Field',
+      messageInsert: 'Insert Message',
       messageContent: 'Message Content',
+      userSearchField:'Search Fields',
+      userSearch: 'Search User',
       form: {
+        messageType: 'Please select message type',
+        messageField: 'Please select message field',
+        messageContent: 'Please enter message content',
         employeeName: 'Please enter employee name',
+        userSearchField: 'Please select search field',
+        userSearchKeyword: 'Please enter search keyword',
       },
+      messageInsertFields: {
+        taskID: "Task No.",
+        taskName: "Task Name",
+        runModeTime: "Run Mode Time",
+        runTime: "Run Time",
+      },
+      userSearchFields: {
+        username: "Username",
+        employeeName: "Employee Name",
+        employeeNo: "Employee No.",
+        phone: "Phone",
+        email: "Email",
+      }
     },
     authorize: {
       title: 'Authorize Management',
@@ -635,8 +658,8 @@ const local: App.I18n.Schema = {
         gender: 'Gender',
         phone: 'Phone',
         email: 'Email',
-        weCom: 'WeCom ID',
-        dingTalk: 'Ding Talk ID',
+        weCom: 'WeCom',
+        dingTalk: 'Ding Talk',
         status: 'Status',
         userRoles: 'User Role',
         form: {

@@ -9,41 +9,46 @@ export function fetchGetTaskPagingList(params?: Api.Message.TaskSearchParams) {
   });
 }
 
-export function fetchGetPagingList(params?: Api.Message.UserSearchParams) {
+export function getAssignedUserPagingList(params?: Api.Message.UserSearchParams) {
   return request({
-    url: '/message/getPagingList',
+    url: '/message/getAssignedUserPagingList',
     method: 'get',
     params
   });
 }
 
-export function fetchGetList(taskId?: number) {
+export function fetchGetAssignedUserList(taskId?: number) {
   return request<Api.Message.MessageList>({
-    url: '/message/getList',
+    url: '/message/getAssignedUserList',
     method: 'get',
     params: { taskId }
   });
 }
 
-export function fetchGetModel(id: number) {
-  return request({
-    url: '/tasklog/getModel',
+export function fetchGetUserPagingList(params?: Api.Message.UserSearchParams) {
+  return request<Api.SystemManage.UserList>({
+    url: '/message/getUserPagingList',
     method: 'get',
-    params: { id }
+    params
   });
 }
 
-/** save connection */
-export function fetchSave(data: Api.Connection.ConnectionModel) {
-  let url = data.id === 0 ? '/connection/add' : '/connection/update';
+export function fetchSave(data: Api.Message.MessageModel) {
   return request({
-    url: url,
+    url: 'message/save',
     method: 'post',
     data
   });
 }
 
-/** batch delete by ids */
+export function fetchUpdate(data: Api.Message.MessageModel) {
+  return request({
+    url: 'message/update',
+    method: 'post',
+    data
+  });
+}
+
 export function fetchDeletes(ids: number[]) {
   return request({
     url: '/message/delete',

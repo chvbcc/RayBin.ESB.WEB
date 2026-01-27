@@ -5,7 +5,7 @@
   import { useTable } from '@/hooks/common/table';
   import { useAppStore } from '@/store/modules/app';
   import MessageSearch from './modules/message-search.vue';
-  import { fetchGetTaskPagingList, fetchGetList } from '@/service/api/message';
+  import { fetchGetTaskPagingList, fetchGetAssignedUserList } from '@/service/api/message';
   import { runModeRecord, taskTypeRecord, messageTypeRecord, taskStatusRecord } from '@/constants/options';
 
   const router = useRouter();
@@ -90,7 +90,7 @@
   async function handleAssignUser (record: Api.Task.TaskModel) {
     appStore.tabStore.removeActiveTab();
     const model = encodeURIComponent(JSON.stringify({
-        taskId: record.id,
+        taskID: record.id,
         taskType: $t(taskTypeRecord[record.taskType]),
         taskName: record.taskName,
         runMode: $t(runModeRecord[record.runMode]),
@@ -110,7 +110,7 @@
   // 异步获取子表数据（带缓存）
   const getExpandedSubData =async (id: number) => {
     if (subTableDataCache.value[id]) return subTableDataCache.value[id];
-    const { data } = await fetchGetList(id);
+    const { data } = await fetchGetAssignedUserList(id);
     subTableDataCache.value[id] = data || [];
     return subTableDataCache.value[id];
   };

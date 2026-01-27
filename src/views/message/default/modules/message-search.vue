@@ -34,7 +34,7 @@
 
 <template>
   <a-card :title="$t('common.search')" :bordered="false" class="card-wrapper">
-    <a-form :model="model"  :label-col="labelCol" :labelWrap="true">
+    <a-form :model="model" :label-col="labelCol" :labelWrap="true">
       <a-row :gutter="[16, 16]" wrap>
         <a-col :span="24" :md="12" :lg="12">
           <a-form-item :label="$t('page.task.taskName')" name="taskName" class="m-0">

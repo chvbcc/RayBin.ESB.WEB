@@ -97,6 +97,23 @@ export const messageTypeRecord: Record<Api.Message.MessageType, App.I18n.I18nKey
 };
 export const messageTypeOptions = convertRecordToOption(messageTypeRecord);
 
+export const messageInsertFieldsRecord: Record<Api.Message.MessageInsertFields, App.I18n.I18nKey> = {
+  0: 'page.message.messageInsertFields.taskID',
+  1: 'page.message.messageInsertFields.taskName',
+  2: 'page.message.messageInsertFields.runModeTime',
+  3: 'page.message.messageInsertFields.runTime',
+};
+export const messageInsertFieldsOptions = convertRecordToOption(messageInsertFieldsRecord);
+
+export const userSearchFieldsRecord: Record<Api.Message.UserSearchFields, App.I18n.I18nKey> = {
+  0: 'page.message.userSearchFields.username',
+  1: 'page.message.userSearchFields.employeeName',
+  2: 'page.message.userSearchFields.employeeNo',
+  3: 'page.message.userSearchFields.phone',
+  4: 'page.message.userSearchFields.email',
+};
+export const userSearchFieldsOptions = convertRecordToOption(userSearchFieldsRecord);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // log
 // log level

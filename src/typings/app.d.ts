@@ -658,13 +658,36 @@ declare namespace App {
         };
         message: {
           title: string;
+          messageEdit: string;
           assignedUsers: string;
           taskinfo: string;
           assignUser: string;
           messageType: string;
+          messageField: string;
+          messageInsert: string;
           messageContent: string;
+          userSearchField: string;
+          userSearch: string;
           form: {
+            messageType: string;
+            messageField: string;
+            messageContent: string;
             employeeName: string;
+            userSearchField: string;
+            userSearchKeyword: string;
+          }
+          messageInsertFields: {
+            taskID: string;
+            taskName: string;
+            runModeTime: string;
+            runTime: string;
+          }
+          userSearchFields: {
+            username: string;
+            employeeName: string;
+            employeeNo: string;
+            phone: string;
+            email: string;
           }
         };
         authorize : {

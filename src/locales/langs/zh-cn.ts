@@ -483,14 +483,37 @@ const local: App.I18n.Schema = {
     },
     message: {
       title: '通知消息',
+      messageEdit: '编辑消息',
       taskinfo: '任务信息',
       assignedUsers: '已分配的用户',
       assignUser: '分配用户',
       messageType: '消息类型',
+      messageField:'消息字段',
+      messageInsert: '插入消息',
       messageContent: '消息内容',
+      userSearchField:'搜索字段',
+      userSearch: '搜索用户',
       form: {
-        employeeName: '请输入接收消息的员工姓名'
+        messageType: '请选择消息类型',
+        messageField: '请选择消息字段',
+        messageContent: '请输入消息内容',
+        employeeName: '请输入接收消息的员工姓名',
+        userSearchField: '请选择搜索字段',
+        userSearchKeyword: '请输入搜索关键字',
       },
+      messageInsertFields: {
+        taskID: "任务编号",
+        taskName: "任务名称",
+        runModeTime: "运行方式时间",
+        runTime: "运行时间",
+      },
+      userSearchFields: {
+        username: "用户名",
+        employeeName: "员工姓名",
+        employeeNo: "员工编号",
+        phone: "电话",
+        email: "电子邮件",
+      }
     },
     authorize: {
       title: '授权管理',
@@ -635,8 +658,8 @@ const local: App.I18n.Schema = {
         gender: '性别',
         phone: '电话',
         email: '邮箱',
-        weCom: '微信标识',
-        dingTalk: '钉钉标识',
+        weCom: '企业微信',
+        dingTalk: '钉钉',
         status: '状态',
         userRoles: '用户角色',
         form: {
