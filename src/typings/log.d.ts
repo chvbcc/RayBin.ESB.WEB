@@ -6,7 +6,6 @@ declare namespace Api {
     /* TaskLog list */
     type TaskLogList = Common.PaginatingQueryRecord<TaskLog>;
 
-
     /* Log levels  0 info  1 Successc 2 warning  2 Failure  3 debug */
     type LogLevel = 0 | 1 | 2 | 3 | 4;
 
@@ -15,7 +14,9 @@ declare namespace Api {
       taskID: number;
       taskType: Api.Task.TaskType;
       runMode: Api.Task.RunMode;
-      runTime: string | null | undefined;
+      runWeek: Api.Task.RunWeek;
+      runTime: string;
+      runFrequency: number;
       taskName: string;
       logLevel: LogLevel;
       message: string;
@@ -25,6 +26,6 @@ declare namespace Api {
     }>;
 
     /* TaskLog model */
-    type TaskLogModel = Pick<TaskLog, 'id' | 'taskID' | 'taskType' | 'runMode' | 'runTime' | 'taskName' | 'logLevel' | 'message' | 'spentTime' | 'createUserID' | 'createTime'>;
+    type TaskLogModel = Pick<TaskLog, 'id' | 'taskID' | 'taskType' | 'runMode' | 'runWeek' | 'runTime' | 'runFrequency' | 'taskName' | 'logLevel' | 'message' | 'spentTime' | 'createUserID' | 'createTime'>;
   }
 }

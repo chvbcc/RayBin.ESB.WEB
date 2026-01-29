@@ -2,6 +2,7 @@
   import { $t } from '@/locales';
   import { useRouter } from 'vue-router';
   import { computed, ref,onMounted } from 'vue';
+  import { formatRunTime } from '@/utils/common';
   import { fetchGetModel } from '@/service/api/log';
   import { taskTypeRecord, runModeRecord, logLevelRecord } from '@/constants/options';
 
@@ -14,7 +15,9 @@
       taskID: 0,
       taskType: '5000',
       runMode: '6000',
+      runWeek: 1,
       runTime: '',
+      runFrequency: 0,
       taskName: '',
       spentTime: 0,
       logLevel: 0,
@@ -28,12 +31,15 @@
   const taskId = computed(() => router.currentRoute.value.params.id);
 
   const runMode = computed(() => {
+    // 6000 手动执行
     if (model.value.runMode ==  '6000') {
       return ($t(runModeRecord[model.value.runMode])) || $t('page.taskLog.taskDeleted');
     }
-    else  {
-      return ($t(runModeRecord[model.value.runMode]) + " " + model.value.runTime) || $t('page.taskLog.taskDeleted');
+    // 6005 时间间隔
+    if (model.value.runMode ==  '6005') {
+      return ($t(runModeRecord[model.value.runMode]) + " " + model.value.runFrequency) || $t('page.taskLog.taskDeleted');
     }
+    return ($t(runModeRecord[model.value.runMode]) + " " + formatRunTime(model.value.runTime, model.value.runMode, model.value.runWeek)) || $t('page.taskLog.taskDeleted');
   })
 
   // 获取日志详情

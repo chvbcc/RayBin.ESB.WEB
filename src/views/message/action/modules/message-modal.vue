@@ -8,7 +8,6 @@
   import { fetchGetUserPagingList, fetchSave } from '@/service/api/message';
   import { enableStatusRecord, userGenderRecord, messageTypeOptions, messageInsertFieldsOptions, userSearchFieldsOptions } from '@/constants/options';
 
-
   // 定义组件名称
   defineOptions({
     name: 'MessageModal'
@@ -101,14 +100,15 @@
       dataIndex: 'weCom',
       title: $t('page.manage.user.weCom'),
       align: 'center',
-      width: 100
+      width: 130
     },
     {
       key: 'dingTalk',
       dataIndex: 'dingTalk',
       title: $t('page.manage.user.dingTalk'),
       align: 'center',
-      width: 90
+      width: 130,
+      ellipsis: true
     },
     {
       key: 'status',
@@ -172,12 +172,10 @@
   // #region 6. 插入字段
   async function handleInsert() {
     if (messageFields.value === undefined || messageFields.value === null) return;
-
     // 获取文本框的当前值和光标位置
     const textarea: HTMLTextAreaElement | null =
       messageContentRef.value?.resizableTextArea?.textArea ||
-      messageContentRef.value?.$el?.querySelector('textarea') ||
-      null;
+      messageContentRef.value?.$el?.querySelector('textarea') || null;
     if (!textarea) return;
     const start = textarea.selectionStart ?? 0;
     const end = textarea.selectionEnd ?? 0;
@@ -249,6 +247,11 @@
               <a-select v-model:value="messageFields" :placeholder="$t('page.message.form.messageField')" :options="convertOptions(messageInsertFieldsOptions)" allow-clear />
               <a-button type="primary" class="orange-btn ml-3" @click="handleInsert">{{$t('page.message.messageInsert')}}</a-button>
             </div>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24" :md="24" :lg="24">
+          <a-form-item :label="$t('page.message.emailSubject')" name="emailSubject" class="m-0" :rules="[{ required: model.messageType === 3}]">
+            <a-input v-model:value="model.emailSubject" :rows="4" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="24" :lg="24">

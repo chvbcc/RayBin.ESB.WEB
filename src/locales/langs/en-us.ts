@@ -330,6 +330,7 @@ const local: App.I18n.Schema = {
       taskType: 'Task Type',
       taskName: 'Task Name',
       runMode: 'Run Mode',
+      runWeek: 'Run Week',
       runTime: 'Run Time',
       runFrequency: 'Run Frequency',
       isDebug: 'Is Debug',
@@ -351,8 +352,9 @@ const local: App.I18n.Schema = {
         taskType: 'Please select task type',
         taskName: 'Please enter task name',
         runMode: 'Please select run mode',
+        runWeek: 'Please select run week',
         runTime: 'Please enter run time',
-        runFrequency: 'Please enter run frequency',
+        runFrequency: 'Please enter run frequency (seconds)',
         isDebug: 'Please select is debug',
         description: 'Please enter task description',
         status: 'Please select task status'
@@ -488,6 +490,7 @@ const local: App.I18n.Schema = {
       assignedUsers: 'Assigned Users',
       assignUser: 'Assign User',
       messageType: 'Message Type',
+      emailSubject: 'Email Subject',
       messageField:'Message Field',
       messageInsert: 'Insert Message',
       messageContent: 'Message Content',
@@ -495,6 +498,7 @@ const local: App.I18n.Schema = {
       userSearch: 'Search User',
       form: {
         messageType: 'Please select message type',
+        emailSubject: 'Please enter email subject',
         messageField: 'Please select message field',
         messageContent: 'Please enter message content',
         employeeName: 'Please enter employee name',
@@ -833,10 +837,20 @@ const local: App.I18n.Schema = {
     },
     runMode: {
       manualOperation: 'Manual Operation',
-      everyDay: 'Every Day',
+      daily: 'Daily',
+      weekly: 'Weekly',
       monthly: 'Monthly',
       annually: 'Annually',
       timeInterval: 'Time Interval',
+    },
+    runWeek: {
+      monday: 'Monday',
+      tuesday: 'Tuesday',
+      wednesday: 'Wednesday',
+      thursday: 'Thursday',
+      friday: 'Friday',
+      saturday: 'Saturday',
+      sunday: 'Sunday'
     },
     dataObjectType: {
       table: 'Table',

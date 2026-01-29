@@ -505,6 +505,7 @@ declare namespace App {
           taskType: string;
           taskName: string;
           runMode: string;
+          runWeek: string;
           runTime: string;
           runFrequency: string;
           isDebug: string;
@@ -526,6 +527,7 @@ declare namespace App {
             taskType: string;
             taskName: string;
             runMode: string;
+            runWeek: string;
             runTime: string;
             runFrequency: string;
             isDebug: string;
@@ -663,6 +665,7 @@ declare namespace App {
           taskinfo: string;
           assignUser: string;
           messageType: string;
+          emailSubject: string;
           messageField: string;
           messageInsert: string;
           messageContent: string;
@@ -670,6 +673,7 @@ declare namespace App {
           userSearch: string;
           form: {
             messageType: string;
+            emailSubject: string;
             messageField: string;
             messageContent: string;
             employeeName: string;
@@ -985,10 +989,20 @@ declare namespace App {
         };
         runMode: {
           manualOperation: string;
-          everyDay: string;
+          daily: string;
+          weekly: string;
           monthly: string;
           annually: string;
           timeInterval: string;
+        };
+        runWeek: {
+          monday: string;
+          tuesday: string;
+          wednesday: string;
+          thursday: string;
+          friday: string;
+          saturday: string;
+          sunday: string;
         };
         dataObjectType: {
           table: string;

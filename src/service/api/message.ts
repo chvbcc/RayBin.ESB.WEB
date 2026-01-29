@@ -35,7 +35,7 @@ export function fetchGetUserPagingList(params?: Api.Message.UserSearchParams) {
 
 export function fetchSave(data: Api.Message.MessageModel) {
   return request({
-    url: 'message/save',
+    url: 'message/add',
     method: 'post',
     data
   });

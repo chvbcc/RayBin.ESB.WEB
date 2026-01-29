@@ -57,12 +57,25 @@ export const taskTypeOptions = transformRecordToOption(taskTypeRecord);
 /** runMode */
 export const runModeRecord: Record<Api.Task.RunMode, App.I18n.I18nKey> = {
   '6000': 'dropdownList.runMode.manualOperation',
-  '6001': 'dropdownList.runMode.everyDay',
-  '6002': 'dropdownList.runMode.monthly',
-  '6003': 'dropdownList.runMode.annually',
-  '6004': 'dropdownList.runMode.timeInterval'
+  '6001': 'dropdownList.runMode.daily',
+  '6002': 'dropdownList.runMode.weekly',
+  '6003': 'dropdownList.runMode.monthly',
+  '6004': 'dropdownList.runMode.annually',
+  '6005': 'dropdownList.runMode.timeInterval'
 };
 export const runModeOptions = transformRecordToOption(runModeRecord);
+
+// run Week 1 Monday, 2 Tuesday, 3 Wednesday, 4 Thursday, 5 Friday, 6 Saturday, 7 Sunday
+export const runWeekRecord: Record<Api.Task.RunWeek, App.I18n.I18nKey> = {
+  1: 'dropdownList.runWeek.monday',
+  2: 'dropdownList.runWeek.tuesday',
+  3: 'dropdownList.runWeek.wednesday',
+  4: 'dropdownList.runWeek.thursday',
+  5: 'dropdownList.runWeek.friday',
+  6: 'dropdownList.runWeek.saturday',
+  7: 'dropdownList.runWeek.sunday'
+}
+export const runWeekOptions = convertRecordToOption(runWeekRecord);
 
 // task status
 export const taskStatusRecord: Record<Api.Task.TaskStatus, App.I18n.I18nKey> = {

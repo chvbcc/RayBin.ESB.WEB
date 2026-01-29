@@ -10,8 +10,11 @@ declare namespace Api {
     // Task 5000 Database, 5001 WebApi, 5002 Industry PLC
     type TaskType = '5000' | '5001' | '5002';
 
-    // Run mode 6000 Manual Operation, 6001 Every Day, 6002 Monthly, 6003 Annually, 6004 Time Interval
-    type RunMode = '6000' | '6001' | '6002' | '6003' | '6004';
+    // Run mode 6000 Manual Operation, 6001 Daily, 6002 Weekly,  6003 Monthly, 6004 Annually, 6005 Time Interval
+    type RunMode = '6000' | '6001' | '6002' | '6003' | '6004' | '6005';
+
+    // Run week 1 Monday, 2 Tuesday, 3 Wednesday, 4 Thursday, 5 Friday, 6 Saturday, 7 Sunday
+    type RunWeek =  1 | 2 | 3 | 4 | 5 | 6 | 7;
 
     // Data handle 0 No, 1 Yes
     type DataHandle = 0 | 1;
@@ -29,13 +32,14 @@ declare namespace Api {
       taskType: TaskType;
       taskName: string;
       runMode: RunMode;
-      runTime: string | null | undefined;
+      runWeek: RunWeek | undefined;
+      runTime: string | undefined;
       runFrequency: number;
       isDebug: boolean;
       status: TaskStatus;
       description: string;
     }>;
-    type TaskModel = Pick<Task, | 'id' | 'taskType' | 'taskName' | 'runMode' | 'runTime' | 'runFrequency' | 'isDebug' | 'status' | 'description'>;
+    type TaskModel = Pick<Task, | 'id' | 'taskType' | 'taskName' | 'runMode' | 'runWeek' | 'runTime' | 'runFrequency' | 'isDebug' | 'status' | 'description'>;
 
     // Mapping Dialog
     type DialogModal = {

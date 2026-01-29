@@ -15,6 +15,7 @@
   interface Props {
     id: number;
     messageType: Api.Message.MessageType;
+    emailSubject: string;
     messageContent: string;
   }
 
@@ -66,6 +67,7 @@
   // #region 7. 确认
   async function handleConfirm() {
     formRefTask.value?.validate().then(async () => {
+      debugger
       const { error } = await fetchUpdate(model.value);
       if (error) return;
       emit('confirm');
@@ -85,6 +87,7 @@
     if (newVal) {
       model.value.id= props.id;
       model.value.messageType = Number(props.messageType) as Api.Message.MessageType;
+      model.value.emailSubject = props.emailSubject;
       model.value.messageContent = props.messageContent;
     } else {
       messageFields.value = undefined;
@@ -101,6 +104,11 @@
         <a-col :span="24" :md="24" :lg="24">
           <a-form-item :label="$t('page.message.messageType')" name="messageType" class="m-0" :rules="[{ required: true}]">
             <a-select v-model:value="model.messageType" :placeholder="$t('page.message.form.messageType')" :options="convertOptions(messageTypeOptions)" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24" :md="24" :lg="24">
+          <a-form-item :label="$t('page.message.emailSubject')" name="emailSubject" class="m-0" :rules="[{ required: model.messageType === 3}]">
+            <a-input v-model:value="model.emailSubject" :rows="4" />
           </a-form-item>
         </a-col>
         <a-col :span="24" :md="24" :lg="24">

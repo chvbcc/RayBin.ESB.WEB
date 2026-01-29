@@ -1,6 +1,7 @@
 <script setup lang="tsx">
   import { $t, language } from '@/locales';
-  import { onMounted, computed, ref } from 'vue';
+  import { getWeek } from '@/utils/common';
+  import { onMounted, computed, ref, watch } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useAppStore } from '@/store/modules/app';
   import { useAuthStore } from '@/store/modules/auth';
@@ -10,8 +11,8 @@
   import { useAntdForm, useFormRules } from '@/hooks/common/form';
   import { fetchGetConnectionOptions } from '@/service/api/connection';
   import RelationDiagram from '@/components/database/relation-diagram.vue';
-  import { convertOptions, translateOptions, convertDateTime, getPromptMessage } from '@/utils/common';
-  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions, dataObjectTypeOptions, taskStatusOptions, programmeLanguageOptions } from '@/constants/options';
+  import { convertOptions, translateOptions, getPromptMessage } from '@/utils/common';
+  import { booleanYesOrNoOptions, dataHandleOptions, runModeOptions, runWeekOptions, dataObjectTypeOptions, taskStatusOptions, programmeLanguageOptions } from '@/constants/options';
 
   // #region 1. 参数定义
   const route = useRoute();
@@ -21,14 +22,12 @@
   const { formRef: formRefTask } = useAntdForm();
   const { formRef: formRefDialog } = useAntdForm();
 
-
   const { defaultRequiredRule } = useFormRules();
   const relationDiagramRef =  ref<InstanceType<typeof RelationDiagram>>();
 
   const connectionOptions = ref<{ label: string; value: number }[]>([]);
   const dataHandleModalVisible = ref(false);
   const dataObjectModalVisible = ref(false);
-
 
   const dialogModel = ref<Api.Task.DialogModal>({connectionID: undefined, dataObjectType: 'table'});
   const selectedDataObjectNames = ref<string[]>([]);
@@ -39,13 +38,6 @@
   // 定义默认模型
   const model = ref<Api.Task.TaskDatabaseModel>(createDefaultModel());
 
-  const runTimeValue = computed<string | undefined>({
-    get: () => convertDateTime(model.value.task.runTime),
-    set: value => {
-        model.value.task.runTime = convertDateTime(value);
-    }
-  });
-
   function createDefaultModel(): Api.Task.TaskDatabaseModel {
     return {
       task: {
@@ -53,7 +45,8 @@
         taskType: '5000',
         taskName: '',
         runMode: '6000',
-        runFrequency: 0, // 应为数字类型
+        runWeek: undefined,
+        runFrequency: 10,
         runTime: undefined,
         isDebug: false,
         status: 0,
@@ -141,13 +134,18 @@
 
   // #region 5. 保存数据对象
   async function handleSave() {
+    if (model.value.task.status == 0 && relationDiagramRef.value?.validateUnusedNodes()) model.value.task.status = 1;
     formRefTask.value?.validate().then(async () => {
+      if (model.value.taskDatabase.dataHandle == 1 && model.value.taskDatabase.dataHandleScript.trim() === '') {
+        window.$message?.error($t('page.database.form.dataHandleScript') as string);
+        return;
+      }
       model.value.taskDatabase.diagramData = JSON.stringify(relationDiagramRef.value?.getData());
+      model.value.task.runTime = model.value.task.runTime ? model.value.task.runTime.replace(' ', 'T') : undefined;
       const payload: Api.Task.TaskDatabaseModel = {
         task: { ...model.value.task },
         taskDatabase: { ...model.value.taskDatabase }
       };
-
       // 提交保存
       const { error, response } = await TaskDatabaseApi.fetchSave(payload);
       if (error) { window.$message?.error(getPromptMessage(route.query, "Failed")); return; }
@@ -164,11 +162,6 @@
     }).catch(() => {
       return;
     });
-
-    if (model.value.task.status == 0 && relationDiagramRef.value?.validateUnusedNodes()) {
-      window.$message?.error($t('page.database.needDataMapping'));
-      return;
-    }
   }
   // #endregion
 
@@ -201,9 +194,34 @@
   // #region 11. 处理DataHandleModal返回的内容
   function handleConfirm(content: string) {
     model.value.taskDatabase.dataHandleScript = content;
-    dataHandleModalVisible.value = false;
+    dataHandleModalVisible.value = false
   }
   // #endregion
+
+  watch(() => model.value?.task?.runMode, (newVal: Api.Task.RunMode) => {
+    switch (newVal) {
+      case '6001': // 每日
+        model.value.task.runWeek = undefined;
+        model.value.task.runTime =  new Date().toISOString().slice(0, 19).replace('T', ' ');
+        break;
+      case '6002': // 每周
+        model.value.task.runWeek = getWeek();
+        model.value.task.runTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        break;
+      case '6003': // 每月
+        model.value.task.runWeek = undefined;
+        model.value.task.runTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        break;
+      case '6004': // 每年
+        model.value.task.runWeek = undefined;
+        model.value.task.runTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        break;
+      default:     // 手动与定时
+        model.value.task.runWeek = undefined;
+        model.value.task.runTime = undefined;
+        break;
+    }
+  });
 </script>
 
 <template>
@@ -227,13 +245,23 @@
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.runTime')" :name="['task', 'runTime']" :rules="[{required: model.task.runMode !== '6000'}]" class="m-0">
-                <a-date-picker v-model:value="runTimeValue" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss"show-time :placeholder="$t('page.task.runTime')" style="width: 100%;" />
+              <a-form-item :label="$t('page.task.runWeek')" :name="['task', 'runWeek']" :rules="[{ required: model.task.runMode === '6002' }]" class="m-0">
+                <a-select v-model:value="model.task.runWeek" :placeholder="$t('page.task.form.runWeek')" :options="convertOptions(runWeekOptions)" :disabled="model.task.runMode !== '6002'" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.task.runTime')" :name="['task', 'runTime']" :rules="[{required: model.task.runMode !== '6000' && model.task.runMode !== '6005'}]" class="m-0">
+                <a-date-picker v-model:value="model.task.runTime" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss"show-time :placeholder="$t('page.task.runTime')" :disabled="model.task.runMode === '6000' || model.task.runMode === '6005'"  style="width: 100%;" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.task.runFrequency')" :name="['task', 'runFrequency']" :rules="[{required: model.task.runMode === '6005'}]" class="m-0">
+                <a-input-number v-model:value="model.task.runFrequency" :min="10" :max="99999" :placeholder="$t('page.task.form.runFrequency')" :disabled="model.task.runMode !== '6005'" style="width: 100%;" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.database.dataHandleLanguage')" :name="['taskDatabase', 'dataHandleLanguage']" :rules="[{required: model.taskDatabase.dataHandle == 1}]" class="m-0">
-                <a-select v-model:value="model.taskDatabase.dataHandleLanguage" :placeholder="$t('page.database.form.dataHandleLanguage')" :options="programmeLanguageOptions" allow-clear />
+                <a-select v-model:value="model.taskDatabase.dataHandleLanguage" :placeholder="$t('page.database.form.dataHandleLanguage')" :options="programmeLanguageOptions" :disabled="model.taskDatabase.dataHandle === 0" allow-clear />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
@@ -242,7 +270,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.database.dataHandle')" :name="['taskDatabase', 'dataHandle']" class="m-0">
+              <a-form-item :label="$t('page.database.dataHandle')" :name="['taskDatabase', 'dataHandle']" :rules="[{required: model.taskDatabase.dataHandle == 1}]" class="m-0">
                 <div style="display: flex; align-items: center; gap: 10px;">
                   <a-select v-model:value="model.taskDatabase.dataHandle" :placeholder="$t('page.database.form.dataHandle')" :options="convertOptions(dataHandleOptions)" class="flex-1" />
                   <a-button type="primary" class="bule-btn ml-3" @click="showDataHandleModal()">{{$t('page.database.dataHandle')}}</a-button>

@@ -53,7 +53,8 @@
         dataIndex: 'employeeName',
         title: $t('page.manage.user.employeeName'),
         align: 'center',
-        width: 120
+        width: 120,
+        ellipsis: true
       },
       {
         key: 'email',

@@ -14,6 +14,7 @@
   // #region 1. 参数定义
   const id = ref(0);
   const messageType = ref<Api.Message.MessageType>(0);
+  const emailSubject = ref<string>('');
   const messageContent = ref<string>('');
   const route = useRoute();
   const router = useRouter();
@@ -137,6 +138,7 @@
           <a-button type="default" class="orange-btn row-btn" onClick={() => {
               id.value = record.id;
               messageType.value = record.messageType as Api.Message.MessageType;
+              emailSubject.value = record.emailSubject;
               messageContent.value = record.messageContent;
               editModelVisible.value = true;
             }}>
@@ -286,7 +288,7 @@
         </template>
       <a-table :columns="columns" :data-source="data" :row-selection="rowSelection" size="small" :loading="loading" row-key="id" :scroll="scrollConfig" :pagination="pagination" class="h-full"  bordered />
       </a-card>
-      <EditModel v-model:visible="editModelVisible" :id="id" :messageType="messageType" :messageContent="messageContent" @confirm="getData" />
+      <EditModel v-model:visible="editModelVisible" :id="id" :messageType="messageType" :emailSubject="emailSubject" :messageContent="messageContent" @confirm="getData" />
       <MessageModel v-model:visible="messageModalVisible" :taskID="taskModel.taskID" :userIds="userIds" @confirm="getData" />
     </a-form>
   </div>

@@ -23,6 +23,7 @@ declare namespace Api {
       userID: number;
       userIds: number[];
       messageType: MessageType;
+      emailSubject: string;
       messageContent: string;
       searchFieldName: string;
       searchKeyWord: string;
@@ -30,6 +31,6 @@ declare namespace Api {
     }> & Api.SystemManage.User;
 
     /* Message model */
-    type MessageModel = Pick<Message, 'id' | 'taskID' | 'userID' | 'userIds' | 'messageType' | 'messageContent'>;
+    type MessageModel = Pick<Message, 'id' | 'taskID' | 'userID' | 'userIds' | 'messageType' | 'emailSubject' | 'messageContent'>;
   }
 }

@@ -1,15 +1,16 @@
 <script lang="tsx" setup>
   import { $t, language } from '@/locales';
-  import { ref, onMounted, computed } from 'vue';
+  import { getWeek } from '@/utils/common';
   import { TaskWebApi } from '@/service/api/task';
   import { useRoute, useRouter } from 'vue-router';
   import { useAppStore } from '@/store/modules/app';
   import { useAntdForm } from '@/hooks/common/form';
   import { useAuthStore } from '@/store/modules/auth';
   import WebApiModal from './modules/webapi-modal.vue';
+  import { ref, onMounted, computed, watch } from 'vue';
   import type { TableColumnsType } from 'ant-design-vue';
-  import { convertOptions, translateOptions, convertDateTime, getPromptMessage } from '@/utils/common';
-  import { booleanYesOrNoOptions, runModeOptions,taskStatusOptions, interfaceTypeRecord } from '@/constants/options';
+  import { convertOptions, translateOptions, getPromptMessage } from '@/utils/common';
+  import { booleanYesOrNoOptions, runModeOptions, runWeekOptions, taskStatusOptions, interfaceTypeRecord } from '@/constants/options';
 
   // #region 1. 表格列
   const columns = computed<TableColumnsType<Api.Task.TaskWebApi>>(() => [
@@ -71,14 +72,6 @@
   // 定义默认模型
   const model = ref<Api.Task.TaskWebApiModel>(createDefaultModel());
   const currentItemModel = ref<Api.Task.TaskWebApi | undefined>(undefined);
-
-  // 计算属性
-  const runTimeValue = computed<string | undefined>({
-    get: () => convertDateTime(model.value.task.runTime),
-    set: value => {
-        model.value.task.runTime = convertDateTime(value);
-    }
-  });
   // #endregion
 
   // #region 3. 创建默认模型
@@ -96,7 +89,8 @@
       taskType: '5000',
       taskName: '',
       runMode: '6000',
-      runFrequency: 0,
+      runWeek: undefined,
+      runFrequency: 10,
       runTime: undefined,
       isDebug: false,
       status: 0,
@@ -241,6 +235,7 @@
   // #region 9. 保存数据对象
   async function handleSave() {
     formRefTask.value?.validate().then(async () => {
+      model.value.task.runTime = model.value.task.runTime ? model.value.task.runTime.replace(' ', 'T') : undefined;
       const payload: Api.Task.TaskWebApiModel = {
         task: { ...model.value.task },
         taskWebApis: [...model.value.taskWebApis],
@@ -287,6 +282,31 @@
     }
   });
   // #endregion
+
+  watch(() => model.value?.task?.runMode, (newVal: Api.Task.RunMode) => {
+    switch (newVal) {
+      case '6001': // 每日
+        model.value.task.runWeek = undefined;
+        model.value.task.runTime =  new Date().toISOString().slice(0, 19).replace('T', ' ');
+        break;
+      case '6002': // 每周
+        model.value.task.runWeek = getWeek();
+        model.value.task.runTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        break;
+      case '6003': // 每月
+        model.value.task.runWeek = undefined;
+        model.value.task.runTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        break;
+      case '6004': // 每年
+        model.value.task.runWeek = undefined;
+        model.value.task.runTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        break;
+      default:     // 手动与定时
+        model.value.task.runWeek = undefined;
+        model.value.task.runTime = undefined;
+        break;
+    }
+});
 </script>
 
 <!-- App.vue -->
@@ -311,8 +331,18 @@
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.task.runTime')" :name="['task', 'runTime']" :rules="[{required: model.task.runMode !== '6000'}]" class="m-0">
-                <a-date-picker v-model:value="runTimeValue" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss"show-time :placeholder="$t('page.task.runTime')" style="width: 100%;" />
+              <a-form-item :label="$t('page.task.runWeek')" :name="['task', 'runWeek']" :rules="[{ required: model.task.runMode === '6002' }]" class="m-0">
+                <a-select v-model:value="model.task.runWeek" :placeholder="$t('page.task.form.runWeek')" :options="convertOptions(runWeekOptions)" :disabled="model.task.runMode !== '6002'" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.task.runTime')" :name="['task', 'runTime']" :rules="[{required: model.task.runMode !== '6000' && model.task.runMode !== '6005'}]" class="m-0">
+                <a-date-picker v-model:value="model.task.runTime" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss"show-time :placeholder="$t('page.task.runTime')" :disabled="model.task.runMode === '6000' || model.task.runMode === '6005'"  style="width: 100%;" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.task.runFrequency')" :name="['task', 'runFrequency']" :rules="[{required: model.task.runMode === '6005'}]" class="m-0">
+                <a-input-number v-model:value="model.task.runFrequency" :min="10" :max="99999" :placeholder="$t('page.task.form.runFrequency')" :disabled="model.task.runMode !== '6005'" style="width: 100%;" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
