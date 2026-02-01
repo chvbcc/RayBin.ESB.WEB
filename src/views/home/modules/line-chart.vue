@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { $t } from '@/locales';
 import { useAppStore } from '@/store/modules/app';
 import { useEcharts } from '@/hooks/common/echarts';
@@ -128,7 +128,7 @@ function updateLocale() {
 }
 
 async function init() {
-  mockData();
+  await mockData();
 }
 
 watch(
@@ -138,14 +138,15 @@ watch(
   }
 );
 
-// init
-init();
+onMounted(() => {
+  init();
+});
 </script>
 
 <template>
-  <ACard :bordered="false" class="card-wrapper">
+  <a-card :bordered="false" class="card-wrapper">
     <div ref="domRef" class="h-360px overflow-hidden"></div>
-  </ACard>
+  </a-card>
 </template>
 
 <style scoped></style>

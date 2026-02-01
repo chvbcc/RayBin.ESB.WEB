@@ -445,9 +445,16 @@ declare namespace App {
           devDep: string;
         };
         home: {
-          greeting: string;
-          weatherDesc: string;
-          projectCount: string;
+          goodMorning: string;
+          goodAfternoon: string;
+          goodEvening: string;
+          taskCount: string;
+          pendingTaskCount: string;
+          suspendedTaskCount: string;
+          databaseTask:string;
+          webApiTask:string;
+          industryTask:string;
+          dataMonitorTask:string;
           todo: string;
           message: string;
           downloadCount: string;

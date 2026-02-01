@@ -28,6 +28,13 @@ export namespace TaskApi {
     });
   }
 
+  export function fetchGetTaskCount() {
+    return request({
+      url: '/task/getTaskCount',
+      method: 'get'
+    });
+  }
+
   export function fetchSetStatus(taskId: number, status: Api.Task.TaskStatus) {
     return request({
       url: '/task/setStatus',

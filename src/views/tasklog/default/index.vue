@@ -1,8 +1,8 @@
 <script setup lang="tsx">
   import dayjs from 'dayjs';
-  import { $t } from '@/locales';
   import { computed } from 'vue';
   import { useRouter } from 'vue-router';
+  import { $t, language } from '@/locales';
   import TaskLogSearch from './modules/tasklog-search.vue';
   import { useTable, useTableOperate } from '@/hooks/common/table';
   import { fetchGetPagingList, fetchDeletes } from '@/service/api/log';
@@ -75,7 +75,7 @@
         dataIndex: 'spentTime',
         title: $t('page.taskLog.spentTime'),
         align: 'center',
-        width: 90,
+        width:  language()==='en-US'? 130: 90,
         customRender: ({ record }) => {
           return `${record.spentTime} ms`;
         }
