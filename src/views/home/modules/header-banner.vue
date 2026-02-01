@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { $t, language } from '@/locales';
-import { TaskApi } from '@/service/api/task';
-import { ref, onMounted, onUnmounted } from 'vue';
 import { useAuthStore } from '@/store/modules/auth';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 defineOptions({
   name: 'HeaderBanner'
@@ -12,29 +11,32 @@ const realTime = ref('');
 const authStore = useAuthStore();
 let timer: NodeJS.Timeout | null = null;
 
-interface StatisticData {
-  id: number;
-  title: string;
-  value: number;
+interface Props {
+  taskCount: number,
+  pendingTaskCount: number,
+  suspendedTaskCount: number,
 }
 
-const statisticData = ref<StatisticData[]>([
+const props = defineProps<Props>();
+
+const statisticData = computed(() => [
   {
     id: 0,
     title: $t('page.home.taskCount'),
-    value: 0
+    value: props.taskCount
   },
   {
     id: 1,
     title: $t('page.home.pendingTaskCount'),
-    value: 0
+    value: props.pendingTaskCount
   },
   {
     id: 2,
     title: $t('page.home.suspendedTaskCount'),
-    value: 0
+    value: props.suspendedTaskCount
   }
 ]);
+
 
 function getGreeting(date: Date = new Date()): string {
   const hour = date.getHours();
@@ -81,14 +83,6 @@ const updateTime = () => {
 onMounted(async() => {
   updateTime(); // 页面加载时立即执行
   timer = setInterval(updateTime, 1000); // 每秒刷新
-  const { error, data } = await TaskApi.fetchGetTaskCount();
-  if (!error && data) {
-    console.log(data);
-    const { taskCount, pendingTaskCount, suspendedTaskCount } = data;
-    statisticData.value[0].value = taskCount;
-    statisticData.value[1].value = pendingTaskCount;
-    statisticData.value[2].value = suspendedTaskCount;
-  }
 });
 
 onUnmounted(() => {
@@ -114,7 +108,7 @@ onUnmounted(() => {
       </ACol>
       <ACol :span="24" :md="6">
         <ASpace class="w-full justify-end" :size="24">
-          <AStatistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" v-bind="item" />
+            <AStatistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" :title="item.title" :value="item.value" />
         </ASpace>
       </ACol>
     </ARow>
