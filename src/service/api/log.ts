@@ -9,6 +9,20 @@ export function fetchGetPagingList(params?: Api.Log.SearchParams) {
   });
 }
 
+export function fetchGetHomeList() {
+  return request<Api.Log.TaskLog[]>({
+    url: '/tasklog/getHomeList',
+    method: 'get',
+  });
+}
+
+
+export function getTaskSpentTime() {
+  return request({
+    url: '/tasklog/getTaskSpentTime',
+    method: 'get'
+  });
+}
 export function fetchGetModel(id: number) {
   return request({
     url: '/tasklog/getModel',

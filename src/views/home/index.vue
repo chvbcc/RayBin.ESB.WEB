@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import HeaderBanner from './modules/header-banner.vue';
-import CardData from './modules/card-data.vue';
-import LineChart from './modules/line-chart.vue';
-import PieChart from './modules/pie-chart.vue';
-import ProjectNews from './modules/project-news.vue';
-import CreativityBanner from './modules/creativity-banner.vue';
 import { ref,onMounted } from 'vue';
 import { TaskApi } from '@/service/api/task';
+import PieChart from './modules/pie-chart.vue';
+import CardData from './modules/card-data.vue';
+import LineChart from './modules/line-chart.vue';
+import { getTaskSpentTime } from '@/service/api/log';
+import TaskLogs from './modules/task-logs.vue';
+import HeaderBanner from './modules/header-banner.vue';
 
 interface TaskCounts {
   taskCount: number;
@@ -16,6 +16,13 @@ interface TaskCounts {
   webApiTaskCount: number;
   industriaTaskCount: number;
   dataMonitorTaskCount: number;
+}
+
+interface TaskSpentTime {
+  databaseTaskSpentTime: number[];
+  webApiTaskSpentTime: number[];
+  industriaTaskSpentTime: number[];
+  dataMonitorTaskSpentTime: number[];
 }
 
 const taskCountModel = ref<TaskCounts>({
@@ -28,10 +35,21 @@ const taskCountModel = ref<TaskCounts>({
   dataMonitorTaskCount: 0
 });
 
+const taskSpentTimeModel = ref<TaskSpentTime>({
+  databaseTaskSpentTime: [],
+  webApiTaskSpentTime: [],
+  industriaTaskSpentTime: [],
+  dataMonitorTaskSpentTime: []
+});
+
 onMounted(async() => {
-    const { error, data } = await TaskApi.fetchGetTaskCount();
-    if (!error && data)  {
-      taskCountModel.value = data;
+    const { error: errorCount, data: dataCount } = await TaskApi.fetchGetTaskCount();
+    if (!errorCount && dataCount)  {
+      taskCountModel.value = dataCount;
+    }
+    const {error: errorSpentTime, data: dataSpentTime } = await getTaskSpentTime();
+    if (!errorSpentTime && dataSpentTime) {
+      taskSpentTimeModel.value = dataSpentTime;
     }
 });
 
@@ -40,21 +58,18 @@ onMounted(async() => {
 <template>
   <a-space direction="vertical" :size="16">
     <HeaderBanner :taskCount="taskCountModel.taskCount" :pendingTaskCount="taskCountModel.pendingTaskCount" :suspendedTaskCount="taskCountModel.suspendedTaskCount" />
-    <CardData :databaseTaskCount="taskCountModel.databaseTaskCount" :webApiTaskCount="taskCountModel.webApiTaskCount" :industriaTaskCount="taskCountModel.industriaTaskCount" :dataMonitorTaskCount="taskCountModel.dataMonitorTaskCount" />
+    <CardData :taskCountModel="taskCountModel" />
     <a-row :gutter="[16, 16]">
       <a-col :span="24" :lg="14">
-        <LineChart />
+        <LineChart :taskSpentTimeModel="taskSpentTimeModel" />
       </a-col>
       <a-col :span="24" :lg="10">
-        <PieChart />
+        <PieChart :taskCountModel="taskCountModel" />
       </a-col>
     </a-row>
     <a-row :gutter="[16, 16]">
-      <a-col :span="24" :lg="14">
-        <ProjectNews />
-      </a-col>
-      <a-col :span="24" :lg="10">
-        <CreativityBanner />
+      <a-col :span="24" :lg="24">
+        <TaskLogs />
       </a-col>
     </a-row>
   </a-space>

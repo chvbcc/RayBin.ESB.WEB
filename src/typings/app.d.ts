@@ -261,6 +261,7 @@ declare namespace App {
       };
       common: {
         action: string;
+        getDataFailed: string;
         add: string;
         addSuccess: string;
         addFailed: string;
@@ -455,28 +456,10 @@ declare namespace App {
           webApiTask:string;
           industryTask:string;
           dataMonitorTask:string;
-          todo: string;
-          message: string;
-          downloadCount: string;
-          registerCount: string;
-          schedule: string;
-          study: string;
-          work: string;
-          rest: string;
-          entertainment: string;
-          visitCount: string;
-          turnover: string;
-          dealCount: string;
-          projectNews: {
-            title: string;
-            moreNews: string;
-            desc1: string;
-            desc2: string;
-            desc3: string;
-            desc4: string;
-            desc5: string;
-          };
-          creativity: string;
+          taskSpentTime: string;
+          taskProportion: string;
+          taskRunLogs: string;
+          moreLogs: string;
         };
         connection: {
           title: string;

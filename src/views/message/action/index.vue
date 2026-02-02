@@ -175,7 +175,7 @@
         pagination.total = response.total;
       }
     } catch (err) {
-      console.error('获取数据时发生错误:', err);
+      window.$message?.error($t('common.getDataFailed'));
     } finally {
       loading.value = false;
     }

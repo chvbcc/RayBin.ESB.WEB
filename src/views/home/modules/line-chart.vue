@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
 import { $t } from '@/locales';
+import { computed, watch, onMounted } from 'vue';
 import { useAppStore } from '@/store/modules/app';
 import { useEcharts } from '@/hooks/common/echarts';
 
@@ -9,6 +9,26 @@ defineOptions({
 });
 
 const appStore = useAppStore();
+const title = computed(() => $t('page.home.taskSpentTime'));
+
+interface TaskSpentTimeModel {
+  databaseTaskSpentTime: number[];
+  webApiTaskSpentTime: number[];
+  industriaTaskSpentTime: number[];
+  dataMonitorTaskSpentTime: number[];
+}
+
+interface Props {
+  taskSpentTimeModel: TaskSpentTimeModel;
+}
+const props = withDefaults(defineProps<Props>(), {
+  taskSpentTimeModel: () => ({
+    databaseTaskSpentTime: [],
+    webApiTaskSpentTime: [],
+    industriaTaskSpentTime: [],
+    dataMonitorTaskSpentTime: []
+  })
+});
 
 const { domRef, updateOptions } = useEcharts(() => ({
   tooltip: {
@@ -20,8 +40,18 @@ const { domRef, updateOptions } = useEcharts(() => ({
       }
     }
   },
+  title: {
+    text: title.value,
+    left: 'left',
+    top: '0',
+    textStyle: {
+        color: '#888888',
+        fontWeight: 'normal',
+        fontSize: 14
+    }
+  },
   legend: {
-    data: [$t('page.home.downloadCount'), $t('page.home.registerCount')]
+    data: [$t('page.home.databaseTask'), $t('page.home.webApiTask'), $t('page.home.industryTask'), $t('page.home.dataMonitorTask')]
   },
   grid: {
     left: '3%',
@@ -31,105 +61,84 @@ const { domRef, updateOptions } = useEcharts(() => ({
   },
   xAxis: {
     type: 'category',
-    boundaryGap: false,
-    data: [] as string[]
+    data: ['1', '2', '3', '4', '5', '6', '7'],
   },
   yAxis: {
     type: 'value'
   },
-  series: [
+   series: [
     {
-      color: '#8e9dff',
-      name: $t('page.home.downloadCount'),
+      color: '#ec4786',
+      name: $t('page.home.databaseTask'),
       type: 'line',
       smooth: true,
       stack: 'Total',
-      areaStyle: {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            {
-              offset: 0.25,
-              color: '#8e9dff'
-            },
-            {
-              offset: 1,
-              color: '#fff'
-            }
-          ]
-        }
-      },
       emphasis: {
         focus: 'series'
       },
       data: [] as number[]
     },
     {
-      color: '#26deca',
-      name: $t('page.home.registerCount'),
+      color: '#865ec0',
+      name: $t('page.home.webApiTask'),
       type: 'line',
       smooth: true,
       stack: 'Total',
-      areaStyle: {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            {
-              offset: 0.25,
-              color: '#26deca'
-            },
-            {
-              offset: 1,
-              color: '#fff'
-            }
-          ]
-        }
-      },
       emphasis: {
         focus: 'series'
       },
-      data: []
+      data: [] as number[]
+    },
+    {
+      color: '#56cdf3',
+      name: $t('page.home.industryTask'),
+      type: 'line',
+      smooth: true,
+      stack: 'Total',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [] as number[]
+    },
+    {
+      color: '#fcbc25',
+      name: $t('page.home.dataMonitorTask'),
+      type: 'line',
+      smooth: true,
+      stack: 'Total',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [] as number[]
     }
   ]
 }));
 
-async function mockData() {
-  await new Promise(resolve => {
-    setTimeout(resolve, 1000);
-  });
-
-  updateOptions(opts => {
-    opts.xAxis.data = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00'];
-    opts.series[0].data = [4623, 6145, 6268, 6411, 1890, 4251, 2978, 3880, 3606, 4311];
-    opts.series[1].data = [2208, 2016, 2916, 4512, 8281, 2008, 1963, 2367, 2956, 678];
-
-    return opts;
-  });
-}
-
 function updateLocale() {
   updateOptions((opts, factory) => {
     const originOpts = factory();
-
     opts.legend.data = originOpts.legend.data;
+    opts.title.text = title.value;
     opts.series[0].name = originOpts.series[0].name;
     opts.series[1].name = originOpts.series[1].name;
+    opts.series[2].name = originOpts.series[2].name;
+    opts.series[3].name = originOpts.series[3].name;
 
+    opts.series[0].data = props.taskSpentTimeModel.databaseTaskSpentTime;
+    opts.series[1].data = props.taskSpentTimeModel.webApiTaskSpentTime;
+    opts.series[2].data = props.taskSpentTimeModel.industriaTaskSpentTime;
+    opts.series[3].data = props.taskSpentTimeModel.dataMonitorTaskSpentTime;
     return opts;
   });
 }
-
-async function init() {
-  await mockData();
-}
+// 添加监听 props 变化
+watch(
+  () => props.taskSpentTimeModel,
+  () => {
+    updateLocale();
+  },
+  { immediate: true } // 立即执行一次
+);
 
 watch(
   () => appStore.locale,
@@ -139,7 +148,9 @@ watch(
 );
 
 onMounted(() => {
-  init();
+  if (domRef.value) {
+    updateLocale();
+  }
 });
 </script>
 

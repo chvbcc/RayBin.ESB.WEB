@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { watch, onMounted, computed } from 'vue';
 import { $t } from '@/locales';
 import { useAppStore } from '@/store/modules/app';
 import { useEcharts } from '@/hooks/common/echarts';
@@ -8,25 +8,58 @@ defineOptions({
   name: 'PieChart'
 });
 
+const title = computed(() => $t('page.home.taskProportion'));
 const appStore = useAppStore();
+
+interface TaskCountModel {
+  databaseTaskCount: number;
+  webApiTaskCount: number;
+  industriaTaskCount: number;
+  dataMonitorTaskCount: number;
+}
+
+interface Props {
+  taskCountModel: TaskCountModel;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  taskCountModel: () => ({
+    databaseTaskCount: 0,
+    webApiTaskCount: 0,
+    industriaTaskCount: 0,
+    dataMonitorTaskCount: 0
+  })
+});
 
 const { domRef, updateOptions } = useEcharts(() => ({
   tooltip: {
     trigger: 'item'
   },
+  title: {
+    text: title.value,
+    left: 'left',
+    top: '2%',
+    textStyle: {
+        color: '#888888',
+        fontWeight: 'normal',
+        fontSize: 14
+    }
+  },
   legend: {
-    bottom: '1%',
+    bottom: '3%',
     left: 'center',
+    itemHeight: 13,
     itemStyle: {
-      borderWidth: 0
+      borderWidth: 0,
     }
   },
   series: [
     {
-      color: ['#5da8ff', '#8e9dff', '#fedc69', '#26deca'],
-      name: $t('page.home.schedule'),
+      color: ['#ec4786', '#865ec0', '#56cdf3', '#fcbc25'],
+      name: $t('page.home.taskProportion'),
       type: 'pie',
       radius: ['45%', '75%'],
+      center: ['50%', '46%'],
       avoidLabelOverlap: false,
       itemStyle: {
         borderRadius: 10,
@@ -51,59 +84,49 @@ const { domRef, updateOptions } = useEcharts(() => ({
   ]
 }));
 
-async function mockData() {
-  await new Promise(resolve => {
-    setTimeout(resolve, 1000);
-  });
-
-  updateOptions(opts => {
-    opts.series[0].data = [
-      { name: $t('page.home.study'), value: 20 },
-      { name: $t('page.home.entertainment'), value: 10 },
-      { name: $t('page.home.work'), value: 40 },
-      { name: $t('page.home.rest'), value: 30 }
-    ];
-
-    return opts;
-  });
-}
+onMounted(() => {
+  if (domRef.value) {
+    updateLocale();
+  }
+});
 
 function updateLocale() {
   updateOptions((opts, factory) => {
     const originOpts = factory();
-
+    opts.title.text = title.value;
     opts.series[0].name = originOpts.series[0].name;
-
     opts.series[0].data = [
-      { name: $t('page.home.study'), value: 20 },
-      { name: $t('page.home.entertainment'), value: 10 },
-      { name: $t('page.home.work'), value: 40 },
-      { name: $t('page.home.rest'), value: 30 }
+      { name: $t('page.home.databaseTask').replace("Tasks",""), value: props.taskCountModel.databaseTaskCount },
+      { name: $t('page.home.webApiTask').replace("Tasks",""), value: props.taskCountModel.webApiTaskCount },
+      { name: $t('page.home.industryTask').replace("Tasks",""), value: props.taskCountModel.industriaTaskCount },
+      { name: $t('page.home.dataMonitorTask').replace("Tasks",""), value: props.taskCountModel.dataMonitorTaskCount }
     ];
-
     return opts;
   });
 }
 
-async function init() {
-  mockData();
-}
+// 添加监听 props 变化
+watch(
+  () => props.taskCountModel,
+  () => {
+    updateLocale();
+  },
+  { immediate: true } // 立即执行一次
+);
 
+// 删除了 mockData 函数和调用
 watch(
   () => appStore.locale,
   () => {
     updateLocale();
   }
 );
-
-// init
-init();
 </script>
 
 <template>
-  <ACard :bordered="false" class="card-wrapper">
+  <a-card :bordered="false" class="card-wrapper">
     <div ref="domRef" class="h-360px overflow-hidden"></div>
-  </ACard>
+  </a-card>
 </template>
 
 <style scoped></style>

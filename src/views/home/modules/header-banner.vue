@@ -91,9 +91,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ACard :bordered="false" class="card-wrapper">
-    <ARow :gutter="[16, 16]">
-      <ACol :span="24" :md="18">
+  <a-card :bordered="false" class="card-wrapper">
+    <a-row :gutter="[16, 16]">
+      <a-col :span="24" :md="18">
         <div class="flex-y-center">
           <div class="size-72px shrink-0 overflow-hidden rd-1/2">
             <img src="@/assets/imgs/soybean.jpg" class="size-full" />
@@ -105,14 +105,14 @@ onUnmounted(() => {
             <p class="text-#999 leading-30px">{{ realTime }}</p>
           </div>
         </div>
-      </ACol>
-      <ACol :span="24" :md="6">
-        <ASpace class="w-full justify-end" :size="24">
-            <AStatistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" :title="item.title" :value="item.value" />
-        </ASpace>
-      </ACol>
-    </ARow>
-  </ACard>
+      </a-col>
+      <a-col :span="24" :md="6">
+        <a-space class="w-full justify-end" :size="24">
+            <a-statistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" :title="item.title" :value="item.value" />
+        </a-space>
+      </a-col>
+    </a-row>
+  </a-card>
 </template>
 
 <style scoped></style>

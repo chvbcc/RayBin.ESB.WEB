@@ -7,12 +7,25 @@ defineOptions({
   name: 'CardData'
 });
 
-interface Props {
-  databaseTaskCount: number,
-  webApiTaskCount: number,
-  industriaTaskCount: number,
-  dataMonitorTaskCount: number
+interface TaskCountModel {
+  databaseTaskCount: number;
+  webApiTaskCount: number;
+  industriaTaskCount: number;
+  dataMonitorTaskCount: number;
 }
+
+interface Props {
+  taskCountModel: TaskCountModel;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  taskCountModel: () => ({
+    databaseTaskCount: 0,
+    webApiTaskCount: 0,
+    industriaTaskCount: 0,
+    dataMonitorTaskCount: 0
+  })
+});
 
 interface CardData {
   key: string;
@@ -27,12 +40,10 @@ interface CardData {
   iconClass: string;
 }
 
-const props = defineProps<Props>();
-
 const cardData = computed(() => [
   {
     key: 'databaseTaskCount',
-    value: props.databaseTaskCount,
+    value: props.taskCountModel.databaseTaskCount,
     title: $t('page.home.databaseTask'),
     color: {
       start: '#ec4786',
@@ -43,7 +54,7 @@ const cardData = computed(() => [
   },
   {
     key: 'webApiTaskCount',
-    value: props.webApiTaskCount,
+    value: props.taskCountModel.webApiTaskCount,
     title: $t('page.home.webApiTask'),
     color: {
       start: '#865ec0',
@@ -54,7 +65,7 @@ const cardData = computed(() => [
   },
   {
     key: 'industriaTaskCount',
-    value: props.industriaTaskCount,
+    value: props.taskCountModel.industriaTaskCount,
     title: $t('page.home.industryTask'),
     color: {
       start: '#56cdf3',
@@ -65,7 +76,7 @@ const cardData = computed(() => [
   },
   {
     key: 'dataMonitorTaskCount',
-    value: props.dataMonitorTaskCount,
+    value: props.taskCountModel.dataMonitorTaskCount,
     title: $t('page.home.dataMonitorTask'),
     color: {
       start: '#fcbc25',
