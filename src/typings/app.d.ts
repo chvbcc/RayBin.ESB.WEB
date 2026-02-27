@@ -465,6 +465,7 @@ declare namespace App {
           title: string;
           add: string;
           edit: string;
+          connectionConfig: string;
           connectionName: string;
           databaseType: string;
           hostName: string;
@@ -514,6 +515,7 @@ declare namespace App {
             paused: string;
           },
           form: {
+            id: string;
             taskType: string;
             taskName: string;
             runMode: string;
@@ -629,6 +631,53 @@ declare namespace App {
             deleteTable: string;
           };
         };
+        monitor: {
+          title: string;
+          add: string;
+          edit: string;
+          monitorTitle: string;
+          messageTitle: string;
+          taskID: string;
+          connectionID: string;
+          connectionName: string;
+          dataObjectType: string;
+          dataObjectName: string;
+          name: string;
+          value: string;
+          dataType: string;
+          triggerLogic: string;
+          conditionOperator: string;
+          andOrOperator: string;
+          sqlString: string;
+          dataRange: string;
+          orderPrimaryKey: string;
+          customRange: string;
+          pushType: string;
+          messageType: string;
+          messageRecipient: string;
+          emailSubject: string;
+          messageContent: string;
+          createUserID: string;
+          createTime: string;
+          form: {
+            connectionID: string;
+            dataObjectType: string;
+            dataObjectName: string;
+            value: string;
+            triggerLogic: string;
+            conditionOperator: string;
+            andOrOperator: string;
+            sqlString: string;
+            pushType: string;
+            messageType: string;
+            messageRecipient: string;
+            emailSubject: string;
+            messageContent: string;
+            dataRange: string;
+            orderPrimaryKey: string;
+            customRange: string;
+          }
+        };
         taskLog: {
           title: string;
           viewLogDetail: string;
@@ -660,6 +709,7 @@ declare namespace App {
           messageInsert: string;
           messageContent: string;
           userSearchField: string;
+          userSearchKeyword: string;
           userSearch: string;
           form: {
             messageType: string;
@@ -936,6 +986,41 @@ declare namespace App {
             addPermission: string;
             editPermission: string;
           };
+          config: {
+            title: string;
+            edit: string;
+            weComTitle: string;
+            dingTalkTitle: string;
+            emailServiceTitle: string;
+            weComTokenUrl: string;
+            weComCorpID:  string;
+            weComCorpSecret: string;
+            weComTokenPath: string;
+            dingTalkTokenUrl: string;
+            dingTalkAppKey: string;
+            dingTalkAppSecret: string;
+            dingTalkTokenPath: string;
+            smtpServer: string;
+            smtpPort: string;
+            emailAccount: string;
+            emailPassword: string;
+            emailSender: string;
+            form: {
+              weComTokenUrl: string;
+              weComCorpID:  string;
+              weComCorpSecret: string;
+              weComTokenPath: string;
+              dingTalkTokenUrl: string;
+              dingTalkAppKey: string;
+              dingTalkAppSecret: string;
+              dingTalkTokenPath: string;
+              smtpServer: string;
+              smtpPort: string;
+              emailAccount: string;
+              emailPassword: string;
+              emailSender: string;
+            }
+          };
         };
       };
       form: {
@@ -962,20 +1047,24 @@ declare namespace App {
       };
       dropdownList: {
         databaseType: {
-          hana: string;
           mySql: string;
+          postgreSQL: string;
           oracle: string;
           sqlServer: string;
-          postgreSQL: string;
-          oceanBase: string;
+          hana: string;
           polarDB: string;
           goldenDB: string;
+          tidb: string;
+          oceanBase: string;
+          daMeng: string;
           openGauss: string;
+          kingBase: string;
         };
         taskType: {
           database: string;
           webApi: string;
           industry: string;
+          dataMonitor: string;
         };
         runMode: {
           manualOperation: string;
@@ -1017,6 +1106,10 @@ declare namespace App {
           pull: string;
           pushSingle: string;
           pushBatch: string;
+        };
+        dataRange: {
+          lastData: string;
+          customRange: string;
         };
       };
     };

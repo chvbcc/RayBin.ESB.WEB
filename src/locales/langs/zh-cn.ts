@@ -192,6 +192,9 @@ const local: App.I18n.Schema = {
     industria_task: '工业接口任务',
     industria_task_default: '工业接口任务',
     industria_task_action: '工业接口任务',
+    monitor: '数据监控任务',
+    monitor_default: '数据监控任务',
+    monitor_action: '数据监控任务',
     pending: '待运行任务',
     suspended: '已暂停任务',
     tasklog: '任务日志',
@@ -209,6 +212,7 @@ const local: App.I18n.Schema = {
     manage_authorize_default: '授权管理',
     manage_authorize_action: '授权',
     manage_menu: '菜单管理',
+    manage_config: '系统配置',
   },
   page: {
     login: {
@@ -290,6 +294,7 @@ const local: App.I18n.Schema = {
       title: '数据库连接',
       add: '新增数据库连接',
       edit: '编辑数据库连接',
+      connectionConfig: '连接配置',
       connectionName: '连接名称',
       databaseType: '数据库类型',
       hostName: '主机名',
@@ -339,6 +344,7 @@ const local: App.I18n.Schema = {
         paused: '已暂停'
       },
       form: {
+        id: '请输入任务编号',
         taskType: '请选择任务类型',
         taskName: '请输入任务名称',
         runMode: '请选择运行方式',
@@ -454,6 +460,53 @@ const local: App.I18n.Schema = {
         deleteTable: '删除表视图'
       }
     },
+    monitor: {
+      title: '数据监控任务',
+      add: '新增数据监控任务',
+      edit: '编辑数据监控任务',
+      monitorTitle: '监控数据配置',
+      messageTitle: '通知消息配置',
+      taskID: '任务编号',
+      connectionID: '数据库连接',
+      connectionName: '数据库连接名称',
+      dataObjectType: '对象类型',
+      dataObjectName: '对象名称',
+      name: '字段名称',
+      value: '条件判断值',
+      dataType: '数据类型',
+      triggerLogic: '触发逻辑',
+      conditionOperator: '条件操作符',
+      andOrOperator: '与/或操作符',
+      sqlString: 'SQL 字符串',
+      dataRange: '数据范围',
+      orderPrimaryKey: '排序主键',
+      customRange: '自定义范围',
+      pushType: '推送类型',
+      messageType: '消息类型',
+      messageRecipient: '消息接收者',
+      emailSubject: '邮件主题',
+      messageContent: '消息内容',
+      createUserID: '创建用户',
+      createTime: '创建时间',
+      form: {
+        connectionID: '请选择数据连接',
+        dataObjectType: '请选择对象类型',
+        dataObjectName: '请选择对象名称',
+        value: '请输入条件判断值',
+        triggerLogic: '请选择触发逻辑',
+        conditionOperator: '请选择条件操作符',
+        andOrOperator: '请选择与/或操作符',
+        sqlString: '请输入SQL 字符串',
+        dataRange: '请选择数据范围',
+        orderPrimaryKey: '请选择排序主键',
+        customRange: '请输入自定义范围',
+        pushType: '请选择推送类型',
+        messageType: '请选择消息类型',
+        messageRecipient: '请选择消息接收者',
+        emailSubject: '请输入邮件主题',
+        messageContent: '请输入消息内容',
+      }
+    },
     taskLog: {
       title: '任务日志',
       viewLogDetail: '查看日志明细',
@@ -485,6 +538,7 @@ const local: App.I18n.Schema = {
       messageInsert: '插入消息',
       messageContent: '消息内容',
       userSearchField:'搜索字段',
+      userSearchKeyword:'搜索关键字',
       userSearch: '搜索用户',
       form: {
         messageType: '请选择消息类型',
@@ -760,6 +814,41 @@ const local: App.I18n.Schema = {
         addPermission: '新增权限',
         editPermission: '编辑权限',
       },
+      config: {
+        title: '系统配置',
+        edit: '编辑配置项',
+        weComTitle: '企业微信配置',
+        dingTalkTitle: '钉钉配置',
+        emailServiceTitle: '邮件服务配置',
+        weComTokenUrl: '企微凭证地址',
+        weComCorpID: '企微企业ID',
+        weComCorpSecret: '企微企业密钥',
+        weComTokenPath: '企微令牌路径',
+        dingTalkTokenUrl: '钉钉凭证地址',
+        dingTalkAppKey: '钉钉应用标识',
+        dingTalkAppSecret: '钉钉应用密钥',
+        dingTalkTokenPath: '钉钉令牌路径',
+        smtpServer: 'SMTP服务器',
+        smtpPort: 'SMTP端口',
+        emailAccount: '邮箱账号',
+        emailPassword: '邮箱密码',
+        emailSender: '发件人',
+        form: {
+          weComTokenUrl: '请输入企微凭证地址',
+          weComCorpID: '请输入企微企业ID',
+          weComCorpSecret: '请输入企微企业密钥',
+          weComTokenPath: '请输入企微令牌路径',
+          dingTalkTokenUrl: '请输入钉钉凭证地址',
+          dingTalkAppKey: '请输入钉钉应用标识',
+          dingTalkAppSecret: '请输入钉钉应用密钥',
+          dingTalkTokenPath: '请输入钉钉令牌路径',
+          smtpServer: '请输入SMTP服务器',
+          smtpPort: '请输入SMTP端口',
+          emailAccount: '请输入邮箱账号',
+          emailPassword: '请输入邮箱密码',
+          emailSender: '请输入发件人'
+        }
+      }
     }
   },
   form: {
@@ -810,20 +899,24 @@ const local: App.I18n.Schema = {
   },
   dropdownList: {
     databaseType: {
-      hana: 'Hana',
       mySql: 'MySql',
+      postgreSQL: 'PostgreSQL',
       oracle: 'Oracle',
       sqlServer: 'SqlServer',
-      postgreSQL: 'PostgreSQL',
-      oceanBase: 'OceanBase',
+      hana: 'Hana',
       polarDB: 'PolarDB',
       goldenDB: 'GoldenDB',
-      openGauss: 'OpenGauss'
+      tidb: 'TiDB',
+      oceanBase: 'OceanBase',
+      daMeng: 'DaMeng',
+      openGauss: 'OpenGauss',
+      kingBase: 'KingBase'
     },
     taskType: {
       database: '数据库任务',
       webApi: '网络接口任务',
-      industry: '工业PLC任务'
+      industry: '工业PLC任务',
+      dataMonitor: '数据监控任务'
     },
     runMode: {
       manualOperation: '手动运行',
@@ -865,7 +958,11 @@ const local: App.I18n.Schema = {
       pull: '拉取数据',
       pushSingle: '推送单条数据',
       pushBatch: '推送批量数据'
-    }
+    },
+    dataRange: {
+      lastData: '最新数据',
+      customRange: '自定义范围'
+    },
   },
 };
 

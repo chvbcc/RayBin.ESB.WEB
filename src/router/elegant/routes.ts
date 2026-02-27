@@ -241,6 +241,15 @@ export const generatedRoutes: GeneratedRoute[] = [
         ]
       },
       {
+        name: 'manage_config',
+        path: '/manage/config',
+        component: 'view.manage_config',
+        meta: {
+          title: 'manage_config',
+          i18nKey: 'route.manage_config'
+        }
+      },
+      {
         name: 'manage_menu',
         path: '/manage/menu',
         component: 'view.manage_menu',
@@ -317,6 +326,35 @@ export const generatedRoutes: GeneratedRoute[] = [
         meta: {
           title: 'message_default',
           i18nKey: 'route.message_default'
+        }
+      }
+    ]
+  },
+  {
+    name: 'monitor',
+    path: '/monitor',
+    component: 'layout.base',
+    meta: {
+      title: 'monitor',
+      i18nKey: 'route.monitor'
+    },
+    children: [
+      {
+        name: 'monitor_action',
+        path: '/monitor/action',
+        component: 'view.monitor_action',
+        meta: {
+          title: 'monitor_action',
+          i18nKey: 'route.monitor_action'
+        }
+      },
+      {
+        name: 'monitor_default',
+        path: '/monitor/default',
+        component: 'view.monitor_default',
+        meta: {
+          title: 'monitor_default',
+          i18nKey: 'route.monitor_default'
         }
       }
     ]

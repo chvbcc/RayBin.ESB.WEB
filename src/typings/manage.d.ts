@@ -130,5 +130,23 @@ declare namespace Api {
       parentId: number;
       children?: MenuTree[];
     };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // System config
+    type SystemConfig = {
+      weComTokenUrl: string;
+      weComCorpID:  string;
+      weComCorpSecret: string;
+      weComTokenPath: string;
+      dingTalkTokenUrl: string;
+      dingTalkAppKey: string;
+      dingTalkAppSecret: string;
+      dingTalkTokenPath: string;
+      smtpServer: string;
+      smtpPort: string;
+      emailAccount: string;
+      emailPassword: string;
+      emailSender: string;
+    };
   }
 }

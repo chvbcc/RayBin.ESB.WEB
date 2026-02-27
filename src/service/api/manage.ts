@@ -314,3 +314,21 @@ export namespace AuthorizeApi {
     });
   }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export namespace SystemConfigApi {
+  export function fetchGetModel() {
+    return request<Api.SystemManage.SystemConfig>({
+      url: '/systemConfig/getModel',
+      method: 'get'
+    });
+  }
+
+  export function fetchUpdate(data: Api.SystemManage.SystemConfig) {
+    return request({
+      url: '/systemConfig/update',
+      method: 'post',
+      data
+    });
+  }
+}

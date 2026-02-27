@@ -40,6 +40,7 @@ declare module "@elegant-router/types" {
     "manage_authorize": "/manage/authorize";
     "manage_authorize_action": "/manage/authorize/action";
     "manage_authorize_default": "/manage/authorize/default";
+    "manage_config": "/manage/config";
     "manage_menu": "/manage/menu";
     "manage_role": "/manage/role";
     "manage_user": "/manage/user";
@@ -47,6 +48,9 @@ declare module "@elegant-router/types" {
     "message": "/message";
     "message_action": "/message/action";
     "message_default": "/message/default";
+    "monitor": "/monitor";
+    "monitor_action": "/monitor/action";
+    "monitor_default": "/monitor/default";
     "pending": "/pending";
     "suspended": "/suspended";
     "tasklog": "/tasklog";
@@ -98,6 +102,7 @@ declare module "@elegant-router/types" {
     | "login"
     | "manage"
     | "message"
+    | "monitor"
     | "pending"
     | "suspended"
     | "tasklog"
@@ -135,12 +140,15 @@ declare module "@elegant-router/types" {
     | "industria_task_default"
     | "manage_authorize_action"
     | "manage_authorize_default"
+    | "manage_config"
     | "manage_menu"
     | "manage_role"
     | "manage_user-detail"
     | "manage_user"
     | "message_action"
     | "message_default"
+    | "monitor_action"
+    | "monitor_default"
     | "pending"
     | "suspended"
     | "tasklog_default"

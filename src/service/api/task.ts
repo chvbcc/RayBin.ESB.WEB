@@ -213,3 +213,56 @@ export namespace TaskWebApi {
     }
   }
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// data monitor api
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export namespace TaskDataMonitorApi {
+  export function fetchGetList(params?: Api.Task.MonitorSearchParams) {
+    return request<Api.Task.TaskList>({
+      url: '/taskdatamonitor/getPagingList',
+      method: 'get',
+      params
+    });
+  }
+
+  export function fetchGetConditionList(connectionId: number, dataObjectType: string, dataObjectName: string) {
+    return request({
+      url: '/taskdatamonitor/getConditionList',
+      method: 'get',
+      params: { connectionId, dataObjectType, dataObjectName }
+    });
+  }
+
+  export function fetchCheckName(taskName: string, createUserId: number, id: number) {
+    return request({
+      url: '/taskdatamonitor/checkName',
+      method: 'get',
+      params: { taskName, createUserId, id }
+    });
+  }
+
+  export function fetchGetModel(id: number) {
+    return request({
+      url: '/taskdatamonitor/getModel',
+      method: 'get',
+      params: { id }
+    });
+  }
+
+  export function fetchSave(data: Api.Task.TaskDataMonitorModel) {
+    let url = data.task.id === 0 ? '/taskdatamonitor/add' : '/taskdatamonitor/update';
+    return request({
+      url: url,
+      method: 'post',
+      data
+    });
+  }
+
+  export function fetchDelete(id: number) {
+    return request({
+      url: '/taskdatamonitor/delete',
+      method: 'delete',
+      params: { id }
+    });
+  }
+}

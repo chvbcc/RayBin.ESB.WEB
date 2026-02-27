@@ -18,22 +18,25 @@ export const enableStatusOptions = convertRecordToOption(enableStatusRecord);
 /** boolean yes or no **/
 /** yes or no **/
 export const booleanYesOrNoRecord: Record<Api.Common.BooleanYesOrNo, App.I18n.I18nKey> = {
-  'false': 'common.yesOrNo.no',
-  'true': 'common.yesOrNo.yes'
+  'true': 'common.yesOrNo.yes',
+  'false': 'common.yesOrNo.no'
 };
 export const booleanYesOrNoOptions = transformRecordToOption(booleanYesOrNoRecord);
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // database
 export const databaseTypeRecord: Record<Api.Connection.DatabaseType, App.I18n.I18nKey> = {
-  '0': 'dropdownList.databaseType.hana',
-  '1': 'dropdownList.databaseType.mySql',
+  '0': 'dropdownList.databaseType.mySql',
+  '1': 'dropdownList.databaseType.postgreSQL',
   '2': 'dropdownList.databaseType.oracle',
   '3': 'dropdownList.databaseType.sqlServer',
-  '4': 'dropdownList.databaseType.postgreSQL',
-  '5': 'dropdownList.databaseType.oceanBase',
-  '6': 'dropdownList.databaseType.polarDB',
-  '7': 'dropdownList.databaseType.goldenDB',
-  '8': 'dropdownList.databaseType.openGauss'
+  '4': 'dropdownList.databaseType.hana',
+  '5': 'dropdownList.databaseType.polarDB',
+  '6': 'dropdownList.databaseType.goldenDB',
+  '7': 'dropdownList.databaseType.tidb',
+  '8': 'dropdownList.databaseType.oceanBase',
+  '9': 'dropdownList.databaseType.daMeng',
+  '10': 'dropdownList.databaseType.openGauss',
+  '11': 'dropdownList.databaseType.kingBase',
 };
 export const databaseTypeOptions = transformRecordToOption(databaseTypeRecord);
 
@@ -50,7 +53,8 @@ export const connectionModeOptions = transformRecordToOption(connectionModeRecor
 export const taskTypeRecord: Record<Api.Task.TaskType, App.I18n.I18nKey> = {
   '5000': 'dropdownList.taskType.database',
   '5001': 'dropdownList.taskType.webApi',
-  '5002': 'dropdownList.taskType.industry'
+  '5002': 'dropdownList.taskType.industry',
+  '5003': 'dropdownList.taskType.dataMonitor'
 };
 export const taskTypeOptions = transformRecordToOption(taskTypeRecord);
 
@@ -100,6 +104,17 @@ export const dataObjectTypeRecord: Record<Api.Task.DataObjectType, App.I18n.I18n
 };
 export const dataObjectTypeOptions = transformRecordToOption(dataObjectTypeRecord);
 export const programmeLanguageOptions = [{ label: 'C#', value: '7000' }, { label: 'Python', value: '7001' }];
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// data monitor
+export const conditionOperatorOptions = [{ label: '=', value: '=' }, { label: '>', value: '>' }, { label: '>=', value: '>=' }, { label: '<', value: '<' }, { label: '<=', value: '<=' }, { label: '<>', value: '<>' }, { label: 'Like', value: 'like' }];
+export const andOrOperatorOptions = [{ label: 'And', value: 'and' }, { label: 'Or', value: 'or' }];
+
+export const dataRangeRecord: Record<Api.Task.DataRange, App.I18n.I18nKey> = {
+  0: 'dropdownList.dataRange.lastData',
+  1: 'dropdownList.dataRange.customRange'
+};
+export const dataRangeOptions = convertRecordToOption(dataRangeRecord);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // message
 export const messageTypeRecord: Record<Api.Message.MessageType, App.I18n.I18nKey> = {

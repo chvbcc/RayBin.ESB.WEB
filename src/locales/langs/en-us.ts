@@ -186,12 +186,15 @@ const local: App.I18n.Schema = {
     webapi_default: 'Web API Task',
     webapi_action: 'Web API Task',
     industria: 'Industrial Interface Task',
-    industria_connection: 'PLC Connection',
-    industria_connection_default: 'PLC Connection',
-    industria_connection_action: 'PLC Connection',
+    industria_connection: 'Industrial Connection',
+    industria_connection_default: 'Industrial Connection',
+    industria_connection_action: 'Industrial Connection',
     industria_task: 'Industrial Interface Task',
     industria_task_default: 'Industrial Interface Task',
     industria_task_action: 'Industrial Interface Task',
+    monitor: 'Data Monitor Task',
+    monitor_default: 'Data Monitor Task',
+    monitor_action: 'Data Monitor Task',
     pending: 'Pending Task',
     suspended: 'Suspended Task',
     tasklog: 'Task Log',
@@ -209,6 +212,7 @@ const local: App.I18n.Schema = {
     manage_authorize_default: 'Authorize Manage',
     manage_authorize_action: 'Authorize',
     manage_menu: 'Menu Manage',
+    manage_config: 'System Config',
   },
   page: {
     login: {
@@ -290,6 +294,7 @@ const local: App.I18n.Schema = {
       title: 'Database Connection',
       add: 'Add Connection',
       edit: 'Edit Connection',
+      connectionConfig: 'Connection Configuration',
       connectionName: 'Connection Name',
       databaseType: 'Database Type',
       hostName: 'Host Name',
@@ -339,6 +344,7 @@ const local: App.I18n.Schema = {
         paused: 'Paused'
       },
       form: {
+        id: 'Please enter task no.',
         taskType: 'Please select task type',
         taskName: 'Please enter task name',
         runMode: 'Please select run mode',
@@ -454,6 +460,53 @@ const local: App.I18n.Schema = {
         deleteTable: 'Delete Table/View'
       }
     },
+    monitor: {
+      title: 'Data Monitor',
+      add: 'Add Data Monitor',
+      edit: 'Edit Data Monitor',
+      monitorTitle: 'Monitor Data Config',
+      messageTitle: 'Notification Message Config',
+      taskID: 'Task ID',
+      connectionID: 'Database Connection',
+      connectionName: 'Connection Name',
+      dataObjectType: 'Object Type',
+      dataObjectName: 'Object Name',
+      name: 'Field Name',
+      value: 'Condition Value',
+      dataType: 'Data Type',
+      triggerLogic: 'Trigger Logic',
+      conditionOperator: 'Condition Operator',
+      andOrOperator: 'And/Or Operator',
+      sqlString: 'SQL String',
+      orderPrimaryKey: 'Order Primary Key',
+      dataRange: 'Data Range',
+      customRange: 'Custom Range',
+      pushType: 'Push Type',
+      messageType: 'Message Type',
+      messageRecipient: 'Message Recipient',
+      emailSubject: 'Email Subject',
+      messageContent: 'Message Content',
+      createUserID: 'Create User ID',
+      createTime: 'Create Time',
+      form: {
+        connectionID: 'Please select data connection',
+        dataObjectType: 'Please select object type',
+        dataObjectName: 'Please select object name',
+        value: 'Please enter condition value',
+        triggerLogic: 'Please select trigger logic',
+        conditionOperator: 'Please select condition operator',
+        andOrOperator: 'Please select and/or operator',
+        sqlString: 'Please enter SQL string',
+        orderPrimaryKey: 'Please select order primary key',
+        dataRange: 'Please select data range',
+        customRange: 'Please enter custom range',
+        pushType: 'Please select push type',
+        messageType: 'Please select message type',
+        messageRecipient: 'Please select message recipient',
+        emailSubject: 'Please enter email subject',
+        messageContent: 'Please enter message content',
+      }
+    },
     taskLog: {
       title: 'Task Log',
       viewLogDetail: 'View Log Detail',
@@ -485,6 +538,7 @@ const local: App.I18n.Schema = {
       messageInsert: 'Insert Message',
       messageContent: 'Message Content',
       userSearchField:'Search Fields',
+      userSearchKeyword:'Search Keyword',
       userSearch: 'Search User',
       form: {
         messageType: 'Please select message type',
@@ -760,6 +814,41 @@ const local: App.I18n.Schema = {
         addPermission: 'Add Permission',
         editPermission: 'Edit Permission',
       },
+      config: {
+        title: 'System Configuration',
+        edit: 'Edit Configuration',
+        weComTitle: 'WeCom Configuration',
+        dingTalkTitle: 'DingTalk Configuration',
+        emailServiceTitle: 'Email Service Configuration',
+        weComTokenUrl: 'WeCom Token URL',
+        weComCorpID: 'WeCom Corp ID',
+        weComCorpSecret: 'WeCom Corp Secret',
+        weComTokenPath: 'WeCom Token Path',
+        dingTalkTokenUrl: 'DingTalk Token URL',
+        dingTalkAppKey: 'DingTalk App Key',
+        dingTalkAppSecret: 'DingTalk App Secret',
+        dingTalkTokenPath: 'DingTalk Token Path',
+        smtpServer: 'SMTP Server',
+        smtpPort: 'SMTP Port',
+        emailAccount: 'Email Account',
+        emailPassword: 'Email Password',
+        emailSender: 'Email Sender',
+        form: {
+          weComTokenUrl: 'Please enter WeCom Token URL',
+          weComCorpID: 'Please enter WeCom Corp ID',
+          weComCorpSecret: 'Please enter WeCom Corp Secret',
+          weComTokenPath: 'Please enter WeCom Token Path',
+          dingTalkTokenUrl: 'Please enter DingTalk Token URL',
+          dingTalkAppKey: 'Please enter DingTalk App Key',
+          dingTalkAppSecret: 'Please enter DingTalk App Secret',
+          dingTalkTokenPath: 'Please enter DingTalk Token Path',
+          smtpServer: 'Please enter SMTP Server',
+          smtpPort: 'Please enter SMTP Port',
+          emailAccount: 'Please enter Email Account',
+          emailPassword: 'Please enter Email Password',
+          emailSender: 'Please enter Email Sender'
+        }
+      }
     }
   },
   form: {
@@ -810,20 +899,24 @@ const local: App.I18n.Schema = {
   },
   dropdownList: {
     databaseType: {
-      hana: 'Hana',
       mySql: 'MySql',
+      postgreSQL: 'PostgreSQL',
       oracle: 'Oracle',
       sqlServer: 'SqlServer',
-      postgreSQL: 'PostgreSQL',
-      oceanBase: 'OceanBase',
+      hana: 'Hana',
       polarDB: 'PolarDB',
       goldenDB: 'GoldenDB',
-      openGauss: 'OpenGauss'
+      tidb: 'TiDB',
+      oceanBase: 'OceanBase',
+      daMeng: 'DaMeng',
+      openGauss: 'OpenGauss',
+      kingBase: 'KingBase'
     },
     taskType: {
       database: 'Database',
       webApi: 'WebApi',
-      industry: 'Industry PLC'
+      industry: 'Industry PLC',
+      dataMonitor: 'Data Monitor'
     },
     runMode: {
       manualOperation: 'Manual Operation',
@@ -865,7 +958,11 @@ const local: App.I18n.Schema = {
       pull: 'Pull Data',
       pushSingle: 'Push Single Data',
       pushBatch: 'Push Batch Data'
-    }
+    },
+    dataRange: {
+      lastData: 'Last Data',
+      customRange: 'Custom Range'
+    },
   },
 };
 

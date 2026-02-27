@@ -13,9 +13,9 @@
 
   // #region 1. 参数定义
   const id = ref(0);
-  const messageType = ref<Api.Message.MessageType>(0);
   const emailSubject = ref<string>('');
   const messageContent = ref<string>('');
+  const messageType = ref<Api.Message.MessageType>(0);
   const route = useRoute();
   const router = useRouter();
   const appStore = useAppStore();

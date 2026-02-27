@@ -6,9 +6,10 @@ declare namespace Api {
     //#region Task Common
     // Task search params
     type TaskSearchParams = Partial<Pick<Task, 'taskName' | 'taskType' | 'runMode' | 'description' | 'status'> & Common.CommonSearchParams >;
+    type MonitorSearchParams = Partial<Pick<Task, 'id' | 'taskName' | 'taskType' | 'description' | 'status'> & Api.Common.CommonSearchParams >;
 
-    // Task 5000 Database, 5001 WebApi, 5002 Industry PLC
-    type TaskType = '5000' | '5001' | '5002';
+    // Task 5000 Database, 5001 WebApi, 5002 Industry PLC, 5003 Data Monitor
+    type TaskType = '5000' | '5001' | '5002' | '5003';
 
     // Run mode 6000 Manual Operation, 6001 Daily, 6002 Weekly,  6003 Monthly, 6004 Annually, 6005 Time Interval
     type RunMode = '6000' | '6001' | '6002' | '6003' | '6004' | '6005';
@@ -171,5 +172,34 @@ declare namespace Api {
     //#endregion
 
     /* Task industry plc */
+
+    /* Data monitor */
+    type TaskDataMonitor = {
+      id: number;
+      taskID: number;
+      connectionID: number | undefined;
+      dataObjectType: DataObjectType;
+      dataObjectName: string | undefined;
+      conditions: Condition[];
+      triggerLogic: boolean;
+      orderPrimaryKey: string | undefined;
+      dataRange: DataRange;
+      customRange: string;
+      pushMessageType: Api.Message.MessageType | undefined;
+      messageRecipient: string;
+      emailSubject: string;
+      messageContent: string;
+    };
+
+    type Condition = {
+      name: string;
+      dataType: string;
+      conditionOperator: string;
+      value: string;
+      andOrOperator: string;
+    };
+
+    type DataRange = 0 | 1;
+    type TaskDataMonitorModel = { task: TaskModel; taskDataMonitor: TaskDataMonitor; };
   }
 }
