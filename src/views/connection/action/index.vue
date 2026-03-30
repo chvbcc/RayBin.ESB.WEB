@@ -274,7 +274,7 @@ function handleBack() {
                 </a-form-item>
               </a-col>
               <a-col :span="24">
-                <a-form-item :label-col="{ span: 6 }" label="&nbsp;" :colon="false" class="m-2">
+                <a-form-item :label-col="{ span: 4}" label="&nbsp;" :colon="false" class="m-2">
                   <a-button type="primary" @click="handleTestConnection" class="orange-btn mr-8 pl-6 pr-6">
                     {{$t('common.test')}}
                   </a-button>

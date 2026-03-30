@@ -24,6 +24,17 @@
       padding-inline: calc(50% - 18px);
     }
   }
+
+  /* 当没有图标时给标题留出 20px 左边距 */
+  .ant-menu-item .ant-menu-title-content,
+  .horizontal-menu .ant-menu-item .ant-menu-title-content {
+    padding-left: 12px;
+  }
+
+  .ant-menu-item .ant-menu-item-icon + .ant-menu-title-content,
+  .horizontal-menu .ant-menu-item .ant-menu-item-icon + .ant-menu-title-content {
+    padding-left: 0cm;
+  }
 }
 
 .select-menu {

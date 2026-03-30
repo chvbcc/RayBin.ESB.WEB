@@ -631,6 +631,35 @@ declare namespace App {
             deleteTable: string;
           };
         };
+        deviceConnection: {
+          title: string;
+          add: string;
+          edit: string;
+          titleBaseInfo: string;
+          connectionName: string;
+          manufacturer: string;
+          deviceName: string;
+          deviceModel: string;
+          address: string;
+          username: string;
+          password: string;
+          form: {
+            connectionName: string;
+            manufacturer: string;
+            deviceName: string;
+            deviceModel: string;
+            address: string;
+            username: string;
+            password: string;
+          };
+        };
+        industry: {
+          title: string;
+          add: string;
+          edit: string;
+          titleBaseInfo: string;
+          titleDataMapping: string;
+        };
         monitor: {
           title: string;
           add: string;

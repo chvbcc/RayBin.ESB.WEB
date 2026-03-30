@@ -1,6 +1,6 @@
 const local: App.I18n.Schema = {
   system: {
-    title: 'RayBin ESB 6.0',
+    title: 'RayBin ESB 8.0',
     updateTitle: '系统版本更新通知',
     updateContent: '检测到系统有新版本发布，是否立即刷新页面？',
     updateConfirm: '立即刷新',
@@ -186,9 +186,9 @@ const local: App.I18n.Schema = {
     webapi_default: '网络接口任务',
     webapi_action: '网络接口任务',
     industria: '工业接口任务',
-    industria_connection: '工业接口任务',
-    industria_connection_default: '工业接口任务',
-    industria_connection_action: '工业接口任务',
+    industria_connection: '设备连接',
+    industria_connection_default: '设备连接',
+    industria_connection_action: '设备连接',
     industria_task: '工业接口任务',
     industria_task_default: '工业接口任务',
     industria_task_action: '工业接口任务',
@@ -459,6 +459,35 @@ const local: App.I18n.Schema = {
         deleteSearchKey: '删除查询主键',
         deleteTable: '删除表视图'
       }
+    },
+    deviceConnection: {
+      title: '设备连接',
+      add: '新增设备连接',
+      edit: '编辑设备连接',
+      titleBaseInfo: '基本信息',
+      connectionName: '连接名称',
+      manufacturer: '设备厂商',
+      deviceName: '设备名称',
+      deviceModel: '设备型号',
+      address: '设备地址',
+      username: '用户名',
+      password: '密码',
+      form: {
+        connectionName: '请输入连接名称',
+        manufacturer: '请选择设备厂商',
+        deviceName: '请输入设备名称',
+        deviceModel: '请输入设备型号',
+        address: '请输入设备 OPC UA 地址',
+        username: '请输入用户名',
+        password: '请输入密码',
+      }
+    },
+    industry: {
+      title: '行业管理',
+      add: '新增行业',
+      edit: '编辑行业',
+      titleBaseInfo: '基本信息',
+      titleDataMapping: '数据映射',
     },
     monitor: {
       title: '数据监控任务',

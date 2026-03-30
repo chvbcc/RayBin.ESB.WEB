@@ -1,6 +1,6 @@
 const local: App.I18n.Schema = {
   system: {
-    title: 'RayBin ESB 6.0',
+    title: 'RayBin ESB 8.0',
     updateTitle: 'System Version Update Notification',
     updateContent: 'A new version of the system has been detected. Do you want to refresh the page immediately?',
     updateConfirm: 'Refresh immediately',
@@ -459,6 +459,35 @@ const local: App.I18n.Schema = {
         deleteSearchKey: 'Delete Search Primary Key',
         deleteTable: 'Delete Table/View'
       }
+    },
+    deviceConnection: {
+      title: 'Device Connection',
+      add: 'Add Device Connection',
+      edit: 'Edit Device Connection',
+      titleBaseInfo: 'Basic Information',
+      connectionName: 'Connection Name',
+      manufacturer: 'Device Manufacturer',
+      deviceName: 'Device Name',
+      deviceModel: 'Device Model',
+      address: 'Device Address',
+      username: 'Username',
+      password: 'Password',
+      form: {
+        connectionName: 'Please enter connection name',
+        manufacturer: 'Please select device manufacturer',
+        deviceName: 'Please enter device name',
+        deviceModel: 'Please enter device model',
+        address: 'Please enter OPC UA address',
+        username: 'Please enter username',
+        password: 'Please enter password',
+      }
+    },
+    industry: {
+      title: 'Industry Management',
+      add: 'Add Industry',
+      edit: 'Edit Industry',
+      titleBaseInfo: 'Basic Information',
+      titleDataMapping: 'Data Mapping',
     },
     monitor: {
       title: 'Data Monitor',
