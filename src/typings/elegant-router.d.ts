@@ -29,12 +29,15 @@ declare module "@elegant-router/types" {
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
     "industria": "/industria";
+    "industria_api": "/industria/api";
+    "industria_api_action": "/industria/api/action";
+    "industria_api_default": "/industria/api/default";
     "industria_connection": "/industria/connection";
     "industria_connection_action": "/industria/connection/action";
     "industria_connection_default": "/industria/connection/default";
-    "industria_task": "/industria/task";
-    "industria_task_action": "/industria/task/action";
-    "industria_task_default": "/industria/task/default";
+    "industria_monitor": "/industria/monitor";
+    "industria_monitor_action": "/industria/monitor/action";
+    "industria_monitor_default": "/industria/monitor/default";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-weCom)?";
     "manage": "/manage";
     "manage_authorize": "/manage/authorize";
@@ -134,10 +137,12 @@ declare module "@elegant-router/types" {
     | "database_action"
     | "database_default"
     | "home"
+    | "industria_api_action"
+    | "industria_api_default"
     | "industria_connection_action"
     | "industria_connection_default"
-    | "industria_task_action"
-    | "industria_task_default"
+    | "industria_monitor_action"
+    | "industria_monitor_default"
     | "manage_authorize_action"
     | "manage_authorize_default"
     | "manage_config"

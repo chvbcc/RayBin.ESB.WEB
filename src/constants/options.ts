@@ -53,8 +53,8 @@ export const connectionModeOptions = transformRecordToOption(connectionModeRecor
 export const taskTypeRecord: Record<Api.Task.TaskType, App.I18n.I18nKey> = {
   '5000': 'dropdownList.taskType.database',
   '5001': 'dropdownList.taskType.webApi',
-  '5002': 'dropdownList.taskType.industry',
-  '5003': 'dropdownList.taskType.dataMonitor'
+  '5002': 'dropdownList.taskType.dataMonitor',
+  '5003': 'dropdownList.taskType.deviceMonitor',
 };
 export const taskTypeOptions = transformRecordToOption(taskTypeRecord);
 
@@ -114,7 +114,14 @@ export const dataRangeRecord: Record<Api.Task.DataRange, App.I18n.I18nKey> = {
   1: 'dropdownList.dataRange.customRange'
 };
 export const dataRangeOptions = convertRecordToOption(dataRangeRecord);
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// Industria Api
+export const industriaApiInterfaceTypeRecord: Record<Api.Industria.InterfaceType, App.I18n.I18nKey> = {
+  0: 'dropdownList.industriaApiInterfaceType.readNode',
+  1: 'dropdownList.industriaApiInterfaceType.writeNode',
+  2: 'dropdownList.industriaApiInterfaceType.subscribeNode'
+};
+export const industriaApiInterfaceTypeOptions = transformRecordToOption(industriaApiInterfaceTypeRecord);
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // message
 export const messageTypeRecord: Record<Api.Message.MessageType, App.I18n.I18nKey> = {
@@ -181,10 +188,10 @@ export const permissionTypeOptions = transformRecordToOption(permissionTypeRecor
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // token
 export const interfaceTypeRecord: Record<Api.Task.InterfaceType, App.I18n.I18nKey> = {
-  '8000': 'dropdownList.requestType.call',
-  '8001': 'dropdownList.requestType.pull',
-  '8002': 'dropdownList.requestType.pushSingle',
-  '8003': 'dropdownList.requestType.pushBatch'
+  '8000': 'dropdownList.interfaceType.call',
+  '8001': 'dropdownList.interfaceType.pull',
+  '8002': 'dropdownList.interfaceType.pushSingle',
+  '8003': 'dropdownList.interfaceType.pushBatch'
 };
 export const interfaceTypeOptions = transformRecordToOption(interfaceTypeRecord);
 

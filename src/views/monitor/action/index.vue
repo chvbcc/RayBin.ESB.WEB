@@ -78,7 +78,7 @@
   function createTaskModel(): Api.Task.TaskModel {
     return {
       id: 0,
-      taskType: '5000',
+      taskType: '5002',
       taskName: '',
       runMode: '6005',
       runWeek: undefined,

@@ -131,6 +131,34 @@ export const generatedRoutes: GeneratedRoute[] = [
     },
     children: [
       {
+        name: 'industria_api',
+        path: '/industria/api',
+        meta: {
+          title: 'industria_api',
+          i18nKey: 'route.industria_api'
+        },
+        children: [
+          {
+            name: 'industria_api_action',
+            path: '/industria/api/action',
+            component: 'view.industria_api_action',
+            meta: {
+              title: 'industria_api_action',
+              i18nKey: 'route.industria_api_action'
+            }
+          },
+          {
+            name: 'industria_api_default',
+            path: '/industria/api/default',
+            component: 'view.industria_api_default',
+            meta: {
+              title: 'industria_api_default',
+              i18nKey: 'route.industria_api_default'
+            }
+          }
+        ]
+      },
+      {
         name: 'industria_connection',
         path: '/industria/connection',
         meta: {
@@ -159,29 +187,29 @@ export const generatedRoutes: GeneratedRoute[] = [
         ]
       },
       {
-        name: 'industria_task',
-        path: '/industria/task',
+        name: 'industria_monitor',
+        path: '/industria/monitor',
         meta: {
-          title: 'industria_task',
-          i18nKey: 'route.industria_task'
+          title: 'industria_monitor',
+          i18nKey: 'route.industria_monitor'
         },
         children: [
           {
-            name: 'industria_task_action',
-            path: '/industria/task/action',
-            component: 'view.industria_task_action',
+            name: 'industria_monitor_action',
+            path: '/industria/monitor/action',
+            component: 'view.industria_monitor_action',
             meta: {
-              title: 'industria_task_action',
-              i18nKey: 'route.industria_task_action'
+              title: 'industria_monitor_action',
+              i18nKey: 'route.industria_monitor_action'
             }
           },
           {
-            name: 'industria_task_default',
-            path: '/industria/task/default',
-            component: 'view.industria_task_default',
+            name: 'industria_monitor_default',
+            path: '/industria/monitor/default',
+            component: 'view.industria_monitor_default',
             meta: {
-              title: 'industria_task_default',
-              i18nKey: 'route.industria_task_default'
+              title: 'industria_monitor_default',
+              i18nKey: 'route.industria_monitor_default'
             }
           }
         ]

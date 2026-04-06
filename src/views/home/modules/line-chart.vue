@@ -14,8 +14,8 @@ const title = computed(() => $t('page.home.taskSpentTime'));
 interface TaskSpentTimeModel {
   databaseTaskSpentTime: number[];
   webApiTaskSpentTime: number[];
-  industriaTaskSpentTime: number[];
   dataMonitorTaskSpentTime: number[];
+  deviceMonitorTaskSpentTime: number[];
 }
 
 interface Props {
@@ -25,8 +25,8 @@ const props = withDefaults(defineProps<Props>(), {
   taskSpentTimeModel: () => ({
     databaseTaskSpentTime: [],
     webApiTaskSpentTime: [],
-    industriaTaskSpentTime: [],
-    dataMonitorTaskSpentTime: []
+    dataMonitorTaskSpentTime: [],
+    deviceMonitorTaskSpentTime: []
   })
 });
 
@@ -51,7 +51,7 @@ const { domRef, updateOptions } = useEcharts(() => ({
     }
   },
   legend: {
-    data: [$t('page.home.databaseTask'), $t('page.home.webApiTask'), $t('page.home.industryTask'), $t('page.home.dataMonitorTask')]
+    data: [$t('page.home.databaseTask'), $t('page.home.webApiTask'), $t('page.home.dataMonitorTask'), $t('page.home.deviceMonitorTask')],
   },
   grid: {
     left: '3%',
@@ -90,8 +90,8 @@ const { domRef, updateOptions } = useEcharts(() => ({
       data: [] as number[]
     },
     {
-      color: '#56cdf3',
-      name: $t('page.home.industryTask'),
+      color: '#fcbc25',
+      name: $t('page.home.dataMonitorTask'),
       type: 'line',
       smooth: true,
       stack: 'Total',
@@ -101,8 +101,8 @@ const { domRef, updateOptions } = useEcharts(() => ({
       data: [] as number[]
     },
     {
-      color: '#fcbc25',
-      name: $t('page.home.dataMonitorTask'),
+      color: '#56cdf3',
+      name: $t('page.home.deviceMonitorTask'),
       type: 'line',
       smooth: true,
       stack: 'Total',
@@ -120,14 +120,14 @@ function updateLocale() {
     opts.legend.data = originOpts.legend.data;
     opts.title.text = title.value;
     opts.series[0].name = originOpts.series[0].name;
-    opts.series[1].name = originOpts.series[1].name;
-    opts.series[2].name = originOpts.series[2].name;
+      opts.series[1].name = originOpts.series[1].name;
+      opts.series[2].name = originOpts.series[2].name;
     opts.series[3].name = originOpts.series[3].name;
 
     opts.series[0].data = props.taskSpentTimeModel.databaseTaskSpentTime;
     opts.series[1].data = props.taskSpentTimeModel.webApiTaskSpentTime;
-    opts.series[2].data = props.taskSpentTimeModel.industriaTaskSpentTime;
-    opts.series[3].data = props.taskSpentTimeModel.dataMonitorTaskSpentTime;
+    opts.series[2].data = props.taskSpentTimeModel.dataMonitorTaskSpentTime;
+    opts.series[3].data = props.taskSpentTimeModel.deviceMonitorTaskSpentTime;
     return opts;
   });
 }

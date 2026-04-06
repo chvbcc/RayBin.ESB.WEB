@@ -185,16 +185,19 @@ const local: App.I18n.Schema = {
     webapi: 'Web API Task',
     webapi_default: 'Web API Task',
     webapi_action: 'Web API Task',
+    monitor: 'Data Monitor Task',
+    monitor_default: 'Data Monitor Task',
+    monitor_action: 'Data Monitor Task',
     industria: 'Industrial Interface Task',
     industria_connection: 'Industrial Connection',
     industria_connection_default: 'Industrial Connection',
     industria_connection_action: 'Industrial Connection',
-    industria_task: 'Industrial Interface Task',
-    industria_task_default: 'Industrial Interface Task',
-    industria_task_action: 'Industrial Interface Task',
-    monitor: 'Data Monitor Task',
-    monitor_default: 'Data Monitor Task',
-    monitor_action: 'Data Monitor Task',
+    industria_monitor: 'Device Monitor Task',
+    industria_monitor_default: 'Device Monitor Task',
+    industria_monitor_action: 'Device Monitor Task',
+    industria_api: 'Industrial API Task',
+    industria_api_default: 'Industrial API Task',
+    industria_api_action: 'Industrial API Task',
     pending: 'Pending Task',
     suspended: 'Suspended Task',
     tasklog: 'Task Log',
@@ -283,8 +286,8 @@ const local: App.I18n.Schema = {
       suspendedTaskCount: 'Suspended Tasks',
       databaseTask: 'Database Tasks',
       webApiTask: 'Web API Tasks',
-      industryTask: 'Industry Tasks',
       dataMonitorTask: 'Data Monitor Tasks',
+      deviceMonitorTask: 'Device Monitor Tasks',
       taskSpentTime: 'Task Spent Time',
       taskProportion: 'Task Proportion',
       taskRunLogs: 'Task Run Logs',
@@ -482,12 +485,24 @@ const local: App.I18n.Schema = {
         password: 'Please enter password',
       }
     },
-    industry: {
-      title: 'Industry Management',
-      add: 'Add Industry',
-      edit: 'Edit Industry',
+    industriaApi: {
+      title: 'Interface Management',
+      add: 'Add Interface',
+      edit: 'Edit Interface',
       titleBaseInfo: 'Basic Information',
-      titleDataMapping: 'Data Mapping',
+      titleApiList: 'Interface List',
+      interfaceName: 'Interface Name',
+      connectionID: 'Device Connection',
+      interfaceType: 'Interface Type',
+      description: 'Interface Description',
+      status: 'Interface Status',
+      form: {
+        interfaceName: 'Please enter interface name',
+        connectionID: 'Please select device connection',
+        interfaceType: 'Please select interface type',
+        description: 'Please enter interface description',
+        status: 'Please select interface status',
+      }
     },
     monitor: {
       title: 'Data Monitor',
@@ -944,8 +959,8 @@ const local: App.I18n.Schema = {
     taskType: {
       database: 'Database',
       webApi: 'WebApi',
-      industry: 'Industry PLC',
-      dataMonitor: 'Data Monitor'
+      dataMonitor: 'Data Monitor',
+      deviceMonitor: 'Device Monitor'
     },
     runMode: {
       manualOperation: 'Manual Operation',
@@ -982,11 +997,16 @@ const local: App.I18n.Schema = {
       failure: 'Failure',
       debug: 'Debug'
     },
-    requestType: {
+    interfaceType: {
       call: 'Call API',
       pull: 'Pull Data',
       pushSingle: 'Push Single Data',
       pushBatch: 'Push Batch Data'
+    },
+    industriaApiInterfaceType: {
+      readNode: 'Read Node',
+      writeNode: 'Write Node',
+      subscribeNode: 'Subscribe Node'
     },
     dataRange: {
       lastData: 'Last Data',

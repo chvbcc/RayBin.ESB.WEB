@@ -185,16 +185,19 @@ const local: App.I18n.Schema = {
     webapi: '网络接口任务',
     webapi_default: '网络接口任务',
     webapi_action: '网络接口任务',
-    industria: '工业接口任务',
-    industria_connection: '设备连接',
-    industria_connection_default: '设备连接',
-    industria_connection_action: '设备连接',
-    industria_task: '工业接口任务',
-    industria_task_default: '工业接口任务',
-    industria_task_action: '工业接口任务',
     monitor: '数据监控任务',
     monitor_default: '数据监控任务',
     monitor_action: '数据监控任务',
+    industria: '工业设备任务',
+    industria_connection: '设备连接',
+    industria_connection_default: '设备连接',
+    industria_connection_action: '设备连接',
+    industria_monitor: '监控任务',
+    industria_monitor_default: '监控任务',
+    industria_monitor_action: '监控任务',
+    industria_api: '接口任务',
+    industria_api_default: '接口任务',
+    industria_api_action: '接口任务',
     pending: '待运行任务',
     suspended: '已暂停任务',
     tasklog: '任务日志',
@@ -283,8 +286,8 @@ const local: App.I18n.Schema = {
       suspendedTaskCount: '已暂停的任务',
       databaseTask: '数据库任务',
       webApiTask: '网络接口任务',
-      industryTask: '工业接口任务',
       dataMonitorTask: '数据监控任务',
+      deviceMonitorTask: '设备监控任务',
       taskSpentTime: '任务耗时',
       taskProportion: '任务比例',
       taskRunLogs: '任务运行日志',
@@ -482,12 +485,24 @@ const local: App.I18n.Schema = {
         password: '请输入密码',
       }
     },
-    industry: {
-      title: '行业管理',
-      add: '新增行业',
-      edit: '编辑行业',
+    industriaApi: {
+      title: '接口管理',
+      add: '新增接口',
+      edit: '编辑接口',
       titleBaseInfo: '基本信息',
-      titleDataMapping: '数据映射',
+      titleApiList: '接口列表',
+      interfaceName: '接口名称',
+      connectionID: '设备连接',
+      interfaceType: '接口类型',
+      description: '接口描述',
+      status: '接口状态',
+      form: {
+        interfaceName: '请输入接口名称',
+        connectionID: '请选择设备连接',
+        interfaceType: '请选择接口类型',
+        description: '请输入接口描述',
+        status: '请选择接口状态',
+      }
     },
     monitor: {
       title: '数据监控任务',
@@ -944,8 +959,8 @@ const local: App.I18n.Schema = {
     taskType: {
       database: '数据库任务',
       webApi: '网络接口任务',
-      industry: '工业PLC任务',
-      dataMonitor: '数据监控任务'
+      dataMonitor: '数据监控任务',
+      deviceMonitor: '设备监控任务'
     },
     runMode: {
       manualOperation: '手动运行',
@@ -982,11 +997,16 @@ const local: App.I18n.Schema = {
       failure: '失败',
       debug: '调试'
     },
-    requestType: {
+    interfaceType: {
       call: '调用接口',
       pull: '拉取数据',
       pushSingle: '推送单条数据',
       pushBatch: '推送批量数据'
+    },
+    industriaApiInterfaceType: {
+      readNode: '读取节点',
+      writeNode: '写入节点',
+      subscribeNode: '订阅节点'
     },
     dataRange: {
       lastData: '最新数据',

@@ -454,8 +454,8 @@ declare namespace App {
           suspendedTaskCount: string;
           databaseTask:string;
           webApiTask:string;
-          industryTask:string;
           dataMonitorTask:string;
+          deviceMonitorTask:string;
           taskSpentTime: string;
           taskProportion: string;
           taskRunLogs: string;
@@ -653,12 +653,24 @@ declare namespace App {
             password: string;
           };
         };
-        industry: {
+        industriaApi: {
           title: string;
           add: string;
           edit: string;
           titleBaseInfo: string;
-          titleDataMapping: string;
+          titleApiList: string;
+          interfaceName: string;
+          connectionID: string;
+          interfaceType: string;
+          description: string;
+          status: string;
+          form: {
+            interfaceName: string;
+            connectionID: string;
+            interfaceType: string;
+            description: string;
+            status: string;
+          };
         };
         monitor: {
           title: string;
@@ -1092,8 +1104,8 @@ declare namespace App {
         taskType: {
           database: string;
           webApi: string;
-          industry: string;
           dataMonitor: string;
+          deviceMonitor: string;
         };
         runMode: {
           manualOperation: string;
@@ -1130,11 +1142,16 @@ declare namespace App {
           failure: string,
           debug: string
         },
-        requestType: {
+        interfaceType: {
           call: string;
           pull: string;
           pushSingle: string;
           pushBatch: string;
+        };
+        industriaApiInterfaceType: {
+          readNode: string;
+          writeNode: string;
+          subscribeNode: string;
         };
         dataRange: {
           lastData: string;

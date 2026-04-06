@@ -14,8 +14,8 @@ const appStore = useAppStore();
 interface TaskCountModel {
   databaseTaskCount: number;
   webApiTaskCount: number;
-  industriaTaskCount: number;
   dataMonitorTaskCount: number;
+  deviceMonitorTaskCount: number;
 }
 
 interface Props {
@@ -26,8 +26,8 @@ const props = withDefaults(defineProps<Props>(), {
   taskCountModel: () => ({
     databaseTaskCount: 0,
     webApiTaskCount: 0,
-    industriaTaskCount: 0,
-    dataMonitorTaskCount: 0
+    dataMonitorTaskCount: 0,
+    deviceMonitorTaskCount: 0
   })
 });
 
@@ -55,7 +55,7 @@ const { domRef, updateOptions } = useEcharts(() => ({
   },
   series: [
     {
-      color: ['#ec4786', '#865ec0', '#56cdf3', '#fcbc25'],
+      color: ['#ec4786', '#865ec0','#fcbc25','#56cdf3'],
       name: $t('page.home.taskProportion'),
       type: 'pie',
       radius: ['45%', '75%'],
@@ -98,8 +98,8 @@ function updateLocale() {
     opts.series[0].data = [
       { name: $t('page.home.databaseTask').replace("Tasks",""), value: props.taskCountModel.databaseTaskCount },
       { name: $t('page.home.webApiTask').replace("Tasks",""), value: props.taskCountModel.webApiTaskCount },
-      { name: $t('page.home.industryTask').replace("Tasks",""), value: props.taskCountModel.industriaTaskCount },
-      { name: $t('page.home.dataMonitorTask').replace("Tasks",""), value: props.taskCountModel.dataMonitorTaskCount }
+      { name: $t('page.home.dataMonitorTask').replace("Tasks",""), value: props.taskCountModel.dataMonitorTaskCount },
+      { name: $t('page.home.deviceMonitorTask').replace("Tasks",""), value: props.taskCountModel.deviceMonitorTaskCount },
     ];
     return opts;
   });

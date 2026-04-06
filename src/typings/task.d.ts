@@ -8,7 +8,7 @@ declare namespace Api {
     type TaskSearchParams = Partial<Pick<Task, 'taskName' | 'taskType' | 'runMode' | 'description' | 'status'> & Common.CommonSearchParams >;
     type MonitorSearchParams = Partial<Pick<Task, 'id' | 'taskName' | 'taskType' | 'description' | 'status'> & Api.Common.CommonSearchParams >;
 
-    // Task 5000 Database, 5001 WebApi, 5002 Industry PLC, 5003 Data Monitor
+    // 5000 数据库任务， 5001 WebAPI任务， 5002 数据监控任务， 5003 设备监控任务， 5004 工业接口
     type TaskType = '5000' | '5001' | '5002' | '5003';
 
     // Run mode 6000 Manual Operation, 6001 Daily, 6002 Weekly,  6003 Monthly, 6004 Annually, 6005 Time Interval
@@ -171,8 +171,9 @@ declare namespace Api {
     };
     //#endregion
 
-    /* Task industry plc */
-
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /* Data Monitor Task */
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Data monitor */
     type TaskDataMonitor = {
       id: number;
@@ -202,4 +203,5 @@ declare namespace Api {
     type DataRange = 0 | 1;
     type TaskDataMonitorModel = { task: TaskModel; taskDataMonitor: TaskDataMonitor; };
   }
+
 }

@@ -10,8 +10,8 @@ defineOptions({
 interface TaskCountModel {
   databaseTaskCount: number;
   webApiTaskCount: number;
-  industriaTaskCount: number;
   dataMonitorTaskCount: number;
+  deviceMonitorTaskCount: number;
 }
 
 interface Props {
@@ -22,8 +22,8 @@ const props = withDefaults(defineProps<Props>(), {
   taskCountModel: () => ({
     databaseTaskCount: 0,
     webApiTaskCount: 0,
-    industriaTaskCount: 0,
-    dataMonitorTaskCount: 0
+    dataMonitorTaskCount: 0,
+    deviceMonitorTaskCount: 0
   })
 });
 
@@ -64,17 +64,6 @@ const cardData = computed(() => [
     iconClass: 'text-32px',
   },
   {
-    key: 'industriaTaskCount',
-    value: props.taskCountModel.industriaTaskCount,
-    title: $t('page.home.industryTask'),
-    color: {
-      start: '#56cdf3',
-      end: '#719de3'
-    },
-    icon: 'icon-local-industrial',
-    iconClass: 'text-27px',
-  },
-  {
     key: 'dataMonitorTaskCount',
     value: props.taskCountModel.dataMonitorTaskCount,
     title: $t('page.home.dataMonitorTask'),
@@ -84,7 +73,18 @@ const cardData = computed(() => [
     },
     icon: 'icon-local-monitor',
     iconClass: 'text-33px',
-  }
+  },
+    {
+    key: 'deviceMonitorTaskCount',
+    value: props.taskCountModel.deviceMonitorTaskCount,
+    title: $t('page.home.deviceMonitorTask'),
+    color: {
+      start: '#56cdf3',
+      end: '#719de3'
+    },
+    icon: 'icon-local-industrial',
+    iconClass: 'text-27px',
+  },
 ]);
 
 interface GradientBgProps {

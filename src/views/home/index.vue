@@ -14,15 +14,15 @@ interface TaskCounts {
   suspendedTaskCount: number;
   databaseTaskCount: number;
   webApiTaskCount: number;
-  industriaTaskCount: number;
   dataMonitorTaskCount: number;
+  deviceMonitorTaskCount: number;
 }
 
 interface TaskSpentTime {
   databaseTaskSpentTime: number[];
   webApiTaskSpentTime: number[];
-  industriaTaskSpentTime: number[];
   dataMonitorTaskSpentTime: number[];
+  deviceMonitorTaskSpentTime: number[];
 }
 
 const taskCountModel = ref<TaskCounts>({
@@ -31,15 +31,15 @@ const taskCountModel = ref<TaskCounts>({
   suspendedTaskCount: 0,
   databaseTaskCount: 0,
   webApiTaskCount: 0,
-  industriaTaskCount: 0,
-  dataMonitorTaskCount: 0
+  dataMonitorTaskCount: 0,
+  deviceMonitorTaskCount: 0
 });
 
 const taskSpentTimeModel = ref<TaskSpentTime>({
   databaseTaskSpentTime: [],
   webApiTaskSpentTime: [],
-  industriaTaskSpentTime: [],
-  dataMonitorTaskSpentTime: []
+  dataMonitorTaskSpentTime: [],
+  deviceMonitorTaskSpentTime: []
 });
 
 onMounted(async() => {
