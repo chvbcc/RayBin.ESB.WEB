@@ -3,12 +3,11 @@
   import { useRoute, useRouter } from 'vue-router';
   import { useAntdForm } from '@/hooks/common/form';
   import { useAppStore } from '@/store/modules/app';
-  import { useAuthStore } from '@/store/modules/auth';
-  import { ref, onMounted, computed, watch } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import type { TableColumnsType } from 'ant-design-vue';
   import NodeBrowseModal from './modules/node-browse.vue';
-  import { fetchSave, fetchGetConnectionOptions, fetchGetModel } from '@/service/api/industria';
-  import { convertOptions, getPromptMessage } from '@/utils/common';
+  import { fetchGetConnectionOptions, fetchGetModel } from '@/service/api/industria';
+  import { convertOptions } from '@/utils/common';
   import { industriaApiInterfaceTypeOptions, taskStatusOptions } from '@/constants/options';
 
   // #region 01. 表格列
@@ -62,9 +61,11 @@
   const route = useRoute();
   const router = useRouter();
   const appStore = useAppStore();
-  const authStore = useAuthStore();
   const nodeBrowseModalVisible = ref(false);
   const { formRef } = useAntdForm();
+  void formRef;
+  const tableRef = ref();
+  void tableRef;
   const connectionOptions = ref<{ label: string; value: number }[]>([]);
 
   // 根据语言动态设置 labelCol 宽度
@@ -112,15 +113,12 @@
   // #endregion
 
   async function handleAdd() {
-    const newDetail = createApiDetailModel();
     await formRef.value?.validateFields([['industriaApi', 'connectionID']]).then(async () => {
       nodeBrowseModalVisible.value = true;
       return true;
     }).catch(() => {
       return false;
     });
-    //model.value.industriaApiDetail.push(newDetail);
-
   }
 
   function handleEdit(id: number) {

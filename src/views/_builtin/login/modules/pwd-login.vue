@@ -13,6 +13,7 @@ defineOptions({
 const authStore = useAuthStore();
 const { toggleLoginModule } = useRouterPush();
 const { formRef, validate } = useAntdForm();
+void formRef;
 
 interface FormModel {
   userName: string;

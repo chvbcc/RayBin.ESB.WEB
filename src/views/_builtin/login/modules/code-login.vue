@@ -11,6 +11,7 @@ defineOptions({
 
 const { toggleLoginModule } = useRouterPush();
 const { formRef, validate } = useAntdForm();
+void formRef;
 const { label, isCounting, loading, getCaptcha } = useCaptcha();
 
 interface FormModel {

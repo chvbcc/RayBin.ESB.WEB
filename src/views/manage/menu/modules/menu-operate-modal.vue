@@ -33,6 +33,7 @@
 
   const visible = defineModel<boolean>('visible', { default: false });
   const { formRef, validate, resetFields } = useAntdForm();
+  void formRef;
   const { defaultRequiredRule } = useFormRules();
 
   const title = computed(() => {
