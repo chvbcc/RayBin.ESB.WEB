@@ -218,7 +218,7 @@
   // #region 13. 返回列表
   function handleBack() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'industria_api_default' });
+    void router.push({ name: 'industria_api_default' });
   }
   // #endregion
 

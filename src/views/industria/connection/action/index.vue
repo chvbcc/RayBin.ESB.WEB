@@ -155,7 +155,7 @@ async function handleSave() {
       if (result.msg === "success") {
         window.$message?.success(getPromptMessage(route.query, "Success"));
         appStore.tabStore.removeActiveTab();
-        router.push({ name: 'industria_connection' });
+        void router.push({ name: 'industria_connection' });
       }
       else if (result.msg === "fail") {
         window.$message?.error(result.data);
@@ -172,7 +172,7 @@ async function handleSave() {
 // #region 10. 返回连接列表
 function handleBack() {
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'industria_connection' });
+  void router.push({ name: 'industria_connection' });
 }
 //#endregion
 </script>

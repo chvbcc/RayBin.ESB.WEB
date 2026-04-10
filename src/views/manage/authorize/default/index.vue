@@ -112,7 +112,7 @@
 
   function handleAdd() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'manage_authorize_action' });
+    void router.push({ name: 'manage_authorize_action' });
   }
 
   async function handleDelete(id: number) {
@@ -133,7 +133,7 @@
 
   function handleEdit(id: number) {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'manage_authorize_action', query: { id: String(id) } });
+    void router.push({ name: 'manage_authorize_action', query: { id: String(id) } });
   }
 </script>
 

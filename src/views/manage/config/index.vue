@@ -54,7 +54,7 @@
       if (result.msg === "success") {
         window.$message?.success($t('common.updateSuccess'));
         appStore.tabStore.removeActiveTab();
-        router.push({ name: 'connection' });
+        void router.push({ name: 'connection' });
       }
       else if (result.msg === "fail") {
         window.$message?.error($t('common.updateFailed'));
@@ -71,7 +71,7 @@
   // #region 10. 返回主页
   function handleBack() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'home' });
+    void router.push({ name: 'home' });
   }
   //#endregion
 </script>

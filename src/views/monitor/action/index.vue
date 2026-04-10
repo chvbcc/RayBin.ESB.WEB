@@ -256,7 +256,7 @@
       if (result.msg === 'success') {
         window.$message?.success(getPromptMessage(route.query, "Success"));
         appStore.tabStore.removeActiveTab();
-        router.push({ name: 'monitor' });
+        void router.push({ name: 'monitor' });
       } else if (result.msg === 'fail') {
         window.$message?.error(result.data);
       } else {
@@ -271,7 +271,7 @@
   // #region 13. 返回列表
   function handleBack() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'monitor' });
+    void router.push({ name: 'monitor' });
   }
   // #endregion
 
