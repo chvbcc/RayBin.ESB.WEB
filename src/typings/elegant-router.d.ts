@@ -38,7 +38,7 @@ declare module "@elegant-router/types" {
     "industria_monitor": "/industria/monitor";
     "industria_monitor_action": "/industria/monitor/action";
     "industria_monitor_default": "/industria/monitor/default";
-    "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-weCom)?";
+    "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wecom)?";
     "manage": "/manage";
     "manage_authorize": "/manage/authorize";
     "manage_authorize_action": "/manage/authorize/action";
