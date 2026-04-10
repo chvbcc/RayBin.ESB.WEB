@@ -74,7 +74,7 @@
     "vue": "3.5.13",
     "vue-draggable-plus": "^0.6.0",
     "vue-i18n": "11.1.1",
-    "vue-router": "4.5.0"
+    "vue-router": "5.0.4"
   },
   "devDependencies": {
     "@elegant-router/vue": "0.3.8",
@@ -96,6 +96,7 @@
     "axios": "^1.7.7",
     "eslint": "10.2.0",
     "eslint-plugin-vue": "10.8.0",
+    "fast-glob": "^3.3.3",
     "lint-staged": "15.4.3",
     "sass": "1.84.0",
     "simple-git-hooks": "2.11.1",
