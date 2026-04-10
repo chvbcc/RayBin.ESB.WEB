@@ -76,7 +76,7 @@
           <div v-html="model.message" class="message-content"></div>
         </a-col>
         <a-col :span="24" :md="3" :lg="3" class="title">
-          <a-button type="default" class="blue-btn" @click="router.back()">
+          <a-button type="default" class="blue-btn" @click="() => void router.back()">
             <icon-stash:arrow-reply-solid class="align-sub text-icon" />
              <span style="padding-left:5px;">{{$t('common.back')}}</span>
           </a-button>
