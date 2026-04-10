@@ -1,36 +1,29 @@
 <script setup lang="tsx">
-  import { Tag } from 'ant-design-vue';
   import { $t, language } from '@/locales';
   import { computed, ref, watch } from 'vue';
-  import { fetchBrowse } from '@/service/api/industria';
+  import { fetchBrowse, fetchReadNode } from '@/service/api/industria';
+  import type { Key } from 'ant-design-vue/es/_util/type';
 
   // 定义组件名称
-  defineOptions({
-    name: 'NodeBrowseModal'
-  });
+  defineOptions({ name: 'NodeBrowseModal' });
 
   // 组件属性定义
-  const props = defineProps<{
-    visible: boolean;
-    connectionID?: number;
-  }>();
-  const emit = defineEmits<{
-    'update:visible': [boolean];
-    'confirm': [any];
-  }>();
-  // #endregion
+  const props = defineProps<{ visible: boolean;  connectionID?: number; }>();
+  const emit = defineEmits<{ 'update:visible': [boolean]; 'confirm': [any]; }>();
 
-  const model = ref<Api.Message.MessageModel>({} as Api.Message.MessageModel);
+  // #endregion
+  interface Node extends Api.Industria.ApiDetailModel { key: string | number;}
+
   const labelCol = computed(() => language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } });
 
   // #region 2. 树形数据
-  const treeData = ref<any[]>([]);
-  const selectedNode = ref<any>(null);
+  const treeData = ref<Node[]>([]);
   const loading = ref(false);
+  const selectedNode = ref<Node>({ nodeID: '', attributeName: '', variableName: '', key: '0', builtInType: '',  nodeClass: '' } as Node);
   // #endregion
 
   // 确保 treeData 为数组（兼容后端返回对象或嵌套容器）
-  function normalizeTreeData(data: any): any[] {
+  function normalizeTreeData(data: any): Node[] {
     if (!data) return [];
     if (Array.isArray(data)) return data;
 
@@ -47,6 +40,7 @@
   }
 
   // #region 3. 获取 OPC UA 节点数据
+
   async function getOpcUaNodes() {
     if (!props.connectionID) return;
     loading.value = true;
@@ -68,7 +62,7 @@
   async function handleConfirm() {
     if (!selectedNode.value) return;
     // 优先返回后端原始对象（dataRef），否则返回当前节点对象
-    const raw = selectedNode.value?.dataRef ?? selectedNode.value;
+    const raw = selectedNode.value;
     emit('confirm', raw);
     closeModal();
   }
@@ -87,51 +81,84 @@
     } else {
       // 重置状态
       treeData.value = [];
-      selectedNode.value = null;
     }
   });
   // #endregion
 
   // #region 7. 处理树形节点点击
-function handleTreeSelect(selectedKeys: string[], info: any) {
-  const node = info?.node;
-  if (node && node.isLeaf) {
-    // 确保 node 或 node.dataRef 存在且有基本字段
-    const raw = node.dataRef ?? node;
-    // 可选：验证关键字段是否存在
-    if (raw && (raw.DisplayName || raw.title || raw.NodeId)) {
-      selectedNode.value = raw;
-      console.log('Selected node:', selectedNode.value);
-    } else {
-      selectedNode.value = null;
-      console.warn('Invalid node selected:', node);
+  async function handleTreeSelect(selectedKeys: Key[], info: any) {
+    const node = info?.node;
+    if (node) {
+      // 可选：验证关键字段是否存在
+      if (node && (node.variableName && node.nodeID && node.nodeClass)) {
+      if (selectedNode.value) {
+          selectedNode.value.nodeID = node.nodeID;
+          selectedNode.value.variableName = node.variableName;
+          selectedNode.value.nodeClass = node.nodeClass;
+          selectedNode.value.builtInType = node.builtInType || '';
+          selectedNode.value.attributeName = node.attributeName || '';
+        }
+        const {error, data} = await fetchReadNode(props.connectionID!, node.nodeID);
+        if (!error && data) {
+          selectedNode.value.value = data.value;
+          selectedNode.value.builtInType = data.builtInType;
+          selectedNode.value.attributeName = data.attributeName;
+        }
+      } else {
+        console.warn('Invalid node selected:', node);
+      }
     }
-  } else {
-    selectedNode.value = null;
   }
-}
   // #endregion
 </script>
 
 <template>
-  <a-modal :open="props.visible" @update:visible="emit('update:visible', $event)" :title="$t('page.industriaApiDetail.title')" style="width: 68%; min-height: 90vh; max-width: 1200px;">
-    <a-form :model="model" :label-col="labelCol" class="flex flex-col">
+  <a-modal :open="props.visible" @update:visible="emit('update:visible', $event)" :title="$t('page.industriaApiDetail.title')" style="width: 62%; min-height: 66vh; max-width: 1000px;">
+    <a-form  :label-col="labelCol" class="flex flex-col">
       <a-row type="flex">
-        <a-col flex="300px">
-          <a-tree :field-names="{ title: 'displayName', key: 'nodeId', children: 'children' }" :tree-data="treeData" :loading="loading" @select="handleTreeSelect as any" style="height: 50vh; overflow-y: auto; border: 1px solid #ccc;">
-            <template #title="{ displayName }">
-              <sapn>{{ displayName }}</sapn>
+        <a-col flex="250px">
+          <a-tree :field-names="{ title: 'variableName', key: 'nodeID', children: 'children' }" :tree-data="treeData" :loading="loading" @select="handleTreeSelect" style=" width:250px; height: 41vh; overflow: auto; border: 1px solid #ccc;">
+            <template #title="{ variableName }">
+              <span>{{ variableName }}</span>
             </template>
           </a-tree>
         </a-col>
         <a-col flex="auto">
-          <a-row :gutter="[16, 16]" wrap>
-            <a-col :span="24">
-              <a-form-item :label="$t('page.industriaApiDetail.nodeName')" name="displayName" class="m-0">
-                <a-input v-model:value="selectedNode.displayName" :placeholder="$t('page.industriaApiDetail.form.nodeName')" />
+            <a-col :span="24" class="mb-8">
+              <a-form-item :label="$t('page.industriaApiDetail.nodeID')" name="nodeId" class="m-0">
+                <a-input :value="selectedNode?.nodeID" />
               </a-form-item>
             </a-col>
-          </a-row>
+            <a-col :span="24" class="mb-8">
+              <a-form-item :label="$t('page.industriaApiDetail.nodeClass')" name="nodeClass" class="m-0">
+                <a-input :value="selectedNode?.nodeClass" readonly style="background-color: #f5f5f5;" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" class="mb-8">
+              <a-form-item :label="$t('page.industriaApiDetail.nodeName')" name="variableName" class="m-0">
+                <a-input :value="selectedNode?.variableName" readonly style="background-color: #f5f5f5;" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" class="mb-8">
+              <a-form-item :label="$t('page.industriaApiDetail.dataType')" name="builtInType" class="m-0">
+                <a-input :value="selectedNode?.builtInType" readonly style="background-color: #f5f5f5;" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" class="mb-8">
+              <a-form-item :label="$t('page.industriaApiDetail.value')" name="value" class="m-0">
+                <a-input :value="selectedNode?.value" readonly style="background-color: #f5f5f5;" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" class="mb-8">
+              <a-form-item :label="$t('page.industriaApiDetail.attributeName')" name="variableName" class="m-0">
+                <a-input :value="selectedNode?.attributeName"  />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" class="mb-8">
+              <a-form-item :label="$t('page.industriaApiDetail.description')" name="description" class="m-0">
+                <a-textarea :rows="6" :value="selectedNode?.description" />
+              </a-form-item>
+            </a-col>
         </a-col>
       </a-row>
     </a-form>

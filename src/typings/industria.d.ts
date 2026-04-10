@@ -35,6 +35,7 @@ declare namespace Api {
       nodeID: string;
       nodeClass: string;
       variableName: string;
+      value: string;
       builtInType: string;
       attributeName: string;
       dataType: string;
@@ -42,7 +43,7 @@ declare namespace Api {
     }>;
 
     /* Industria Api Detail Model */
-    type ApiDetailModel = Pick<IndustriaApiDetail, | 'id' | 'industriaApiID' | 'nodeName' | 'nodeID' | 'nodeClass' | 'variableName' | 'builtInType' | 'attributeName' | 'dataType' | 'description'>;
+    type ApiDetailModel = Pick<IndustriaApiDetail, | 'id' | 'industriaApiID' | 'nodeName' | 'nodeID' | 'nodeClass' | 'variableName' | 'value' | 'builtInType' | 'attributeName' | 'dataType' | 'description'>;
 
     type IndustriaApiModel = { industriaApi: ApiModel; industriaApiDetail: ApiDetailModel []; deleteIndustriaIds: number[]};
   }

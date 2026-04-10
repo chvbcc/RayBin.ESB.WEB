@@ -514,6 +514,7 @@ const local: App.I18n.Schema = {
       nodeID: 'Node ID',
       nodeClass: 'Node Class',
       variableName: 'Variable Name',
+      value: 'Variable Value',
       builtInType: 'Node Data Type',
       attributeName: 'Attribute Name',
       dataType: 'Data Type',

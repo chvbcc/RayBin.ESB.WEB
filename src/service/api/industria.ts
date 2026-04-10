@@ -80,3 +80,11 @@ export function fetchBrowse(id: number) {
   });
 }
 
+export function fetchReadNode(id: number, nodeId: string) {
+  return request({
+    url: '/opcua/read',
+    method: 'get',
+    params: { id, nodeId }
+  });
+}
+

@@ -102,6 +102,7 @@
       nodeID: '',
       nodeClass: '',
       variableName: '',
+      value: '',
       builtInType: '',
       attributeName: '',
       dataType: '',

@@ -682,6 +682,7 @@ declare namespace App {
           nodeID: string;
           nodeClass: string;
           variableName: string;
+          value: string;
           builtInType: string;
           attributeName: string;
           dataType: string;
