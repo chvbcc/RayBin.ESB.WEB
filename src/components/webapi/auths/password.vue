@@ -5,6 +5,7 @@
 
   // 1. 定义默认模型
   const { formRef, validate, resetFields } = useAntdForm();
+  void formRef;
   const model = defineModel<Api.Authorize.PasswordConfig>('model', { default: () => ({}) });
 
   // 2. 定义验证规则

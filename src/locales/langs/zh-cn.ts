@@ -514,6 +514,7 @@ const local: App.I18n.Schema = {
       nodeID: '节点ID',
       nodeClass: '节点类型',
       variableName: '变量名称',
+      value: '变量值',
       builtInType: '变量类型',
       attributeName: '属性名称',
       dataType: '数据类型',

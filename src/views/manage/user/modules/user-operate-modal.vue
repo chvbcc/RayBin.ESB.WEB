@@ -26,6 +26,7 @@
   const visible = defineModel<boolean>('visible', { default: false });
 
   const { formRef, validate, resetFields } = useAntdForm();
+  void formRef;
   const { defaultRequiredRule } = useFormRules();
 
   // 1. 定义标题

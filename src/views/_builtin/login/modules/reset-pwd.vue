@@ -10,6 +10,7 @@ defineOptions({
 
 const { toggleLoginModule } = useRouterPush();
 const { formRef, validate } = useAntdForm();
+void formRef;
 
 interface FormModel {
   phone: string;
