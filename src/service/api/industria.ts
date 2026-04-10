@@ -8,6 +8,13 @@ export function fetchGetPagingList(params?: Api.Industria.IndustriaApiSearchPara
   });
 }
 
+export function fetchGetConnectionOptions() {
+  return request<Api.DeviceConnection.DeviceConnectionOptions>({
+    url: '/deviceConnection/getOptions',
+    method: 'get'
+  });
+}
+
 // export function fetchGetList(industriaId: number) {
 //   return request({
 //     url: '/industriaapi/getList',
@@ -41,7 +48,7 @@ export function fetchCheckName(taskName: string, createUserId: number, id: numbe
 }
 
 // 授权测试
-export function fetchTest(data: Api.Industria.IndustriaApiModel) {
+export function fetchTest(data: Api.Industria.ApiModel) {
   return request({
     url: '/industriaapi/apiTest',
     method: 'post',
@@ -50,7 +57,7 @@ export function fetchTest(data: Api.Industria.IndustriaApiModel) {
 }
 
 export function fetchSave(data: Api.Industria.IndustriaApiModel) {
-  if (data.id === 0) {
+  if (data.industriaApi.id === 0) {
     return request({
       url: '/industriaapi/add',
       method: 'post',
@@ -64,3 +71,12 @@ export function fetchSave(data: Api.Industria.IndustriaApiModel) {
     });
   }
 }
+
+export function fetchBrowse(id: number) {
+  return request({
+    url: '/opcua/browse',
+    method: 'get',
+    params: { id }
+  });
+}
+

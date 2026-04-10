@@ -504,6 +504,29 @@ const local: App.I18n.Schema = {
         status: '请选择接口状态',
       }
     },
+    industriaApiDetail: {
+      title: '设备浏览',
+      add: '新增设备节点',
+      edit: '编辑设备节点',
+      nodeList: '设备节点列表',
+      industriaApiID: '接口ID',
+      nodeName: '节点名称',
+      nodeID: '节点ID',
+      nodeClass: '节点类型',
+      variableName: '变量名称',
+      builtInType: '变量类型',
+      attributeName: '属性名称',
+      dataType: '数据类型',
+      description: '描述',
+      form: {
+        nodeName: '请输入节点名称',
+        nodeID: '请输入节点ID',
+        variableName: '请输入变量名称',
+        attributeName: '请输入属性名称',
+        dataType: '请选择数据类型',
+        description: '请输入描述'
+      },
+    },
     monitor: {
       title: '数据监控任务',
       add: '新增数据监控任务',

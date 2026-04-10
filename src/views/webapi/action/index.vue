@@ -372,22 +372,22 @@
           </div>
         </template>
         <a-table ref="tableRef" :data-source="model.taskWebApis" :columns="columns" :pagination="false" row-key="id">
-            <template #bodyCell="{ column, record }">
-              <template v-if="column.key === 'operate'">
-                <div class="flex-center gap-8px">
-                  <a-button type="default" :class="`orange-btn row-btn ${language() === 'en-US' ? 'en-edit' : ''}`" @click="editRow(record as Api.Task.TaskWebApi)">
-                    <icon-mdi-square-edit-outline class="align-sub text-16px" />
-                    <span>{{ $t('common.edit') }}</span>
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'operate'">
+              <div class="flex-center gap-8px">
+                <a-button type="default" :class="`orange-btn row-btn ${language() === 'en-US' ? 'en-edit' : ''}`" @click="editRow(record as Api.Task.TaskWebApi)">
+                  <icon-mdi-square-edit-outline class="align-sub text-16px" />
+                  <span>{{ $t('common.edit') }}</span>
+                </a-button>
+                <a-popconfirm :title="$t('common.confirmDelete')" @confirm="deleteRow(record.id)">
+                  <a-button type="default" class="red-btn row-btn">
+                    <icon-mdi-trash-can-outline class="align-sub text-16px" />
+                    <span>{{ $t('common.delete') }}</span>
                   </a-button>
-                  <a-popconfirm :title="$t('common.confirmDelete')" @confirm="deleteRow(record.id)">
-                    <a-button type="default" class="red-btn row-btn">
-                      <icon-mdi-trash-can-outline class="align-sub text-16px" />
-                      <span>{{ $t('common.delete') }}</span>
-                    </a-button>
-                  </a-popconfirm>
-                </div>
-              </template>
+                </a-popconfirm>
+              </div>
             </template>
+          </template>
         </a-table>
       </a-card>
       <a-row :gutter="[16, 16]" class="mt-4 text-align-center">

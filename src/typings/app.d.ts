@@ -672,6 +672,29 @@ declare namespace App {
             status: string;
           };
         };
+        industriaApiDetail: {
+          title: string;
+          add: string;
+          edit: string;
+          nodeList: string;
+          industriaApiID: string;
+          nodeName: string;
+          nodeID: string;
+          nodeClass: string;
+          variableName: string;
+          builtInType: string;
+          attributeName: string;
+          dataType: string;
+          description: string;
+          form: {
+            nodeName: string;
+            nodeID: string;
+            variableName: string;
+            attributeName: string;
+            dataType: string;
+            description: string;
+          };
+        };
         monitor: {
           title: string;
           add: string;

@@ -121,7 +121,7 @@ export const industriaApiInterfaceTypeRecord: Record<Api.Industria.InterfaceType
   1: 'dropdownList.industriaApiInterfaceType.writeNode',
   2: 'dropdownList.industriaApiInterfaceType.subscribeNode'
 };
-export const industriaApiInterfaceTypeOptions = transformRecordToOption(industriaApiInterfaceTypeRecord);
+export const industriaApiInterfaceTypeOptions = convertRecordToOption(industriaApiInterfaceTypeRecord);
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // message
 export const messageTypeRecord: Record<Api.Message.MessageType, App.I18n.I18nKey> = {
