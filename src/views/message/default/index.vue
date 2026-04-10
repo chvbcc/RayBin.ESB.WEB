@@ -97,7 +97,7 @@
         status: $t(taskStatusRecord[record.status]),
         description: record.description
     }))
-    router.push({
+    void router.push({
       name: 'message_action',
       query: { model }
     });

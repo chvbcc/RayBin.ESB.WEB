@@ -96,7 +96,7 @@
 
   async function handleAdd() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'monitor_action' });
+    void router.push({ name: 'monitor_action' });
   }
 
   async function handleDelete(id: number) {
@@ -114,7 +114,7 @@
 
   function handleEdit(id: number) {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'monitor_action', query: { id: String(id) } });
+    void router.push({ name: 'monitor_action', query: { id: String(id) } });
   }
 
   function refresh() {

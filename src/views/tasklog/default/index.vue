@@ -36,7 +36,7 @@
         ellipsis: true,
         customRender: ({ record }) => {
           return (
-            <a-button type="link" onClick={() => router.push(`/tasklog/details/${record.id}`)}>
+            <a-button type="link" onClick={() => void router.push(`/tasklog/details/${record.id}`)}>
               <span style="font-size:14px">{record.taskName}</span>
             </a-button>
           );

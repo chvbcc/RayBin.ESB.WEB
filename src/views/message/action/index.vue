@@ -213,7 +213,7 @@
   // #region 7. 返回列表
   function handleBack() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'message' });
+    void router.push({ name: 'message' });
   }
   // #endregion
 

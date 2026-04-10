@@ -249,7 +249,7 @@
       if (result.msg === 'success') {
         window.$message?.success(getPromptMessage(route.query, "Success"));
         appStore.tabStore.removeActiveTab();
-        router.push({ name: 'webapi' });
+        void router.push({ name: 'webapi' });
       } else if (result.msg === 'fail') {
         window.$message?.error(result.data);
       } else {
@@ -264,7 +264,7 @@
   // #region 10. 返回数据库列表
   function handleBack() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'webapi' });
+    void router.push({ name: 'webapi' });
   }
   // #endregion
 

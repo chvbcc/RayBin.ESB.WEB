@@ -230,7 +230,7 @@
       if (result.msg === 'success') {
         window.$message?.success(getPromptMessage(route.query, "Success"));
         appStore.tabStore.removeActiveTab();
-        router.push({ name: 'manage_authorize_default' });
+        void router.push({ name: 'manage_authorize_default' });
       } else if (result.msg === 'fail') {
         window.$message?.error(result.data);
       } else {
@@ -245,7 +245,7 @@
   // #region 7. 返回数据库列表
   function handleBack() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'manage_authorize_default' });
+    void router.push({ name: 'manage_authorize_default' });
   }
   // #endregion
 </script>

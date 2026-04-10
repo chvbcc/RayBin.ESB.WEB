@@ -99,7 +99,7 @@ const { onDeleted } = useTableOperate(data, getData);
 
 async function handleAdd() {
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'database_action' });
+  void router.push({ name: 'database_action' });
 }
 
 async function handleDelete(id: number) {
@@ -117,7 +117,7 @@ async function handleDelete(id: number) {
 
 function handleEdit(id: number) {
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'database_action', query: { id: String(id) } });
+  void router.push({ name: 'database_action', query: { id: String(id) } });
 }
 
 function refresh() {

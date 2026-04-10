@@ -96,7 +96,7 @@ const { onDeleted } = useTableOperate(data, getData);
 
 function handleAdd() {
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'industria_api_action' });
+  void router.push({ name: 'industria_api_action' });
 }
 
 async function handleDelete(id: number) {
@@ -114,7 +114,7 @@ async function handleDelete(id: number) {
 
 function handleEdit(id: number) {
   appStore.tabStore.removeActiveTab();
-  router.push({ name: 'industria_api_action', query: { id: String(id) } });
+  void router.push({ name: 'industria_api_action', query: { id: String(id) } });
 }
 
 function refresh() {

@@ -99,7 +99,7 @@
 
   async function handleAdd() {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'webapi_action' });
+    void router.push({ name: 'webapi_action' });
   }
 
   async function handleDelete(id: number) {
@@ -117,7 +117,7 @@
 
   function handleEdit(id: number) {
     appStore.tabStore.removeActiveTab();
-    router.push({ name: 'webapi_action', query: { id: String(id) } });
+    void router.push({ name: 'webapi_action', query: { id: String(id) } });
   }
 
   function refresh() {
