@@ -51,6 +51,7 @@ const { domRef, updateOptions } = useEcharts(() => ({
     }
   },
   legend: {
+    top: '10',
     data: [$t('page.home.databaseTask'), $t('page.home.webApiTask'), $t('page.home.dataMonitorTask'), $t('page.home.deviceMonitorTask')],
   },
   grid: {

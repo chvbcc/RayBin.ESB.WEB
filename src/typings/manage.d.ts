@@ -133,17 +133,25 @@ declare namespace Api {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // System config
+    type useConfig = '0' | '1';
+
     type SystemConfig = {
       weComTokenUrl: string;
       weComCorpID:  string;
       weComCorpSecret: string;
+      weComAgentID: string;
       weComTokenPath: string;
       dingTalkTokenUrl: string;
+      dingTalkCorpID: string;
       dingTalkAppKey: string;
       dingTalkAppSecret: string;
+      dingTalkAgentID: string;
       dingTalkTokenPath: string;
-      smtpServer: string;
+      smtpHost: string;
       smtpPort: string;
+      useSSL: string;
+      useAuthCode: string;
+      authCode: string;
       emailAccount: string;
       emailPassword: string;
       emailSender: string;

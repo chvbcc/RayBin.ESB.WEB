@@ -3,9 +3,11 @@
   import { ref, computed } from 'vue';
   import { useRouter } from 'vue-router';
   import { $t, language } from '@/locales';
+  import { translateOptions } from '@/utils/common';
   import { useAppStore } from '@/store/modules/app';
   import { useAntdForm } from '@/hooks/common/form';
   import { SystemConfigApi } from '@/service/api/manage';
+  import { useConfigOptions } from '@/constants/options';
 
   // #region 1. 定义常量
   const router = useRouter();
@@ -19,13 +21,19 @@
         weComTokenUrl: '',
         weComCorpID:  '',
         weComCorpSecret: '',
+        weComAgentID: '',
         weComTokenPath: '',
         dingTalkTokenUrl: '',
+        dingTalkCorpID: '',
         dingTalkAppKey: '',
         dingTalkAppSecret: '',
+        dingTalkAgentID: '',
         dingTalkTokenPath: '',
-        smtpServer: '',
+        smtpHost: '',
         smtpPort: '',
+        useSSL: '0',
+        useAuthCode: '0',
+        authCode: '',
         emailAccount: '',
         emailPassword: '',
         emailSender: '',
@@ -81,7 +89,7 @@
       <a-form ref="formRef" :model="model" :label-col="labelCol">
         <a-card :title="$t('page.manage.config.weComTitle')" :bordered="false" class="card-wrapper">
           <a-row :gutter="[16, 16]">
-            <a-col :span="24" :md="12" :lg="12">
+            <a-col :span="24" :md="24" :lg="24">
               <a-form-item :label="$t('page.manage.config.weComTokenUrl')" name="weComTokenUrl" :rules="[{ required: true }]" class="m-2">
                 <a-input v-model:value="model.weComTokenUrl" :placeholder="$t('page.manage.config.weComTokenUrl')" />
               </a-form-item>
@@ -89,6 +97,11 @@
             <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.manage.config.weComCorpID')" name="weComCorpID" :rules="[{ required: true }]" class="m-2">
                 <a-input v-model:value="model.weComCorpID" :placeholder="$t('page.manage.config.weComCorpID')" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.manage.config.weComAgentID')" name="weComAgentID" :rules="[{ required: true }]" class="m-2">
+                <a-input v-model:value="model.weComAgentID" :placeholder="$t('page.manage.config.weComAgentID')" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
@@ -111,8 +124,18 @@
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.manage.config.dingTalkCorpID')" name="dingTalkCorpID" :rules="[{ required: true }]" class="m-2">
+                <a-input v-model:value="model.dingTalkCorpID" :placeholder="$t('page.manage.config.dingTalkCorpID')" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.manage.config.dingTalkAppKey')" name="dingTalkAppKey" :rules="[{ required: true }]" class="m-2">
                 <a-input v-model:value="model.dingTalkAppKey" :placeholder="$t('page.manage.config.dingTalkAppKey')" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.manage.config.dingTalkAgentID')" name="dingTalkAgentID" :rules="[{ required: true }]" class="m-2">
+                <a-input v-model:value="model.dingTalkAgentID" :placeholder="$t('page.manage.config.dingTalkAgentID')" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
@@ -130,13 +153,23 @@
         <a-card :title="$t('page.manage.config.emailServiceTitle')" :bordered="false" class="card-wrapper mt-16px">
           <a-row :gutter="[16, 16]">
             <a-col :span="24" :md="12" :lg="12">
-              <a-form-item :label="$t('page.manage.config.smtpServer')" name="smtpServer" :rules="[{ required: true }]" class="m-2">
-                <a-input v-model:value="model.smtpServer" :placeholder="$t('page.manage.config.smtpServer')" />
+              <a-form-item :label="$t('page.manage.config.smtpHost')" name="smtpHost" :rules="[{ required: true }]" class="m-2">
+                <a-input v-model:value="model.smtpHost" :placeholder="$t('page.manage.config.smtpHost')" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.manage.config.smtpPort')" name="smtpPort" :rules="[{ required: true }]" class="m-2">
                 <a-input v-model:value="model.smtpPort" :placeholder="$t('page.manage.config.smtpPort')" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.manage.config.useAuthCode')" name="useAuthCode" :rules="[{ required: true }]" class="m-2">
+                <a-select v-model:value="model.useAuthCode" :placeholder="$t('page.manage.config.useAuthCode')" :options="translateOptions(useConfigOptions)" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.manage.config.authCode')" name="authCode" :rules="[{ required: model.useAuthCode === '1' }]" class="m-2">
+                <a-input v-model:value="model.authCode" :placeholder="$t('page.manage.config.authCode')" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">
@@ -147,6 +180,11 @@
             <a-col :span="24" :md="12" :lg="12">
               <a-form-item :label="$t('page.manage.config.emailPassword')" name="emailPassword" :rules="[{ required: true }]" class="m-2">
                 <a-input v-model:value="model.emailPassword" :placeholder="$t('page.manage.config.emailPassword')" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24" :md="12" :lg="12">
+              <a-form-item :label="$t('page.manage.config.useSSL')" name="useSSL" :rules="[{ required: true }]" class="m-2">
+                <a-select v-model:value="model.useSSL" :placeholder="$t('page.manage.config.useSSL')" :options="translateOptions(useConfigOptions)" />
               </a-form-item>
             </a-col>
             <a-col :span="24" :md="12" :lg="12">

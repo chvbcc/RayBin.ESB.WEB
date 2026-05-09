@@ -15,14 +15,6 @@ export function fetchGetConnectionOptions() {
   });
 }
 
-// export function fetchGetList(industriaId: number) {
-//   return request({
-//     url: '/industriaapi/getList',
-//     method: 'get',
-//     params: { taskId }
-//   });
-// }
-
 export function fetchGetModel(id: number) {
   return request({
     url: '/industriaapi/getModel',
@@ -39,11 +31,11 @@ export function fetchDelete(id: number) {
   });
 }
 
-export function fetchCheckName(taskName: string, createUserId: number, id: number) {
+export function fetchCheckName(interfaceName: string, createUserId: number, id: number) {
   return request({
     url: '/industriaapi/checkName',
     method: 'get',
-    params: { taskName, createUserId, id }
+    params: { interfaceName, createUserId, id }
   });
 }
 

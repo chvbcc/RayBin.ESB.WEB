@@ -1,7 +1,7 @@
 <script setup lang="tsx">
-import { $t } from '@/locales';
 import { onMounted } from 'vue';
 import { computed, ref } from 'vue';
+import { $t, language } from '@/locales';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '@/store/modules/app';
 import { useAuthStore } from '@/store/modules/auth';
@@ -26,7 +26,8 @@ const showAlert = ref(false);
 const type = ref<'error' | 'success' | 'warning' | 'info'>('success');
 const message = ref<string>('');
 const description = ref<string>('');
-
+// 根据语言动态设置 labelCol 宽度
+const labelCol = computed(() => language() === 'en-US' ? { style: { width: '141px' } } : { style: { width: '100px' } });
 //#endregion
 
 // #region 2. 定义默认模型创建模型默认值
@@ -179,7 +180,7 @@ function handleBack() {
 
 <template>
     <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-      <a-form ref="formRef" :model="model" :rules="rules" :label-col="{ span: 4 }">
+      <a-form ref="formRef" :model="model" :rules="rules" :label-col="labelCol">
         <a-card :title="$t('page.deviceConnection.titleBaseInfo')" :bordered="false" class="card-wrapper">
           <a-row :gutter="[16, 16]">
             <a-col :span="24">

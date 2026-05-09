@@ -38,13 +38,13 @@ declare namespace Api {
       value: string;
       builtInType: string;
       attributeName: string;
-      dataType: string;
+      dataType: number;
       description: string;
     }>;
 
     /* Industria Api Detail Model */
     type ApiDetailModel = Pick<IndustriaApiDetail, | 'id' | 'industriaApiID' | 'nodeName' | 'nodeID' | 'nodeClass' | 'variableName' | 'value' | 'builtInType' | 'attributeName' | 'dataType' | 'description'>;
 
-    type IndustriaApiModel = { industriaApi: ApiModel; industriaApiDetail: ApiDetailModel []; deleteIndustriaIds: number[]};
+    type IndustriaApiModel = { industriaApi: ApiModel; industriaApiDetails: ApiDetailModel []; deleteIndustriaIds: number[]};
   }
 }

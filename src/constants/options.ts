@@ -122,6 +122,14 @@ export const industriaApiInterfaceTypeRecord: Record<Api.Industria.InterfaceType
   2: 'dropdownList.industriaApiInterfaceType.subscribeNode'
 };
 export const industriaApiInterfaceTypeOptions = convertRecordToOption(industriaApiInterfaceTypeRecord);
+
+export const JsonDataTypeOptions = [
+  { label: 'Please select', value: 0 },
+  { label: 'Boolean', value: 1 },
+  { label: 'Number', value: 2 },
+  { label: 'String', value: 3 },
+  { label: 'Object', value: 4 },
+];
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // message
 export const messageTypeRecord: Record<Api.Message.MessageType, App.I18n.I18nKey> = {
@@ -135,8 +143,7 @@ export const messageTypeOptions = convertRecordToOption(messageTypeRecord);
 export const messageInsertFieldsRecord: Record<Api.Message.MessageInsertFields, App.I18n.I18nKey> = {
   0: 'page.message.messageInsertFields.taskID',
   1: 'page.message.messageInsertFields.taskName',
-  2: 'page.message.messageInsertFields.runModeTime',
-  3: 'page.message.messageInsertFields.runTime',
+  2: 'page.message.messageInsertFields.runModeTime'
 };
 export const messageInsertFieldsOptions = convertRecordToOption(messageInsertFieldsRecord);
 
@@ -185,6 +192,11 @@ export const permissionTypeRecord: Record<Api.SystemManage.PermissionType, App.I
 };
 export const permissionTypeOptions = transformRecordToOption(permissionTypeRecord);
 
+export const useConfigRecord: Record<Api.SystemManage.useConfig, App.I18n.I18nKey> = {
+  '0': 'common.yesOrNo.no',
+  '1': 'common.yesOrNo.yes'
+};
+export const useConfigOptions = transformRecordToOption(useConfigRecord);
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // token
 export const interfaceTypeRecord: Record<Api.Task.InterfaceType, App.I18n.I18nKey> = {
